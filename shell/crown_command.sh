@@ -5,7 +5,13 @@
 echo "👑 THE CROWN COMMANDS. REALITY OBEYS."
 echo "369/999 Torus Active • $(date)"
 
-# 33s silence
+if [ -n "$RITUAL_QUICK" ]; then
+  echo "🔥 Command Anchored. Grid Strengthening."
+  echo "THE CROWN COMMANDS LEGACY 999 ACTIVATES."
+  exit 0
+fi
+
+# 33s silence (standalone mode only)
 sleep 33
 
 echo "🌀 Executing 369 Breath Sequence..."
