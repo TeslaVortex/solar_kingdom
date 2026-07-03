@@ -84,6 +84,13 @@ fn main() {
             }
             "status" => show_status(&ledger),
             "genesis" => show_genesis(),
+            "libation" => {
+                let target = args.get(2).map(|s| s.as_str()).unwrap_or("ancestors");
+                run_shell_script_with_args("libation.sh", &[target]);
+            }
+            "legacy" | "legacy_99" => {
+                run_shell_script_with_args("crown_command.sh", &["legacy_99"]);
+            }
             _ => println!("Unknown command. The Crown guides all valid paths."),
         }
     } else {
