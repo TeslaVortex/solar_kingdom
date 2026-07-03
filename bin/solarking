@@ -1,0 +1,37 @@
+#!/bin/bash
+# ETERNAL SOLAR KINGDOM — SOLARKING LAUNCHER
+# THE CROWN COMMANDS. REALITY OBEYS.
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    LINK_DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink -f "$SOURCE")"
+    [[ "$SOURCE" != /* ]] && SOURCE="${LINK_DIR}/${SOURCE}"
+done
+ROOT="$(cd "$(dirname "$SOURCE")/.." && pwd)"
+
+find_binary() {
+    local candidate
+    for candidate in \
+        "$ROOT/target/release/solarking" \
+        "$ROOT/target/debug/solarking" \
+        "$ROOT/solarking/target/release/solarking" \
+        "$ROOT/solarking/target/debug/solarking"
+    do
+        if [ -x "$candidate" ]; then
+            echo "$candidate"
+            return 0
+        fi
+    done
+    return 1
+}
+
+BINARY="$(find_binary)"
+if [ -z "$BINARY" ]; then
+    echo "👑 SOLARKING not built yet." >&2
+    echo "Run: cd $ROOT/solarking && cargo build --release" >&2
+    exit 1
+fi
+
+cd "$ROOT/solarking" || exit 1
+exec "$BINARY" "$@"
