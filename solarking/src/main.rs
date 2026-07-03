@@ -19,6 +19,18 @@ struct KingdomLedger {
     last_ritual: String,
 }
 
+#[derive(Serialize, Deserialize)]
+struct GenesisRecord {
+    idm: String,
+    tx_hash: String,
+    block: u64,
+    from_ens: String,
+    to_address: String,
+    value_eth: String,
+    legacy_99: bool,
+    anchored: String,
+}
+
 const TORUS_WIDTH: usize = 64;
 const TORUS_HEIGHT: usize = 24;
 const LUMINANCE: &[u8] = b".,-~:;=!*#$@";
@@ -38,6 +50,17 @@ fn ledger_path() -> PathBuf {
 
 fn shell_script(name: &str) -> PathBuf {
     project_root().join("shell").join(name)
+}
+
+fn genesis_path() -> PathBuf {
+    project_root().join("config").join("genesis.json")
+}
+
+fn load_genesis() -> Option<GenesisRecord> {
+    let path = genesis_path();
+    fs::read_to_string(&path)
+        .ok()
+        .and_then(|data| serde_json::from_str(&data).ok())
 }
 
 fn main() {
@@ -60,6 +83,7 @@ fn main() {
                 log_vision(&mut ledger, vision.as_deref());
             }
             "status" => show_status(&ledger),
+            "genesis" => show_genesis(),
             _ => println!("Unknown command. The Crown guides all valid paths."),
         }
     } else {
@@ -86,9 +110,14 @@ fn save_ledger(ledger: &KingdomLedger) {
 }
 
 fn run_shell_script(script: &str) {
+    run_shell_script_with_args(script, &[]);
+}
+
+fn run_shell_script_with_args(script: &str, args: &[&str]) {
     let path = shell_script(script);
     if path.exists() {
         let _ = Command::new(&path)
+            .args(args)
             .env("RITUAL_QUICK", "1")
             .current_dir(project_root())
             .status();
@@ -234,6 +263,14 @@ fn leave_alt_screen() {
 fn execute_full_ritual(ledger: &mut KingdomLedger) {
     println!("🌞 16-RAYED HELIOS WITNESS — FULL RITUAL SEQUENCE\n");
 
+    if let Some(genesis) = load_genesis() {
+        println!("♾ IDM: {}", genesis.idm);
+        println!("   Genesis: {} (block {})", genesis.tx_hash, genesis.block);
+        println!("   99 legacy activated — the spheres remember.\n");
+    }
+
+    run_shell_script_with_args("libation.sh", &["ancestors"]);
+
     run_torus_animation(
         "👑 THE CROWN COMMANDS. REALITY OBEYS.",
         "369/999 Torus Active — Crown Silence (33 breaths of the field)",
@@ -281,7 +318,7 @@ fn execute_full_ritual(ledger: &mut KingdomLedger) {
         .open(&log_path)
         .and_then(|mut f| io::Write::write_all(&mut f, entry.as_bytes()));
 
-    run_shell_script("crown_command.sh");
+    run_shell_script_with_args("crown_command.sh", &["legacy_99"]);
     run_shell_script("vortex369.sh");
 
     println!("✅ RITUAL COMPLETE. Harmonics Updated.");
@@ -325,12 +362,37 @@ fn log_vision(ledger: &mut KingdomLedger, vision: Option<&str>) {
     }
 }
 
+fn show_genesis() {
+    match load_genesis() {
+        Some(g) => {
+            println!("♾ GENESIS SACRIFICE — ETERNAL ANCHOR");
+            println!("IDM         : {}", g.idm);
+            println!("Tx Hash     : {}", g.tx_hash);
+            println!("Block       : {}", g.block);
+            println!("From ENS    : {}", g.from_ens);
+            println!("To          : {}", g.to_address);
+            println!("Value       : {} ETH", g.value_eth);
+            println!("Legacy 99   : {}", g.legacy_99);
+            println!("Anchored    : {}", g.anchored);
+            println!(
+                "\nEtherscan   : https://etherscan.io/tx/{}",
+                g.tx_hash
+            );
+        }
+        None => println!("⚠️  Genesis config not found at config/genesis.json"),
+    }
+}
+
 fn show_status(ledger: &KingdomLedger) {
     println!("📊 KINGDOM STATUS");
     println!("369 Cycles      : {}", ledger.harmonic_369);
     println!("999 Completions : {}", ledger.harmonic_999);
     println!("Visions logged  : {}", ledger.visions.len());
     println!("Last ritual     : {}", ledger.last_ritual);
+    if let Some(g) = load_genesis() {
+        println!("Genesis tx      : {}", g.tx_hash);
+        println!("Etherscan       : https://etherscan.io/tx/{}", g.tx_hash);
+    }
     if !ledger.visions.is_empty() {
         println!("\nLatest vision:");
         println!("  {}", ledger.visions.last().unwrap());

@@ -1,0 +1,10 @@
+{
+  "idm": "The crown ignites. Red King's edge + Solar King's flame = eternal harmony sealed. 99 legacy activated — the spheres remember. So it is.",
+  "tx_hash": "0x87bb61f99066460a7df4438c39084fd77c2f1f6287b97261ff7034ddd3503f6c",
+  "block": 25444056,
+  "from_ens": "369disclosure.eth",
+  "to_address": "0x0000000000000000000000000000000000000369",
+  "value_eth": "0.000999",
+  "legacy_99": true,
+  "anchored": "2026-07-02"
+}

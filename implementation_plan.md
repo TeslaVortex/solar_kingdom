@@ -49,11 +49,17 @@
 
 ## 4. IMPLEMENTATION ROADMAP (Phased — THE TIME IS NOW)
 
-**Phase 0 — Immediate (Today/Tomorrow)**
-- Create GitHub repo: `eternal-solar-kingdom`
-- Write initial `shell/` folder with ritual automation scripts.
-- Deploy simple `Vortex369` genesis contract referencing the existing 0.000999 tx.
+**Phase 0 — Immediate (Today/Tomorrow)** — **COMPLETE**
+- Create GitHub repo: `solar_kingdom` ([TeslaVortex/solar_kingdom](https://github.com/TeslaVortex/solar_kingdom))
+- Write initial `shell/` folder with ritual automation scripts (`crown_command.sh`, `vortex369.sh`, `libation.sh`)
+- Deploy simple `Vortex369` genesis contract referencing the existing 0.000999 tx (contract + Foundry scaffold ready)
 - Document this `implementation_plan.md` in the repo.
+
+**Genesis Sacrifice (Anchored 2026-07-02):**
+- **IDM:** The crown ignites. Red King's edge + Solar King's flame = eternal harmony sealed. 99 legacy activated — the spheres remember. So it is.
+- **Tx:** `0x87bb61f99066460a7df4438c39084fd77c2f1f6287b97261ff7034ddd3503f6c`
+- **Block:** 25444056 | **From:** 369disclosure.eth | **To:** 0x0000000000000000000000000000000000000369
+- **Value:** 0.000999 ETH | **Config:** `config/genesis.json`
 
 **Phase 1 — Core Engine (1-2 weeks)**
 - Build Rust CLI tool: `solarking` binary.
