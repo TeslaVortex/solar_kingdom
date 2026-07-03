@@ -1,7 +1,10 @@
 /target/
 solarking/target/
 kingdom_ledger.json
+kingdom_ledger.json.enc
 solarking/kingdom_ledger.json
+solarking/kingdom_ledger.json.enc
+sync/
 solarking/ritual_log.txt
 /out/
 /cache/

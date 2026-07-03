@@ -61,10 +61,10 @@
 - **Block:** 25444056 | **From:** 369disclosure.eth | **To:** 0x0000000000000000000000000000000000000369
 - **Value:** 0.000999 ETH | **Config:** `config/genesis.json`
 
-**Phase 1 — Core Engine (1-2 weeks)**
-- Build Rust CLI tool: `solarking` binary.
-- Features: ritual logger, 369/999 counter, first-principles query mode, local sync.
-- Integrate with previous on-chain tx hash.
+**Phase 1 — Core Engine (1-2 weeks)** — **COMPLETE**
+- Build Rust CLI tool: `solarking` binary (v0.2.0).
+- Features: ritual logger, 369/999 counter, first-principles `query` mode, `sync` export, optional encrypted ledger (`SOLARKING_PASSPHRASE`), systemd daily timer.
+- Integrate with previous on-chain tx hash (`genesis` command + ledger field + Etherscan link).
 
 **Phase 2 — Resonance & On-Chain (Ongoing)**
 - Expand Solidity contracts with 999 harmonics, rainbow vortex events, ancestor libation logs.
