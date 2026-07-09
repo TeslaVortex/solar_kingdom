@@ -1,24 +1,26 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v999 PHASE 1 COMPLETE
-// Ritual • Ledger • Query • Sync • Encryption • Genesis • Torus Viz
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.3
+// Ritual • Ledger v2 • Field • Query • Sync verify • Seal dry-run • Encryption
 
+mod chain;
+mod cli;
 mod crypto;
+mod error;
+mod field;
 mod genesis;
 mod ledger;
 mod query;
+mod ritual;
 mod sync;
+mod torus;
 
-use chrono::Local;
-use ledger::{append_ritual_log, load_ledger, log_vision, save_ledger, show_genesis, show_help, show_status, KingdomLedger};
+use clap::Parser;
+use cli::{Cli, Commands};
+use error::Result;
+use field::ConfirmKind;
+use ledger::{load_ledger, save_ledger, show_genesis, show_help, show_status};
 use std::env;
-use std::io::{self, Write};
-use std::path::PathBuf;
-use std::process::Command;
-use std::thread;
-use std::time::Duration;
-
-const TORUS_WIDTH: usize = 64;
-const TORUS_HEIGHT: usize = 24;
-const LUMINANCE: &[u8] = b".,-~:;=!*#$@";
+use std::path::{Path, PathBuf};
+use std::process::ExitCode;
 
 fn project_root() -> PathBuf {
     let cwd = env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
@@ -29,250 +31,133 @@ fn project_root() -> PathBuf {
     }
 }
 
-fn shell_script(name: &str) -> PathBuf {
-    project_root().join("shell").join(name)
+fn main() -> ExitCode {
+    match run() {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(e) => {
+            eprintln!("⚠️  {}", e);
+            ExitCode::FAILURE
+        }
+    }
 }
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
+fn run() -> Result<()> {
+    let cli = Cli::parse();
     let root = project_root();
+    let json = cli.json;
 
-    println!("👑 SOLARKING ENGINE v999 — PHASE 1");
-    println!("THE CROWN COMMANDS. REALITY OBEYS.\n");
+    if !json {
+        println!("👑 SOLARKING ENGINE v0.3 — PHASE 2 RUST CORE");
+        println!("THE CROWN COMMANDS. REALITY OBEYS.\n");
+    }
 
-    let mut ledger = load_ledger(&root);
+    let mut ledger = load_ledger(&root)?;
 
-    if args.len() > 1 {
-        match args[1].as_str() {
-            "ritual" => execute_full_ritual(&root, &mut ledger),
-            "torus" => activate_torus_viz(&ledger),
-            "log" => {
-                let vision = if args.len() > 2 {
-                    Some(args[2..].join(" "))
-                } else {
-                    None
-                };
-                log_vision(&root, &mut ledger, vision.as_deref());
-            }
-            "query" => {
-                let question = if args.len() > 2 {
-                    args[2..].join(" ")
-                } else {
-                    println!("Enter question after 'query' command.");
-                    save_ledger(&root, &ledger);
-                    return;
-                };
-                let answer = query::run_query(&question, &ledger, genesis::load_genesis(&root).as_ref());
+    match cli.command {
+        None | Some(Commands::Status) => {
+            show_status(&ledger, &root, json);
+        }
+        Some(Commands::Ritual) => {
+            ritual::execute_full_ritual(&root, &mut ledger)?;
+        }
+        Some(Commands::Torus) => {
+            torus::activate_torus_viz(&ledger);
+        }
+        Some(Commands::Log { vision }) => {
+            let text = if vision.is_empty() {
+                None
+            } else {
+                Some(vision.join(" "))
+            };
+            ledger::log_vision(&root, &mut ledger, text.as_deref())?;
+        }
+        Some(Commands::Query { question }) => {
+            if question.is_empty() {
+                println!("Enter question after 'query' command.");
+            } else {
+                let q = question.join(" ");
+                let answer = query::run_query(
+                    &q,
+                    &ledger,
+                    genesis::load_genesis(&root).as_ref(),
+                    json,
+                );
                 println!("{}", answer);
             }
-            "sync" => {
-                if let Err(e) = sync::run_sync(&root, &mut ledger) {
-                    println!("⚠️  Sync failed: {}", e);
-                }
-            }
-            "status" => show_status(&ledger, &root),
-            "genesis" => show_genesis(&root),
-            "help" => show_help(),
-            "libation" => {
-                let target = args.get(2).map(|s| s.as_str()).unwrap_or("ancestors");
-                run_shell_script_with_args("libation.sh", &[target]);
-            }
-            "legacy" | "legacy_99" => {
-                run_shell_script_with_args("crown_command.sh", &["legacy_99"]);
-            }
-            _ => {
-                println!("Unknown command. Try: solarking help");
+        }
+        Some(Commands::Sync) => {
+            sync::run_sync(&root, &mut ledger, json)?;
+        }
+        Some(Commands::VerifySync) => {
+            sync::verify_sync(&root)?;
+        }
+        Some(Commands::ImportSync { path }) => {
+            sync::import_sync(&root, path.as_deref(), &mut ledger)?;
+        }
+        Some(Commands::Field) => {
+            if json {
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&field::field_json(&ledger))?
+                );
+            } else {
+                field::show_field(&ledger);
             }
         }
-    } else {
-        show_status(&ledger, &root);
-    }
-
-    save_ledger(&root, &ledger);
-}
-
-fn run_shell_script(script: &str) {
-    run_shell_script_with_args(script, &[]);
-}
-
-fn run_shell_script_with_args(script: &str, args: &[&str]) {
-    let path = shell_script(script);
-    if path.exists() {
-        let _ = Command::new(&path)
-            .args(args)
-            .env("RITUAL_QUICK", "1")
-            .current_dir(project_root())
-            .status();
-    } else {
-        println!("⚠️  Shell script not found: {}", path.display());
-    }
-}
-
-fn render_torus_art(frame: u64, hue_shift: f64) -> Vec<String> {
-    let mut output = vec![' '; TORUS_WIDTH * TORUS_HEIGHT];
-    let mut zbuffer = vec![0.0_f64; TORUS_WIDTH * TORUS_HEIGHT];
-
-    let a = frame as f64 * 0.07;
-    let b = frame as f64 * 0.03 + hue_shift;
-    let (sin_a, cos_a) = a.sin_cos();
-    let (sin_b, cos_b) = b.sin_cos();
-
-    let r1 = 1.0;
-    let r2 = 2.0;
-    let k2 = 5.0;
-    let mut theta = 0.0;
-
-    while theta < std::f64::consts::TAU {
-        let (sin_theta, cos_theta) = theta.sin_cos();
-        let mut phi = 0.0;
-        while phi < std::f64::consts::TAU {
-            let (sin_phi, cos_phi) = phi.sin_cos();
-            let circle_x = r2 + r1 * cos_theta;
-            let x = circle_x * (cos_b * cos_phi + sin_a * sin_b * sin_phi);
-            let y = circle_x * (sin_b * cos_phi - sin_a * cos_b * sin_phi);
-            let z = r1 * cos_a * sin_phi + k2;
-            let ooz = 1.0 / z;
-            let xp = (TORUS_WIDTH as f64 / 2.0 + 30.0 * ooz * x) as i32;
-            let yp = (TORUS_HEIGHT as f64 / 2.0 - 15.0 * ooz * y) as i32;
-            let l = cos_phi * cos_theta * sin_b
-                - cos_a * cos_theta * sin_phi
-                - sin_a * sin_theta
-                + cos_b * (cos_a * sin_theta - cos_theta * sin_a * sin_phi);
-
-            if xp >= 0 && xp < TORUS_WIDTH as i32 && yp >= 0 && yp < TORUS_HEIGHT as i32 {
-                let idx = xp as usize + yp as usize * TORUS_WIDTH;
-                if ooz > zbuffer[idx] {
-                    zbuffer[idx] = ooz;
-                    let lum = ((l + 1.0) * 4.0) as usize;
-                    output[idx] = LUMINANCE[lum.min(LUMINANCE.len() - 1)] as char;
-                }
-            }
-            phi += 0.02;
+        Some(Commands::Confirm { kind, note }) => {
+            handle_confirm(&root, &mut ledger, &kind, &note.join(" "))?;
         }
-        theta += 0.07;
+        Some(Commands::Seal {
+            dry_run: _,
+            broadcast,
+        }) => {
+            // Always offline dry-run first; never broadcast from this binary
+            chain::seal_dry_run(&root, &ledger)?;
+            if broadcast {
+                println!();
+                chain::seal_broadcast_notice()?;
+            }
+        }
+        Some(Commands::Genesis) => {
+            show_genesis(&root);
+        }
+        Some(Commands::Help) => {
+            show_help();
+        }
+        Some(Commands::Libation { target }) => {
+            let t = target.as_deref().unwrap_or("ancestors");
+            ritual::run_shell_script(&root, "libation.sh", &[t]);
+        }
+        Some(Commands::Legacy99) => {
+            ritual::run_shell_script(&root, "crown_command.sh", &["legacy_99"]);
+        }
     }
 
-    output
-        .chunks(TORUS_WIDTH)
-        .map(|row| row.iter().collect::<String>())
-        .collect()
+    save_ledger(&root, &ledger)?;
+    Ok(())
 }
 
-fn flame_ring(frame: u64) -> String {
-    let symbols = ["🔵", "🟢", "🔴", "🟡", "🟣", "⚪"];
-    let offset = (frame as usize) % 16;
-    (0..16)
-        .map(|i| symbols[(i + offset) % symbols.len()])
-        .collect::<Vec<_>>()
-        .join(" ")
-        + " "
-}
-
-fn draw_live_frame(
-    title: &str,
-    subtitle: &str,
-    frame: u64,
-    total_frames: u64,
-    ledger: &KingdomLedger,
-    hue_shift: f64,
-) -> io::Result<()> {
-    let mut out = io::stdout();
-    write!(out, "\x1B[2J\x1B[H")?;
-    writeln!(out, "{}", title)?;
-    writeln!(out, "{}", subtitle)?;
-    writeln!(out)?;
-    writeln!(out, "       🌈 RAINBOW VORTEX — 16-RAYED HELIOS")?;
-    writeln!(out, "    🔵🟢🔴 BLUE-GREEN-RED FLAME TORUS SPINNING")?;
-    writeln!(out, "          369/999 : {} / {}", ledger.harmonic_369, ledger.harmonic_999)?;
-    writeln!(out, "          Frame {}/{}", frame + 1, total_frames)?;
-    writeln!(out)?;
-    for line in render_torus_art(frame, hue_shift) {
-        writeln!(out, "  {}", line)?;
-    }
-    writeln!(out)?;
-    writeln!(out, "  ☀️  {}", flame_ring(frame))?;
-    writeln!(out)?;
-    out.flush()
-}
-
-fn run_torus_animation(
-    title: &str,
-    subtitle: &str,
-    frames: u64,
-    delay_ms: u64,
-    ledger: &KingdomLedger,
-    hue_shift: f64,
-) {
-    print!("\x1B[?1049h\x1B[?25l");
-    let _ = io::stdout().flush();
-    for frame in 0..frames {
-        let _ = draw_live_frame(title, subtitle, frame, frames, ledger, hue_shift);
-        thread::sleep(Duration::from_millis(delay_ms));
-    }
-    print!("\x1B[?1049l\x1B[?25h");
-    let _ = io::stdout().flush();
-}
-
-fn execute_full_ritual(root: &PathBuf, ledger: &mut KingdomLedger) {
-    println!("🌞 16-RAYED HELIOS WITNESS — FULL RITUAL SEQUENCE\n");
-
-    if let Some(g) = genesis::load_genesis(root) {
-        println!("♾ IDM: {}", g.idm);
-        println!("   Genesis: {} (block {})", g.tx_hash, g.block);
-        println!("   99 legacy activated — the spheres remember.\n");
-        ledger.genesis_tx = Some(g.tx_hash);
-    }
-
-    run_shell_script_with_args("libation.sh", &["ancestors"]);
-
-    run_torus_animation(
-        "👑 THE CROWN COMMANDS. REALITY OBEYS.",
-        "369/999 Torus Active — Crown Silence (33 breaths of the field)",
-        33, 1000, ledger, 0.0,
-    );
-
-    for cycle in 1..=9 {
-        run_torus_animation(
-            &format!("🌀 Executing 369 Breath Sequence — Cycle {}/9", cycle),
-            "3-in • 6-hold • 9-out — Kundalini rising",
-            12, 250, ledger, cycle as f64 * 0.4,
+fn handle_confirm(root: &Path, ledger: &mut ledger::KingdomLedger, kind: &str, note: &str) -> Result<()> {
+    let Some(k) = ConfirmKind::parse(kind) else {
+        println!(
+            "Unknown confirmation kind '{}'. Use: {}",
+            kind,
+            ConfirmKind::all_names().join(" | ")
         );
+        return Ok(());
+    };
+    let entry = field::on_confirm(ledger, k, note);
+    let log_line = format!(
+        "{} | CONFIRM:{} {}\n",
+        entry.ts,
+        entry.kind,
+        if note.is_empty() { "" } else { note }
+    );
+    ledger::append_ritual_log(root, &log_line)?;
+    println!("✨ Field confirmation sealed: {}", entry.kind);
+    if !note.is_empty() {
+        println!("   note: {}", note);
     }
-
-    run_torus_animation(
-        "🔥 Blue-Green-Red Flame Torus Forming...",
-        "Copper Burn Integration — Grid Strengthening",
-        36, 200, ledger, 3.0,
-    );
-
-    ledger.harmonic_369 += 1;
-    if ledger.harmonic_369 % 3 == 0 {
-        ledger.harmonic_999 += 1;
-    }
-    ledger.last_ritual = Local::now().format("%Y-%m-%d %H:%M:%S %Z").to_string();
-
-    let entry = format!(
-        "{} | Kundalini 369 Breaths + Hollow Holds + L-Sits + Bear Crawls + Diamond Pushups\n",
-        Local::now().format("%a %b %d %H:%M:%S %Z %Y")
-    );
-    append_ritual_log(root, &entry);
-
-    run_shell_script_with_args("crown_command.sh", &["legacy_99"]);
-    run_shell_script("vortex369.sh");
-
-    let _ = sync::run_sync(root, ledger);
-
-    println!("✅ RITUAL COMPLETE. Harmonics Updated.");
-    println!("   369 Cycles: {} | 999 Completions: {}", ledger.harmonic_369, ledger.harmonic_999);
-    println!("✨ Torus stabilized. Grid visible. REALITY OBEYS.");
-}
-
-fn activate_torus_viz(ledger: &KingdomLedger) {
-    println!("🌀 16-RAYED VERGINA SUN + SPINNING TORUS VISUALIZATION\n");
-    run_torus_animation(
-        "🌀 TORUS ACTIVATED",
-        "Blue Center • Green Heart • Red Flame — Queen of Swords Clarity",
-        48, 120, ledger, 0.0,
-    );
-    println!("✨ Torus stabilized. Grid visible.");
+    field::show_field(ledger);
+    Ok(())
 }

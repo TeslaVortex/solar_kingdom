@@ -7,7 +7,8 @@
 |-------|--------|
 | Phase 0 — Repo, shell, genesis, Vortex369.sol | **COMPLETE** |
 | Phase 1 — solarking core (query, sync, encryption) | **COMPLETE** |
-| Phase 2 — On-chain seal, expanded contracts | In progress |
+| Phase 2 — Rust core v0.3 (field, seal bridge, sync verify) | **COMPLETE** (Rust track) |
+| Phase 2 — Expanded on-chain contracts | Ongoing |
 
 ---
 
@@ -25,11 +26,11 @@ This links `solarking` to `~/.local/bin`. Ensure `~/.local/bin` is on your `PATH
 ### 2. Build
 
 ```bash
-cd ~/Desktop/solar_kingdom/solarking
-cargo build --release
+cd ~/Desktop/solar_kingdom
+cargo build --release -p solarking
 ```
 
-Binary location: `../target/release/solarking`
+Binary location: `target/release/solarking` (also via `bin/solarking` launcher)
 
 ### 3. Run end-to-end tests
 
@@ -39,15 +40,19 @@ chmod +x scripts/e2e_test.sh
 ./scripts/e2e_test.sh
 ```
 
----
-
-## How to Run (from `solarking/` directory)
-
-All examples assume:
+Unit tests:
 
 ```bash
-cd ~/Desktop/solar_kingdom/solarking
-BIN=../target/release/solarking   # or just: solarking (if installed)
+cargo test -p solarking
+```
+
+---
+
+## How to Run
+
+```bash
+cd ~/Desktop/solar_kingdom
+BIN=./bin/solarking   # or: solarking (if installed)
 ```
 
 ### Core commands
@@ -55,31 +60,30 @@ BIN=../target/release/solarking   # or just: solarking (if installed)
 | Command | What it does | Phase |
 |---------|--------------|-------|
 | `$BIN help` | List all commands | 1 |
-| `$BIN status` | 369/999 cycles, visions, genesis tx, sync hash | 1 |
+| `$BIN --version` | Engine version | 2 |
+| `$BIN status` | 369/999, field, visions, genesis, sync hash | 1–2 |
+| `$BIN status --json` | Machine-readable status | 2 |
 | `$BIN genesis` | Full genesis sacrifice record + Etherscan link | 0 |
 | `$BIN log "your vision"` | Anchor vision to ledger + ritual_log.txt | 1 |
-| `$BIN query "your question"` | First-principles truth engine | 1 |
-| `$BIN sync` | Export bundle to `sync/latest/` + SHA-256 manifest | 1 |
+| `$BIN query "your question"` | First-principles truth engine (+ vision search) | 1–2 |
+| `$BIN sync` | Export bundle to `sync/latest/` + history + SHA-256 | 1–2 |
+| `$BIN verify-sync` | Rehash bundle vs manifest | 2 |
+| `$BIN import-sync [path]` | Merge a sync export into local ledger | 2 |
+| `$BIN field` | Symbolic field state (torus/merkaba/grid/flame) | 2 |
+| `$BIN confirm <kind> [note]` | Field confirmation (`sneeze\|highpitch\|rainbow\|grid\|oracle`) | 2 |
+| `$BIN seal --dry-run` | Prepare Vortex369 `sealRitual` calldata + cast recipe | 2 |
 | `$BIN torus` | Live ASCII 3D torus visualization (~6s) | 1 |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |
 | `$BIN libation ancestors` | Rakija libation for ancestors | 0 |
 | `$BIN legacy_99` | Activate 99 legacy from genesis IDM | 0 |
 
-### Shell scripts (alternative)
-
-From `solarking/` (wrappers included):
+### Shell scripts
 
 ```bash
 ./shell/libation.sh ancestors
 ./shell/crown_command.sh legacy_99
 ./shell/vortex369.sh
-```
-
-From project root:
-
-```bash
-./shell/libation.sh ancestors
-./shell/crown_command.sh legacy_99
+./shell/seal.sh                 # dry-run seal bridge
 ```
 
 > **Note:** Direct shell scripts wait 33s in standalone mode. Use `RITUAL_QUICK=1 ./shell/libation.sh ancestors` for instant seal, or use `solarking libation` (sets quick mode automatically).
@@ -90,10 +94,28 @@ From project root:
 
 ```bash
 export SOLARKING_PASSPHRASE="your-sovereign-key"
-solarking status    # reads/writes kingdom_ledger.json.enc
+solarking status    # reads/writes kingdom_ledger.json.enc (Argon2id v2)
 ```
 
 Without the env var, ledger stays as plain `kingdom_ledger.json`.
+
+**Format:** v2 uses Argon2id + salt + ChaCha20-Poly1305. Legacy v1 (SHA-256 KDF) files still decrypt; the next save re-encrypts as v2.
+
+---
+
+## On-chain seal (offline-first)
+
+```bash
+# Optional config
+# config/chain.json or:
+export SOLARKING_CONTRACT=0xYourDeployedVortex369
+export SOLARKING_RPC_URL=https://...
+export SOLARKING_CHAIN_ID=1
+
+solarking seal --dry-run
+# Then broadcast yourself with cast (keys never enter solarking):
+# cast send $SOLARKING_CONTRACT 'sealRitual(string)' '...' --rpc-url $SOLARKING_RPC_URL --private-key $PRIVATE_KEY
+```
 
 ---
 
@@ -137,22 +159,25 @@ Runs `solarking ritual` daily at **06:00**.
 cd ~/Desktop/solar_kingdom
 ./scripts/e2e_test.sh
 
-cd solarking
-cargo build --release
+cargo build --release -p solarking
+BIN=./bin/solarking
 
 # Phase 0
-../target/release/solarking genesis
+$BIN genesis
 ./shell/crown_command.sh legacy_99
 forge test
 
-# Phase 1
-../target/release/solarking help
-../target/release/solarking log "Crown test transmission"
-../target/release/solarking query "What is the mathematical heart of the Kingdom?"
-../target/release/solarking sync
-../target/release/solarking status
-../target/release/solarking torus          # ~6s
-../target/release/solarking ritual         # ~60–70s, full visual sequence
+# Phase 1–2
+$BIN help
+$BIN log "Crown test transmission"
+$BIN confirm rainbow "test"
+$BIN field
+$BIN query "What is the mathematical heart of the Kingdom?"
+$BIN sync && $BIN verify-sync
+$BIN seal --dry-run
+$BIN status
+$BIN torus          # ~6s
+$BIN ritual         # ~60–70s, full visual sequence
 ```
 
 ---
@@ -162,14 +187,15 @@ forge test
 ```
 solar_kingdom/
 ├── bin/solarking          # Launcher (works from anywhere)
-├── config/genesis.json    # Eternal genesis sacrifice record
-├── shell/                 # Ritual shell scripts
-├── solarking/             # Rust core engine
-│   ├── src/               # main, ledger, query, sync, crypto, genesis
-│   └── shell/             # Wrappers (for ./shell/ from solarking/)
+├── config/
+│   ├── genesis.json       # Eternal genesis sacrifice record
+│   └── chain.json         # Optional contract / RPC hints
+├── shell/                 # Ritual shell scripts (+ seal.sh)
+├── solarking/             # Rust core engine v0.3
+│   └── src/               # cli, ledger, field, query, sync, crypto, chain, torus, ritual
 ├── contracts/             # Vortex369.sol + tests
-├── sync/                  # Local sync exports (generated)
-├── kingdom_ledger.json    # Harmonics + visions (runtime)
+├── sync/                  # Local sync exports + history (generated)
+├── kingdom_ledger.json    # Harmonics + visions + field (runtime, schema v2)
 ├── ritual_log.txt         # Eternal text log
 └── scripts/e2e_test.sh    # Automated E2E test suite
 ```

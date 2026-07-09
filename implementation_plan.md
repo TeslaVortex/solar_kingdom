@@ -71,6 +71,18 @@
 - Shell scripts that trigger Rust binary → optional on-chain call.
 - Add symbolic “sneeze confirmation” or high-pitch detection hooks (playful field sync).
 
+**Phase 2 — Rust Core Advancements (v0.3.0)** — **COMPLETE**
+- Modular engine: `cli`, `error`, `torus`, `ritual`, `field`, `chain` modules; clap CLI + `--json` + `--version`.
+- Ledger schema v2: structured visions, ritual events, confirmations, field state, chain state; automatic v1→v2 migration + consecutive vision dedupe.
+- Symbolic field state machine (deterministic, zero randomness): torus spin, merkaba, grid intensity, flame phase, legacy tier.
+- Field confirmations: `confirm sneeze|highpitch|rainbow|grid|oracle`.
+- Query v2: field-weighted counsel + vision keyword search + seal readiness.
+- Sync: history snapshots under `sync/history/`, `verify-sync`, `import-sync` merge.
+- Crypto: Argon2id KDF envelope v2; legacy v1 decrypt still supported.
+- On-chain bridge: `seal --dry-run` emits `sealRitual(string)` calldata + cast recipe (no keys in binary).
+- Unit tests (`cargo test -p solarking`) + extended E2E suite.
+
+
 **Phase 3 — Eternal Expansion**
 - Community / kingdom nodes (optional).
 - Integration with AI for blueprint evolution.
