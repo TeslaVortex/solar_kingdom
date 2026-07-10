@@ -1,10 +1,13 @@
-# Plan: Next Phase — On-Chain Resonance → Eternal Expansion
+# Plan: Phase 2B — On-Chain Resonance + Scalar Node Anchoring
 
 **Repo:** [TeslaVortex/solar_kingdom](https://github.com/TeslaVortex/solar_kingdom)  
-**Branch:** `Phase-1-Activation` (HEAD `d962c74` — solarking v0.3)  
-**Local:** `/home/pepo/Desktop/solar_kingdom`  
+**Branch:** `Phase-1-Activation`  
+**Plan path:** [`plans/phase_2b_onchain_resonance.md`](https://github.com/TeslaVortex/solar_kingdom/blob/Phase-1-Activation/plans/phase_2b_onchain_resonance.md)  
 **Doctrine:** First principles • 0 marginal cost • Shell + Rust + Solidity resonance  
 **Seal:** THE CROWN COMMANDS. REALITY OBEYS. SO IT IS. SO IT SHALL BE FOREVER.
+
+**Status of this document:** PLAN ONLY — contract implementation not executed until Crown commands code.  
+**Last plan update:** 2026-07-10 — Scalar Node woven into 2B on-chain architecture.
 
 ---
 
@@ -14,211 +17,342 @@
 |-------|--------|
 | Phase 0 — Repo, shell, genesis, Vortex369 scaffold | **COMPLETE** |
 | Phase 1 — solarking CLI, query, sync, encryption, systemd | **COMPLETE** |
-| Phase 2 Rust track (v0.3) — field, confirm, ledger v2, seal dry-run, Argon2, verify-sync | **COMPLETE** |
-| Phase 2 On-chain track — expanded contracts, deploy, live seal loop | **OPEN** ← next |
-| Phase 3 — nodes, AI co-pilot, physical↔digital bridge | **NOT STARTED** |
+| Phase 2 Rust track (v0.3) — field, confirm, ledger v2, seal dry-run, Argon2, verify-sync | **COMPLETE** (`d962c74`) |
+| Phase 2B Rust geometry — scalar node lattice (Tesla 369 in 3D) | **COMPLETE** (`bd1750d`, solarking **v0.4.0**) |
+| Phase 2B On-chain contracts — expanded Solidity + scalar anchoring | **OPEN** ← **NEXT** |
+| Phase 2C — Living automation | Waiting on 2B on-chain loop |
+| Phase 3A — Eternal expansion seeds | Waiting on sealed chain loop |
 
-**What works today:** full offline ritual engine; deterministic field state; offline `seal --dry-run` (calldata + cast recipe); local sync integrity; genesis sacrifice anchored in `config/genesis.json`.
+### Already live in Rust (v0.4 — do not re-implement)
 
-**What is still open (logical debt):**
+| Capability | Location |
+|------------|----------|
+| Nested cubocta × 6, phase 1–9, period 1296 | `solarking/src/scalar.rs` |
+| Timeline frequency 44 228 Hz optional multiplier | `scalar sync --hz` |
+| `scalar node [--obj]` / `scalar sync` / `scalar seal` | CLI + ledger `scalar: ScalarNodeState` |
+| SHA-256 seal hash + offline cast payload | `scalar seal` → `sealRitual(string)` recipe |
+| Kagome ASCII + OBJ export | `sync/scalar/scalar_node.obj` |
+| Torus lattice overlay | `torus` command |
 
-1. `Vortex369.sol` is genesis-minimal (seal + getGenesis only) — no libation / rainbow / 999-rich events.
-2. Planned contracts `CrownCommand.sol` and `SolarKingdom.sol` do not exist yet.
-3. `config/chain.json` has `contract: null` — no deployed address; no on-chain harmonic reconciliation.
-4. Seal path is dry-run only; no recorded “last seal tx” write-back after real cast.
-5. Phase 3 vision (IPFS, AI, nodes, altar QR/NFC) has no footholds yet.
+### Still open (on-chain debt)
 
-**Principle for sequencing:** Finish the **three-layer closed loop** (Shell → Rust → Chain → ledger write-back) before expanding into community/AI/physical. That preserves 0 marginal cost and avoids building marketplaces on an unsealed vortex.
+1. `Vortex369.sol` is genesis-minimal (`sealRitual` + `getGenesis` only) — no scalar structs, libation, rainbow, or 999-rich events.
+2. `CrownCommand.sol` and `SolarKingdom.sol` do not exist yet.
+3. `config/chain.json` has `contract: null` — no deploy write-back.
+4. No `chain-status` / `seal-record` bridge; no on-chain scalar `nodeId` in ledger.
+5. No shell `scalar-seal` wrapper for activate/advance cast recipes.
+6. Full lattice geometry stays off-chain (by design); chain stores hashes + phase counters only.
+
+**Principle:** Close **Shell → Rust scalar → Solidity scalar → ledger write-back** before Phase 3. Additive ABI only. Offline-first. Gas-aware.
 
 ---
 
-## Recommended Approach — Three Stacked Stages
+## Recommended Approach — Stacked Stages (updated)
 
 ```
-Phase 2B  On-Chain Resonance     (v0.4.x)  ← DO NEXT
-Phase 2C  Living Automation      (v0.4.x)  ← right after 2B
-Phase 3A  Eternal Expansion seed (v0.5.x)  ← only after loop is real
+Phase 2B-R  Scalar geometry in Rust          v0.4.0   COMPLETE
+Phase 2B-C  On-chain contracts + scalar      v0.5.x   ← DO NEXT (this plan)
+Phase 2C    Living automation                v0.5.x   after 2B-C
+Phase 3A    Eternal expansion seeds          v0.6.x   after sealed loop
 ```
 
-Stay offline-first: core rituals never require RPC. Chain features stay opt-in via env/`config/chain.json`.
+Stay offline-first: core rituals never require RPC. Chain features opt-in via `config/chain.json` / env.
 
 ---
 
-## Phase 2B — On-Chain Resonance (PRIMARY NEXT)
+## Phase 2B-C — On-Chain Contracts with Scalar Node (PRIMARY NEXT)
 
-**Goal:** Eternalize field seals on-chain and reconcile harmonics with the local ledger.
+**Goal:** Eternalize field + **scalar lattice** seals on-chain; reconcile harmonics and node phase with the local ledger.
 
-### 2B.1 Expand Solidity contracts
+### Integration principles (Crown law)
 
-| Contract | Purpose | Priority |
-|----------|---------|----------|
-| `Vortex369.sol` (upgrade-in-place or V2) | Libation log, rainbow vortex event, richer 999 harmonics, optional note hash | P0 |
-| `CrownCommand.sol` | Immutable command ledger: append-only “THE CROWN COMMANDS…” decrees | P0 |
-| `SolarKingdom.sol` | Soul-bound / non-transferable achievement tokens (legacy 99→999, rainbow) | P1 (can slip to 2C if gas scope grows) |
+| Rule | Detail |
+|------|--------|
+| **Additive only** | Never break existing `sealRitual(string)` / `getGenesis()` |
+| **Dry-run compatible** | Rust encodes scalar parameters offline; cast remains external |
+| **Offline-first** | Contracts opt-in; no mandatory network in default binary |
+| **Gas-aware** | On-chain: phase, counters, hashes, nodeId — **not** full 3D vertex arrays |
+| **Geometry home** | Full nested cubocta lattice remains in Rust ledger for verification |
+| **Resonance key** | 44 228 Hz used as optional off-chain / encoding multiplier when sealing nodes (not stored as continuous audio on-chain) |
 
-**Vortex369 expansion (minimal, gas-aware):**
+---
+
+### 2B-C.1 Vortex369.sol upgrades (Core + Scalar)
+
+**Keep:** `sealRitual(string)`, `getGenesis()`, genesis immutables, existing harmonic 369/999 counters.
+
+**Add — ScalarNode struct (minimal on-chain geometry state):**
 
 ```solidity
-// Additions (illustrative)
+struct ScalarNode {
+    address sealer;           // who activated
+    uint8 phase;              // 1–9 cycle
+    uint16 shellCoherence;    // 0–6 nested shells “lit” (mirrors Rust)
+    uint32 harmonicIndex;     // position in 1296 lattice [0, 1295]
+    bytes32 sealHash;         // SHA-256 of off-chain node snapshot (from solarking scalar seal)
+    uint64 activatedAt;       // block.timestamp
+    bool active;
+}
+```
+
+**New events:**
+
+```solidity
+event ScalarNodeActivated(
+    address indexed sealer,
+    uint256 indexed nodeId,
+    uint8 phase,
+    bytes32 sealHash
+);
+event LatticeHarmonic(
+    uint256 indexed nodeId,
+    uint256 shift,            // harmonicIndex or delta
+    uint8 phase,
+    uint256 timestamp
+);
+// Retain / add non-scalar resonance events:
 event LibationOffered(address indexed offerer, string target, uint256 h369);
 event RainbowVortex(address indexed sealer, uint8 intensity, uint256 h999);
 event FieldConfirm(address indexed sealer, string kind, bytes32 noteHash);
-
-function offerLibation(string calldata target) external;
-function sealRainbow(uint8 intensity) external;  // requires intensity 1–9
-function sealConfirm(string calldata kind, bytes32 noteHash) external;
-// Keep sealRitual(string) + getGenesis() for compatibility with solarking seal dry-run
 ```
 
-- Foundry tests for every new function + event.
-- Deploy script(s) under `script/` (Sepolia first, mainnet optional).
-- **Do not** break existing `sealRitual` ABI — Rust dry-run already encodes it.
+**New functions:**
 
-### 2B.2 Config + deploy write-back
+| Function | Behavior |
+|----------|----------|
+| `activateScalarNode(uint8 initialPhase, bytes32 sealHash, uint16 shellCoherence, uint32 harmonicIndex)` | Mints/activates node tied to ritual seal; emits `ScalarNodeActivated`; phase clamped 1–9 |
+| `advancePhase(uint256 nodeId)` | Advances 369 phase cycle (phase = phase % 9 + 1); bumps harmonicIndex mod 1296; emits `LatticeHarmonic` |
+| `queryNodeState(uint256 nodeId)` | View: returns full `ScalarNode` for off-chain verification vs Rust ledger |
+| `offerLibation(string target)` | Ancestor libation counter/event (gas-light) |
+| `sealRainbow(uint8 intensity)` | intensity 1–9; rainbow vortex event |
+| `sealConfirm(string kind, bytes32 noteHash)` | Field confirm hash on-chain |
 
-- After deploy: write `contract`, `rpc_url`, `chain_id` into `config/chain.json` (or document env-only if secrets).
-- Extend `.env.example` with `SOLARKING_CONTRACT`, deploy addresses.
-- Optional: `config/deployments.json` history of deploys (network, address, tx, timestamp).
+**Constants (mirror Rust):**
 
-### 2B.3 Rust chain bridge v2 (`chain.rs` + optional feature)
+```solidity
+uint8  public constant PHASE_MAX = 9;
+uint16 public constant HARMONIC_PERIOD = 1296;
+uint8  public constant MAX_SHELLS = 6;
+// 44228 is off-chain resonance key — optional encoded into sealHash payload, not a required storage field
+```
 
-| Command | Behavior |
-|---------|----------|
-| `solarking seal --dry-run` | Keep (already works) |
-| `solarking chain-status` | Offline: show config; Online (if RPC): `eth_call getGenesis()` → compare local vs on-chain 369/999 |
-| `solarking seal-record <tx_hash>` | After user runs `cast send`, record tx into `ledger.chain.last_seal_tx` + ritual log (no private keys) |
-
-- Cargo feature `chain` (optional): lightweight HTTP JSON-RPC via `ureq` or `reqwest` — **not** full ethers stack unless needed.
-- Default binary stays free of network deps.
-- On success of `chain-status`: update `ledger.chain.last_onchain_369/999`.
-
-### 2B.4 Shell resonance
-
-- `shell/seal.sh` — already dry-runs; add comments/recipe for cast after deploy.
-- New `shell/libation_onchain.sh` (optional): `solarking libation` then print cast for `offerLibation`.
-- E2E: forge tests for new contracts; CLI tests for `chain-status` offline path + `seal-record`.
-
-### 2B.5 Acceptance (Phase 2B complete when)
-
-- [ ] `forge test` green for Vortex369 (+ CrownCommand)
-- [ ] Deployed address recorded (testnet OK)
-- [ ] `solarking seal --dry-run` still matches live ABI
-- [ ] `solarking chain-status` shows local vs chain (or “no RPC” offline message)
-- [ ] `solarking seal-record 0x…` persists seal tx on ledger
-- [ ] README + `implementation_plan.md` mark Phase 2 on-chain track COMPLETE (or “testnet sealed”)
-
-**Critical files:**  
-`contracts/Vortex369.sol`, `contracts/CrownCommand.sol`, `contracts/test/*`, `script/*`, `solarking/src/chain.rs`, `solarking/src/cli.rs`, `solarking/src/ledger.rs` (ChainState), `config/chain.json`, `shell/seal.sh`, `scripts/e2e_test.sh`, docs.
-
-**Reuse:** existing `encode_seal_ritual`, `selector`, `load_chain_config`, `field::seal_ready`, genesis loaders, Foundry layout.
+- Foundry tests for every new function + event + phase wrap 9→1 + harmonicIndex mod 1296.
+- **Do not** break `sealRitual` ABI — Rust `solarking seal --dry-run` and `scalar seal` remain valid.
 
 ---
 
-## Phase 2C — Living Automation (after 2B)
+### 2B-C.2 CrownCommand.sol (new)
+
+Immutable / append-only command ledger bound to scalar nodes.
+
+```solidity
+event DecreeSealed(
+    address indexed commander,
+    uint256 indexed decreeId,
+    uint256 indexed nodeId,
+    bytes32 decreeHash,
+    uint256 timestamp
+);
+
+function sealWithScalar(uint256 nodeId, string calldata decree) external;
+// Stores: decreeHash = keccak256(bytes(decree)), nodeId reference, commander, timestamp
+// Requires node active on Vortex369 (interface call or same-deploy coordination)
+function getDecree(uint256 decreeId) external view returns (...);
+```
+
+- Crown decrees (“THE CROWN COMMANDS…”) bound to a specific lattice `nodeId`.
+- Full decree text may stay off-chain; on-chain stores hash + nodeId for integrity.
+
+---
+
+### 2B-C.3 SolarKingdom.sol — SBT layer (P1; may ship with 2B-C or slip to 2C)
+
+Soul-bound (non-transferable) tokens representing activated scalar nodes or completed lattice phases.
+
+| Badge concept | Mint trigger |
+|---------------|--------------|
+| **369 Node Guardian** | Successful `activateScalarNode` |
+| **Lattice Phase Complete** | Phase cycle returns to 1 after full 1–9 advance set (or harmonicIndex milestone) |
+| **Double-Edged Rainbow Lattice** | `sealRainbow` + scalar node active |
+| **Legacy 99→999** | Off-chain legacy tier 999 + on-chain harmonic999 threshold |
+
+- ERC-721 (or minimal custom) with `transfer` disabled / soul-bound pattern.
+- Minted only upon successful on-chain seal with scalar data (not freestanding mint).
+- Rust later: `solarking badge-status` dry-run only.
+
+---
+
+### 2B-C.4 Config + deploy write-back
+
+- After deploy (Sepolia first): write `contract`, `rpc_url`, `chain_id` into `config/chain.json`.
+- Optional `config/deployments.json` history (network, addresses for Vortex369 / CrownCommand / SolarKingdom, tx, timestamp).
+- Extend `.env.example`: `SOLARKING_CONTRACT`, `SOLARKING_CROWN_COMMAND`, `SOLARKING_SBT`, RPC, chain id.
+- Deploy scripts under `script/` (Foundry): `DeployVortex369.s.sol` update + `DeployCrownCommand.s.sol` (+ SBT when ready).
+
+---
+
+### 2B-C.5 Rust chain bridge v2 (`chain.rs` + optional `chain` feature)
+
+| Command | Behavior |
+|---------|----------|
+| `solarking seal --dry-run` | Keep (existing) |
+| `solarking scalar seal` | Keep — emit sealHash + payload; **extend** dry-run to print `activateScalarNode` cast calldata when ABI ready |
+| `solarking chain-status` | Offline: config; Online: `eth_call getGenesis()` + optional `queryNodeState(nodeId)` vs local scalar |
+| `solarking seal-record <tx_hash>` | Record tx into `ledger.chain.last_seal_tx` + ritual log |
+| `solarking scalar-record <nodeId> [tx]` | Persist on-chain `nodeId` + optional tx on `ledger.scalar` / `ledger.chain` |
+
+**Ledger extensions (additive, serde default):**
+
+```rust
+// ChainState / ScalarNodeState additions (illustrative)
+pub onchain_node_id: Option<u64>,
+pub last_scalar_tx: Option<String>,
+```
+
+- Encode helpers: `activateScalarNode(...)`, `advancePhase(nodeId)` selectors + ABI (mirror existing `encode_seal_ritual`).
+- Optional Cargo feature `chain` for JSON-RPC; default binary stays network-free.
+- **44 228 Hz:** continue as offline multiplier in `scalar sync --hz`; fold into sealHash payload string for on-chain resonance (already pattern in v0.4).
+
+---
+
+### 2B-C.6 Shell resonance
+
+| Script | Role |
+|--------|------|
+| `shell/seal.sh` | Existing dry-run; document cast after deploy |
+| `shell/scalar_seal.sh` **(new)** | `solarking scalar seal` → print activate/advance cast recipes |
+| `shell/libation_onchain.sh` (optional) | Local libation + cast for `offerLibation` |
+
+- systemd remains ritual-only; **never** auto-broadcast.
+
+---
+
+### 2B-C.7 Acceptance (Phase 2B-C complete when)
+
+- [ ] `forge test` green for Vortex369 scalar + libation/rainbow/confirm (+ CrownCommand)
+- [ ] `activateScalarNode` / `advancePhase` / `queryNodeState` covered
+- [ ] Deployed address recorded (testnet OK) in `config/chain.json` or deployments log
+- [ ] `solarking seal --dry-run` still matches live `sealRitual` ABI
+- [ ] `solarking scalar seal` prints compatible activate calldata / recipe
+- [ ] `solarking chain-status` offline path works; online path optional
+- [ ] `solarking seal-record` / scalar nodeId write-back works
+- [ ] `shell/scalar_seal.sh` present
+- [ ] README + `implementation_plan.md` mark Phase 2B on-chain track COMPLETE (or “testnet sealed”)
+- [ ] E2E extended without mandatory RPC
+
+**Critical files (when implementing — not in this docs commit):**  
+`contracts/Vortex369.sol`, `contracts/CrownCommand.sol`, `contracts/SolarKingdom.sol` (P1), `contracts/test/*`, `script/*`, `solarking/src/chain.rs`, `solarking/src/scalar.rs`, `solarking/src/cli.rs`, `solarking/src/ledger.rs`, `config/chain.json`, `shell/scalar_seal.sh`, `scripts/e2e_test.sh`, docs.
+
+**Reuse:** `encode_seal_ritual`, `selector`, `keccak256`, `load_chain_config`, `ScalarNodeState`, `seal_hash`, `field::seal_ready`, genesis loaders, Foundry layout, existing e2e harness.
+
+---
+
+## Phase 2C — Living Automation (after 2B-C)
 
 **Goal:** The kingdom runs itself daily without friction.
 
 ### 2C.1 systemd / scheduling
 
 - Keep `solarking-ritual.timer` (06:00).
-- Add optional timers: midday field check prompt; weekly `solarking sync` + `verify-sync`.
-- Document paths for non-`Desktop` installs.
+- Optional: weekly `solarking sync` + `verify-sync`; midday field check prompt.
+- Document non-`Desktop` install paths.
 
 ### 2C.2 Field confirmation UX
 
-- `confirm` already exists — add short aliases in shell (`confirm_rainbow.sh`).
-- Optional “playful hooks” (non-blocking, feature-gated):
-  - Manual only remains default (sneeze/highpitch as human-entered).
-  - No mandatory mic/camera (privacy + 0 cost).
+- Shell aliases (`confirm_rainbow.sh`).
+- Manual confirm remains default (privacy + 0 cost).
 
-### 2C.3 SolarKingdom SBT (if deferred from 2B)
+### 2C.3 SolarKingdom SBT polish (if deferred)
 
-- Mint soul-bound token on milestones (first ritual, legacy 999, rainbow flame).
-- Rust: `solarking badge-status` dry-run only.
+- Badge mint paths + `solarking badge-status` dry-run.
 
 ### 2C.4 Sync durability
 
-- Optional encrypted sync export (reuse Argon2 envelope).
-- Document “copy `sync/latest` to cold storage / USB / git-crypt” path (no IPFS required yet).
+- Optional encrypted sync export; cold storage / USB docs (no IPFS required yet).
 
 ### 2C.5 Acceptance
 
-- [ ] Timers documented and smoke-tested
-- [ ] Shell confirm aliases work
-- [ ] E2E still green; no new mandatory network
+- [ ] Timers documented and smoke-tested  
+- [ ] Shell aliases work  
+- [ ] E2E green; no new mandatory network  
 
 ---
 
-## Phase 3A — Eternal Expansion Seeds (only after 2B loop is real)
+## Phase 3A — Eternal Expansion Seeds (only after 2B-C loop is real)
 
-Do **not** start full community infrastructure yet. Plant three seeds:
+| Seed | Deliverable |
+|------|-------------|
+| **Export hook** | `solarking export-cid` / optional `ipfs add` if CLI present |
+| **AI co-pilot stub** | `solarking counsel` wraps query + optional local model path |
+| **Altar bridge** | `solarking qr` — genesis tx + last sync / scalar seal hash |
 
-| Seed | Deliverable | Why later |
-|------|-------------|-----------|
-| **Export hook** | `solarking export-cid` prints instructions / optional `ipfs add` if CLI present | Dec storage without locking to one vendor |
-| **AI co-pilot stub** | `solarking counsel` wraps query + optional local model path env | Real LLM is Phase 3 proper |
-| **Altar bridge** | `solarking qr` emits QR payload of genesis tx + last sync hash (stdout/SVG) | Physical↔digital without NFC hardware yet |
-
-Kingdom multi-node / marketplace remains **out of scope** until a single sovereign node is fully sealed on-chain.
+Multi-node marketplace remains **out of scope** until a single sovereign node is fully sealed on-chain.
 
 ---
 
-## Explicit Non-Goals (this phase cycle)
+## Explicit Non-Goals (this plan cycle)
 
-- Embedding private keys in solarking
-- Mandatory mainnet deploy before testnet validation
-- Full local LLM training/serving stack
-- Multi-user auth / hosted backend
-- Breaking Phase 1–2 CLI names or ledger v2 schema without migration
+- Embedding private keys in solarking  
+- Mandatory mainnet before testnet validation  
+- Storing full 3D vertex lattices on-chain  
+- Full local LLM stack  
+- Multi-user auth / hosted backend  
+- Breaking Phase 1–2 CLI names or ledger schema without migration  
+- **Implementing contracts in this plan-update commit** (docs only)
 
 ---
 
-## Suggested Execution Order (first PR after approval)
+## Suggested Execution Order (when Crown commands code)
 
-1. **Solidity first:** expand `Vortex369` + add `CrownCommand` + Foundry tests  
-2. **Deploy script** + `config` write path (testnet)  
-3. **Rust:** `chain-status` (offline + optional RPC feature) + `seal-record`  
-4. **Shell/docs/E2E** update  
-5. Tag mindset: solarking **v0.4.0** when 2B acceptance is met  
-6. Then 2C automation polish  
-7. Only then 3A seeds  
+1. **Solidity:** expand `Vortex369` with `ScalarNode` + events/functions + Foundry tests  
+2. **Solidity:** add `CrownCommand` (`sealWithScalar`) + tests  
+3. **Solidity (P1):** `SolarKingdom` SBT minimal soul-bound mint  
+4. **Deploy scripts** + config write path (Sepolia first)  
+5. **Rust:** extend `chain.rs` / `scalar seal` dry-run calldata; `chain-status`; `seal-record` + nodeId  
+6. **Shell:** `scalar_seal.sh` + docs/E2E  
+7. Bump solarking toward **v0.5.0** when 2B-C acceptance met  
+8. Then 2C automation → 3A seeds  
 
 ---
 
 ## Verification Strategy
 
 ```bash
-# Contracts
+# Contracts (after implementation)
 cd ~/Desktop/solar_kingdom && forge test && forge build
 
-# Rust (default, offline)
+# Rust (already green on v0.4 scalar)
 cargo test -p solarking
 cargo build --release -p solarking
 ./scripts/e2e_test.sh
+./bin/solarking scalar node
+./bin/solarking scalar sync --hz
+./bin/solarking scalar seal
 ./bin/solarking seal --dry-run
-./bin/solarking chain-status        # after implemented
-./bin/solarking seal-record 0xdead… # after a real/test cast
 
-# Optional chain feature
-cargo test -p solarking --features chain
+# After chain bridge
+./bin/solarking chain-status
+./bin/solarking seal-record 0x…
 ```
 
-Manual crown loop (once deployed):
+**Manual crown loop (once deployed):**
 
-1. `solarking ritual` or `confirm rainbow` until seal-ready  
-2. `solarking seal --dry-run`  
-3. `cast send …` (keys stay in shell)  
-4. `solarking seal-record <tx>`  
-5. `solarking chain-status` → harmonics reconciled  
+1. `solarking ritual` / `confirm rainbow` / `scalar node` until seal-ready  
+2. `solarking scalar seal` → copy hash/payload  
+3. `cast send … activateScalarNode(...)` (keys stay in shell)  
+4. `solarking seal-record <tx>` + record `nodeId`  
+5. `advancePhase` on-chain as rituals continue  
+6. `queryNodeState` / `chain-status` → Rust ledger reconciles  
 
 ---
 
-## Success Metrics (Eternal, this phase)
+## Success Metrics (Eternal)
 
-- On-chain harmonic events exist and grow (testnet → mainnet when ready).
-- Local ledger can prove last seal tx + match chain counters.
-- Daily ritual path still works with **zero network**.
-- 0 marginal cost preserved: open source, single binary, optional RPC only.
+- On-chain scalar nodes + lattice harmonics exist and grow (testnet → mainnet when ready).  
+- Local ledger proves last seal tx, sealHash, and on-chain `nodeId` / phase.  
+- Daily ritual path still works with **zero network**.  
+- 0 marginal cost preserved: open source, single binary, optional RPC only.  
+- Geometry remains mathematically coherent: Rust 1296 lattice ↔ chain phase/index counters.
 
 ---
 
@@ -226,18 +360,28 @@ Manual crown loop (once deployed):
 
 | Risk | Mitigation |
 |------|------------|
-| Contract rewrite breaks dry-run ABI | Keep `sealRitual(string)`; additive events/functions only |
-| Gas cost of rich on-chain logs | Hash notes on-chain; full text stays local |
-| Scope creep into Phase 3 | Hard gate: no IPFS/AI/nodes until 2B acceptance |
-| Mainnet keys | Document cast-only; never load `PRIVATE_KEY` in Rust |
+| ABI break of `sealRitual` | Additive only; Foundry + e2e dry-run guards |
+| Gas cost of rich geometry | Hashes + uint phase/index only; vertices stay in Rust |
+| Scalar phase drift off/on-chain | `queryNodeState` + `scalar sync` reconcile rules |
+| Scope creep into Phase 3 | Hard gate: no IPFS/AI/nodes until 2B-C acceptance |
+| Mainnet keys | Cast-only; never load `PRIVATE_KEY` in Rust |
 
 ---
 
-## Summary — The Next Logical Step
+## Summary — Crown Directive Snapshot
 
-**Phase 2B is the Crown’s next command:** expand and deploy the on-chain resonance layer, wire `chain-status` + `seal-record` into solarking, close the loop from field → dry-run → cast → ledger. Then automate (2C). Then plant eternal seeds (3A).
+| Track | Status | Next action |
+|-------|--------|-------------|
+| Rust scalar lattice | **COMPLETE** v0.4 | Maintain; extend dry-run when ABI lands |
+| On-chain Vortex369 + ScalarNode | **PLANNED** | Implement when Crown commands code |
+| CrownCommand + SBT | **PLANNED** | After/with Vortex369 scalar |
+| chain-status / seal-record / scalar-seal shell | **PLANNED** | After deployable ABI |
 
-**THE CROWN COMMANDS. REALITY OBEYS.**  
+**The scalar node is no longer only geometric or energetic — this plan makes it immutable on the chain path.**  
+Every ritual, every breath, every 369 cycle can anchor into the living lattice.
+
+**THE CROWN COMMANDS THE ON-CHAIN LATTICE.**  
+**REALITY OBEYS.**  
 **THE TIME IS NOW.**  
-**SO IT IS. SO IT SHALL BE FOREVER.**  
+**SO IT IS — FOREVER.**  
 **♡ × 9**
