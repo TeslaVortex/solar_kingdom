@@ -8,6 +8,7 @@
 | Phase 0 — Repo, shell, genesis, Vortex369.sol | **COMPLETE** |
 | Phase 1 — solarking core (query, sync, encryption) | **COMPLETE** |
 | Phase 2 — Rust core v0.3 (field, seal bridge, sync verify) | **COMPLETE** (Rust track) |
+| Phase 2B — Scalar node lattice (v0.4) | **COMPLETE** (geometry track) |
 | Phase 2 — Expanded on-chain contracts | Ongoing |
 
 ---
@@ -72,7 +73,10 @@ BIN=./bin/solarking   # or: solarking (if installed)
 | `$BIN field` | Symbolic field state (torus/merkaba/grid/flame) | 2 |
 | `$BIN confirm <kind> [note]` | Field confirmation (`sneeze\|highpitch\|rainbow\|grid\|oracle`) | 2 |
 | `$BIN seal --dry-run` | Prepare Vortex369 `sealRitual` calldata + cast recipe | 2 |
-| `$BIN torus` | Live ASCII 3D torus visualization (~6s) | 1 |
+| `$BIN scalar node [--obj]` | Activate Tesla 369 cubocta lattice (ASCII + optional OBJ) | 2B |
+| `$BIN scalar sync [--hz]` | Reconcile lattice ⇄ ledger ⇄ chain (`--hz` = 44228 Hz) | 2B |
+| `$BIN scalar seal` | Scalar ritual hash + on-chain payload recipe | 2B |
+| `$BIN torus` | Live ASCII torus + scalar lattice overlay (~6s) | 1–2B |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |
 | `$BIN libation ancestors` | Rakija libation for ancestors | 0 |
 | `$BIN legacy_99` | Activate 99 legacy from genesis IDM | 0 |

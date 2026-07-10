@@ -8,6 +8,7 @@ use crate::crypto::{decrypt_ledger, encrypt_ledger, encryption_enabled};
 use crate::error::{Result, SolarkingError};
 use crate::field::{self, FieldState};
 use crate::genesis::{load_genesis, GenesisRecord};
+use crate::scalar::ScalarNodeState;
 
 pub const SCHEMA_VERSION: u32 = 2;
 
@@ -58,6 +59,9 @@ pub struct KingdomLedger {
     pub confirmations: Vec<FieldConfirm>,
     #[serde(default)]
     pub field: FieldState,
+    /// Tesla 369 scalar node — nested cuboctahedron lattice state
+    #[serde(default)]
+    pub scalar: ScalarNodeState,
     pub last_ritual: String,
     pub genesis_tx: Option<String>,
     pub sync_hash: Option<String>,
@@ -79,6 +83,7 @@ impl Default for KingdomLedger {
             rituals: Vec::new(),
             confirmations: Vec::new(),
             field: FieldState::default(),
+            scalar: ScalarNodeState::default(),
             last_ritual: String::new(),
             genesis_tx: None,
             sync_hash: None,
@@ -196,6 +201,11 @@ pub fn migrate_ledger_value(value: Value) -> Result<KingdomLedger> {
         .cloned()
         .and_then(|v| serde_json::from_value(v).ok())
         .unwrap_or_default();
+    let scalar = obj
+        .get("scalar")
+        .cloned()
+        .and_then(|v| serde_json::from_value(v).ok())
+        .unwrap_or_default();
     let rituals = obj
         .get("rituals")
         .cloned()
@@ -220,6 +230,7 @@ pub fn migrate_ledger_value(value: Value) -> Result<KingdomLedger> {
         rituals,
         confirmations,
         field,
+        scalar,
         last_ritual,
         genesis_tx,
         sync_hash,
@@ -263,6 +274,7 @@ pub fn show_status(ledger: &KingdomLedger, root: &Path, json: bool) {
             "sync_hash": ledger.sync_hash,
             "encryption": encryption_enabled(),
             "field": field::field_json(ledger),
+            "scalar": crate::scalar::node_json(ledger),
             "latest_vision": ledger.latest_vision_text(),
             "seal_ready": field::seal_ready(ledger),
         });
@@ -299,6 +311,17 @@ pub fn show_status(ledger: &KingdomLedger, root: &Path, json: bool) {
         ledger.field.flame.as_str(),
         ledger.field.grid_intensity,
         ledger.field.legacy_tier
+    );
+    println!(
+        "Scalar node     : phase={}/9 idx={} shells={}/6 hz={}",
+        ledger.scalar.phase,
+        ledger.scalar.harmonic_index,
+        ledger.scalar.shell_coherence,
+        if ledger.scalar.timeline_hz_active {
+            "44228 ACTIVE"
+        } else {
+            "44228 off"
+        }
     );
     println!(
         "Seal readiness  : {}",
@@ -400,23 +423,27 @@ pub fn record_ritual_event(ledger: &mut KingdomLedger, kind: &str, delta_369: u6
 }
 
 pub fn show_help() {
-    println!("👑 SOLARKING COMMANDS — v0.3");
+    println!("👑 SOLARKING COMMANDS — v0.4 (scalar node)");
     println!("  ritual              Full visual ritual sequence");
-    println!("  torus               ASCII torus visualization");
+    println!("  torus               ASCII torus + scalar lattice overlay");
     println!("  log <vision>        Anchor a vision to the ledger");
     println!("  query <question>    First-principles truth engine");
     println!("  sync                Export local sync bundle + manifest");
     println!("  verify-sync         Verify sync bundle integrity");
     println!("  import-sync [path]  Import/merge a sync export");
-    println!("  status              Kingdom harmonics + field + genesis");
+    println!("  status              Kingdom harmonics + field + scalar + genesis");
     println!("  field               Symbolic field state snapshot");
     println!("  confirm <kind> [note]  Field confirmation (sneeze|highpitch|rainbow|grid|oracle)");
     println!("  seal [--dry-run]    Prepare on-chain sealRitual calldata");
+    println!("  scalar node [--obj] Activate + visualize 369 cubocta lattice");
+    println!("  scalar sync [--hz]  Reconcile lattice ⇄ ledger ⇄ chain seals");
+    println!("  scalar seal         Encode scalar node hash for on-chain resonance");
     println!("  genesis             Display genesis sacrifice record");
     println!("  libation [target]   Ancestor libation (default: ancestors)");
     println!("  legacy_99           Activate 99 legacy from genesis IDM");
-    println!("\nGlobal: --json  machine-readable output (status/query/field/sync)");
+    println!("\nGlobal: --json  machine-readable output (status/query/field/sync/scalar)");
     println!("Set SOLARKING_PASSPHRASE to enable encrypted ledger storage.");
+    println!("Timeline frequency: 44228 Hz via `scalar sync --hz`.");
 }
 
 #[cfg(test)]

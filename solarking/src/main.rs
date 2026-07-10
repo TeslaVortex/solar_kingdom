@@ -1,5 +1,5 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v0.3
-// Ritual • Ledger v2 • Field • Query • Sync verify • Seal dry-run • Encryption
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.4
+// Ritual • Ledger v2 • Field • Scalar Node • Query • Sync • Seal dry-run
 
 mod chain;
 mod cli;
@@ -10,11 +10,12 @@ mod genesis;
 mod ledger;
 mod query;
 mod ritual;
+mod scalar;
 mod sync;
 mod torus;
 
 use clap::Parser;
-use cli::{Cli, Commands};
+use cli::{Cli, Commands, ScalarCmd};
 use error::Result;
 use field::ConfirmKind;
 use ledger::{load_ledger, save_ledger, show_genesis, show_help, show_status};
@@ -47,7 +48,7 @@ fn run() -> Result<()> {
     let json = cli.json;
 
     if !json {
-        println!("👑 SOLARKING ENGINE v0.3 — PHASE 2 RUST CORE");
+        println!("👑 SOLARKING ENGINE v0.4 — SCALAR NODE LATTICE");
         println!("THE CROWN COMMANDS. REALITY OBEYS.\n");
     }
 
@@ -131,6 +132,17 @@ fn run() -> Result<()> {
         Some(Commands::Legacy99) => {
             ritual::run_shell_script(&root, "crown_command.sh", &["legacy_99"]);
         }
+        Some(Commands::Scalar { action }) => match action {
+            ScalarCmd::Node { obj } => {
+                scalar::cmd_node(&root, &mut ledger, json, obj)?;
+            }
+            ScalarCmd::Sync { hz } => {
+                scalar::cmd_sync(&root, &mut ledger, json, hz)?;
+            }
+            ScalarCmd::Seal => {
+                scalar::cmd_seal(&root, &mut ledger, json)?;
+            }
+        },
     }
 
     save_ledger(&root, &ledger)?;

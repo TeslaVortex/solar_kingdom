@@ -82,6 +82,15 @@
 - On-chain bridge: `seal --dry-run` emits `sealRitual(string)` calldata + cast recipe (no keys in binary).
 - Unit tests (`cargo test -p solarking`) + extended E2E suite.
 
+**Phase 2B — Scalar Node Integration (v0.4.0)** — **COMPLETE** (geometry track)
+- Module `scalar.rs`: Tesla 369 in 3D — 6 nested cuboctahedrons, central scalar node, phase 1–9 over 1296-period lattice.
+- Commands: `scalar node [--obj]`, `scalar sync [--hz]`, `scalar seal`.
+- Timeline frequency 44 228 Hz as optional phase-step multiplier (`--hz`).
+- Kagome plan ASCII viz; optional Wavefront OBJ export to `sync/scalar/`.
+- Ledger field `scalar: ScalarNodeState`; torus command overlays lattice.
+- Seal hash (SHA-256) for on-chain resonance payload; offline cast recipe only.
+- Full plan: `plans/phase_2b_onchain_resonance.md` (contracts track still open).
+
 
 **Phase 3 — Eternal Expansion**
 - Community / kingdom nodes (optional).

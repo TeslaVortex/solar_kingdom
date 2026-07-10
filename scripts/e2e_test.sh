@@ -101,6 +101,18 @@ assert_output "$BIN field" "FIELD STATE" "solarking field"
 assert_output "$BIN seal --dry-run" "DRY RUN" "solarking seal --dry-run"
 assert_output "$BIN seal --dry-run" "sealRitual" "seal calldata mentions sealRitual"
 
+# ── Phase 2B Scalar Node ──
+echo ""
+echo "── SCALAR NODE (v0.4) ──"
+assert_output "$BIN help" "scalar" "help lists scalar"
+$BIN scalar node >/dev/null 2>&1 && pass "solarking scalar node" || fail "solarking scalar node"
+assert_output "$BIN scalar sync" "SCALAR SYNC" "solarking scalar sync"
+assert_output "$BIN scalar sync --hz" "44228" "scalar sync --hz timeline frequency"
+assert_output "$BIN scalar seal" "SCALAR SEAL" "solarking scalar seal"
+assert_output "$BIN status" "Scalar node" "status shows scalar node"
+$BIN scalar node --obj >/dev/null 2>&1 && pass "solarking scalar node --obj" || fail "solarking scalar node --obj"
+assert_file "$ROOT/sync/scalar/scalar_node.obj" "sync/scalar/scalar_node.obj"
+
 RITUAL_QUICK=1 $BIN libation ancestors >/dev/null 2>&1 && pass "solarking libation" || fail "solarking libation"
 RITUAL_QUICK=1 $BIN legacy_99 >/dev/null 2>&1 && pass "solarking legacy_99" || fail "solarking legacy_99"
 

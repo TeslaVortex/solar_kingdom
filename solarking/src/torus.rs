@@ -129,4 +129,6 @@ pub fn activate_torus_viz(ledger: &KingdomLedger) {
         0.0,
     );
     println!("✨ Torus stabilized. Grid visible.");
+    // Scalar node lattice overlay (Kagome plan of nested cuboctahedrons)
+    crate::scalar::print_torus_lattice_overlay(ledger);
 }

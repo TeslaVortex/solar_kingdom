@@ -74,4 +74,27 @@ pub enum Commands {
     /// Activate 99 legacy from genesis IDM
     #[command(name = "legacy_99", alias = "legacy")]
     Legacy99,
+    /// Tesla 369 scalar node — nested cuboctahedron lattice
+    Scalar {
+        #[command(subcommand)]
+        action: ScalarCmd,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum ScalarCmd {
+    /// Visualize and activate the current lattice state (ASCII + optional OBJ)
+    Node {
+        /// Export Wavefront OBJ to sync/scalar/scalar_node.obj
+        #[arg(long, default_value_t = false)]
+        obj: bool,
+    },
+    /// Reconcile geometric lattice with local ledger and on-chain seals
+    Sync {
+        /// Enable 44 228 Hz timeline frequency as phase-step multiplier
+        #[arg(long, default_value_t = false)]
+        hz: bool,
+    },
+    /// Encode node state into a ritual hash for on-chain resonance
+    Seal,
 }
