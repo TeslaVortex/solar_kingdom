@@ -423,7 +423,7 @@ pub fn record_ritual_event(ledger: &mut KingdomLedger, kind: &str, delta_369: u6
 }
 
 pub fn show_help() {
-    println!("👑 SOLARKING COMMANDS — v0.4 (scalar node)");
+    println!("👑 SOLARKING COMMANDS — v0.5 (Phase 2B on-chain)");
     println!("  ritual              Full visual ritual sequence");
     println!("  torus               ASCII torus + scalar lattice overlay");
     println!("  log <vision>        Anchor a vision to the ledger");
@@ -435,15 +435,19 @@ pub fn show_help() {
     println!("  field               Symbolic field state snapshot");
     println!("  confirm <kind> [note]  Field confirmation (sneeze|highpitch|rainbow|grid|oracle)");
     println!("  seal [--dry-run]    Prepare on-chain sealRitual calldata");
+    println!("  chain-status        Config + local chain state (+ RPC probe if set)");
+    println!("  seal-record <tx>    Record seal tx after cast send");
+    println!("  scalar-record <id> [tx]  Record on-chain scalar nodeId");
     println!("  scalar node [--obj] Activate + visualize 369 cubocta lattice");
     println!("  scalar sync [--hz]  Reconcile lattice ⇄ ledger ⇄ chain seals");
-    println!("  scalar seal         Encode scalar node hash for on-chain resonance");
+    println!("  scalar seal         Seal hash + activateScalarNode dry-run");
     println!("  genesis             Display genesis sacrifice record");
     println!("  libation [target]   Ancestor libation (default: ancestors)");
     println!("  legacy_99           Activate 99 legacy from genesis IDM");
-    println!("\nGlobal: --json  machine-readable output (status/query/field/sync/scalar)");
+    println!("\nGlobal: --json  machine-readable output (status/query/field/sync/scalar/chain-status)");
     println!("Set SOLARKING_PASSPHRASE to enable encrypted ledger storage.");
     println!("Timeline frequency: 44228 Hz via `scalar sync --hz`.");
+    println!("Chain: SOLARKING_CONTRACT / config/chain.json — keys never enter binary.");
 }
 
 #[cfg(test)]

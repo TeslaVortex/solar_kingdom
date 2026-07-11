@@ -79,6 +79,20 @@ pub enum Commands {
         #[command(subcommand)]
         action: ScalarCmd,
     },
+    /// Offline/online chain status (RPC probe if configured)
+    #[command(name = "chain-status")]
+    ChainStatus,
+    /// Record seal tx hash after external cast send
+    #[command(name = "seal-record")]
+    SealRecord {
+        tx_hash: String,
+    },
+    /// Record on-chain scalar nodeId after activateScalarNode
+    #[command(name = "scalar-record")]
+    ScalarRecord {
+        node_id: u64,
+        tx_hash: Option<String>,
+    },
 }
 
 #[derive(Subcommand, Debug)]

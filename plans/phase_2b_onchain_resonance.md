@@ -19,7 +19,7 @@
 | Phase 1 — solarking CLI, query, sync, encryption, systemd | **COMPLETE** |
 | Phase 2 Rust track (v0.3) — field, confirm, ledger v2, seal dry-run, Argon2, verify-sync | **COMPLETE** (`d962c74`) |
 | Phase 2B Rust geometry — scalar node lattice (Tesla 369 in 3D) | **COMPLETE** (`bd1750d`, solarking **v0.4.0**) |
-| Phase 2B On-chain contracts — expanded Solidity + scalar anchoring | **OPEN** ← **NEXT** |
+| Phase 2B On-chain contracts — expanded Solidity + scalar anchoring | **COMPLETE** (v0.5 code; deploy when keys ready) |
 | Phase 2C — Living automation | Waiting on 2B on-chain loop |
 | Phase 3A — Eternal expansion seeds | Waiting on sealed chain loop |
 

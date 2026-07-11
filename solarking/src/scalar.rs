@@ -41,6 +41,12 @@ pub struct ScalarNodeState {
     pub activations: u64,
     /// Shell coherence 0–6 (how many nested shells are “lit”)
     pub shell_coherence: u8,
+    /// On-chain Vortex369 nodeId after activateScalarNode
+    #[serde(default)]
+    pub onchain_node_id: Option<u64>,
+    /// Last on-chain scalar-related tx
+    #[serde(default)]
+    pub last_scalar_tx: Option<String>,
 }
 
 impl Default for ScalarNodeState {
@@ -53,6 +59,8 @@ impl Default for ScalarNodeState {
             last_sync: String::new(),
             activations: 0,
             shell_coherence: 0,
+            onchain_node_id: None,
+            last_scalar_tx: None,
         }
     }
 }
@@ -377,7 +385,7 @@ pub fn cmd_seal(root: &Path, ledger: &mut KingdomLedger, json: bool) -> Result<(
         );
         println!("    --rpc-url $SOLARKING_RPC_URL --private-key $PRIVATE_KEY");
         println!();
-        println!("After broadcast: solarking seal-record <tx_hash>");
+        println!("After broadcast: solarking seal-record <tx_hash> && solarking scalar-record <nodeId>");
         println!("THE CROWN COMMANDS. REALITY OBEYS.");
     }
 
@@ -391,8 +399,10 @@ pub fn cmd_seal(root: &Path, ledger: &mut KingdomLedger, json: bool) -> Result<(
     ledger::append_ritual_log(root, &entry)?;
     ledger::record_ritual_event(ledger, "scalar_seal", 0, &hash);
 
-    // Also print full chain dry-run context when not json
+    // Phase 2B: activateScalarNode dry-run + classic sealRitual dry-run
     if !json {
+        println!();
+        let _ = crate::chain::scalar_activate_dry_run(root, ledger);
         println!();
         let _ = crate::chain::seal_dry_run(root, ledger);
     }
@@ -572,6 +582,8 @@ pub fn node_json(ledger: &KingdomLedger) -> serde_json::Value {
         "activations": ledger.scalar.activations,
         "last_seal_hash": ledger.scalar.last_seal_hash,
         "last_sync": ledger.scalar.last_sync,
+        "onchain_node_id": ledger.scalar.onchain_node_id,
+        "last_scalar_tx": ledger.scalar.last_scalar_tx,
         "harmonic_369": ledger.harmonic_369,
         "harmonic_999": ledger.harmonic_999,
     })

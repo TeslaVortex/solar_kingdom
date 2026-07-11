@@ -9,7 +9,7 @@
 | Phase 1 — solarking core (query, sync, encryption) | **COMPLETE** |
 | Phase 2 — Rust core v0.3 (field, seal bridge, sync verify) | **COMPLETE** (Rust track) |
 | Phase 2B — Scalar node lattice (v0.4) | **COMPLETE** (geometry track) |
-| Phase 2 — Expanded on-chain contracts | Ongoing |
+| Phase 2B — On-chain contracts + chain bridge (v0.5) | **COMPLETE** (code; deploy opt-in) |
 
 ---
 
@@ -73,9 +73,12 @@ BIN=./bin/solarking   # or: solarking (if installed)
 | `$BIN field` | Symbolic field state (torus/merkaba/grid/flame) | 2 |
 | `$BIN confirm <kind> [note]` | Field confirmation (`sneeze\|highpitch\|rainbow\|grid\|oracle`) | 2 |
 | `$BIN seal --dry-run` | Prepare Vortex369 `sealRitual` calldata + cast recipe | 2 |
+| `$BIN chain-status` | Config + local chain state (+ RPC probe if set) | 2B |
+| `$BIN seal-record <tx>` | Record seal tx after external `cast send` | 2B |
+| `$BIN scalar-record <nodeId> [tx]` | Record on-chain scalar nodeId | 2B |
 | `$BIN scalar node [--obj]` | Activate Tesla 369 cubocta lattice (ASCII + optional OBJ) | 2B |
 | `$BIN scalar sync [--hz]` | Reconcile lattice ⇄ ledger ⇄ chain (`--hz` = 44228 Hz) | 2B |
-| `$BIN scalar seal` | Scalar ritual hash + on-chain payload recipe | 2B |
+| `$BIN scalar seal` | Seal hash + `activateScalarNode` dry-run + cast recipe | 2B |
 | `$BIN torus` | Live ASCII torus + scalar lattice overlay (~6s) | 1–2B |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |
 | `$BIN libation ancestors` | Rakija libation for ancestors | 0 |
@@ -107,18 +110,30 @@ Without the env var, ledger stays as plain `kingdom_ledger.json`.
 
 ---
 
-## On-chain seal (offline-first)
+## On-chain Phase 2B (offline-first)
+
+**Contracts:** `Vortex369` (scalar nodes), `CrownCommand`, `SolarKingdom` (SBT).  
+**Tests:** `forge test` (15 tests). **Deploy:** `script/DeployPhase2B.s.sol`
 
 ```bash
-# Optional config
-# config/chain.json or:
-export SOLARKING_CONTRACT=0xYourDeployedVortex369
-export SOLARKING_RPC_URL=https://...
-export SOLARKING_CHAIN_ID=1
+# Never commit API keys — use .env (gitignored)
+cp .env.example .env
+# set BASE_SEPOLIA_RPC_URL, PRIVATE_KEY
 
-solarking seal --dry-run
-# Then broadcast yourself with cast (keys never enter solarking):
-# cast send $SOLARKING_CONTRACT 'sealRitual(string)' '...' --rpc-url $SOLARKING_RPC_URL --private-key $PRIVATE_KEY
+forge test
+forge script script/DeployPhase2B.s.sol --rpc-url $BASE_SEPOLIA_RPC_URL --broadcast
+
+# Point solarking at deploy (config/chain.json or env)
+export SOLARKING_CONTRACT=0xYourVortex369
+export SOLARKING_RPC_URL=$BASE_SEPOLIA_RPC_URL
+export SOLARKING_CHAIN_ID=84532
+
+solarking scalar seal          # hash + activateScalarNode dry-run
+# cast send … activateScalarNode …   (keys stay in shell)
+solarking seal-record 0xTX
+solarking scalar-record 1 0xTX
+solarking chain-status
+./shell/scalar_seal.sh
 ```
 
 ---

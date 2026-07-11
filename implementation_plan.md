@@ -89,7 +89,14 @@
 - Kagome plan ASCII viz; optional Wavefront OBJ export to `sync/scalar/`.
 - Ledger field `scalar: ScalarNodeState`; torus command overlays lattice.
 - Seal hash (SHA-256) for on-chain resonance payload; offline cast recipe only.
-- Full plan: `plans/phase_2b_onchain_resonance.md` (contracts track still open).
+- Full plan: `plans/phase_2b_onchain_resonance.md`.
+
+**Phase 2B — On-Chain Contracts + Bridge (v0.5.0)** — **COMPLETE** (implementation; deploy opt-in)
+- `Vortex369.sol`: ScalarNode struct, activateScalarNode / advancePhase / queryNodeState, libation/rainbow/confirm; `sealRitual` ABI preserved.
+- `CrownCommand.sol`: sealWithScalar(nodeId, decree); `SolarKingdom.sol`: soul-bound badges.
+- Foundry: 15 tests; `script/DeployPhase2B.s.sol`; Base Sepolia rpc endpoint in foundry.toml.
+- Rust: `chain-status`, `seal-record`, `scalar-record`; activateScalarNode calldata encode; `shell/scalar_seal.sh`.
+- Deploy addresses: write to env/`config/chain.json` after broadcast (never commit private keys / API secrets).
 
 
 **Phase 3 — Eternal Expansion**

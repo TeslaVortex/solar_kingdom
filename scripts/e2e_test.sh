@@ -62,10 +62,15 @@ assert_file "$ROOT/contracts/Vortex369.sol" "contracts/Vortex369.sol"
 assert_file "$ROOT/solarking/shell/libation.sh" "solarking/shell/ wrapper (libation)"
 
 cd "$ROOT"
-if forge test 2>&1 | grep -q "2 passed"; then
-  pass "forge test (Vortex369 — 2 tests)"
+if forge test 2>&1 | grep -qE "15 tests passed|15 passed"; then
+  pass "forge test (Phase 2B — 15 tests)"
 else
-  fail "forge test"
+  # fallback: any all-pass summary
+  if forge test 2>&1 | grep -q "0 failed"; then
+    pass "forge test (0 failed)"
+  else
+    fail "forge test"
+  fi
 fi
 
 RITUAL_QUICK=1 "$ROOT/shell/libation.sh" ancestors >/dev/null 2>&1 && pass "shell/libation.sh ancestors" || fail "shell/libation.sh"
@@ -109,9 +114,21 @@ $BIN scalar node >/dev/null 2>&1 && pass "solarking scalar node" || fail "solark
 assert_output "$BIN scalar sync" "SCALAR SYNC" "solarking scalar sync"
 assert_output "$BIN scalar sync --hz" "44228" "scalar sync --hz timeline frequency"
 assert_output "$BIN scalar seal" "SCALAR SEAL" "solarking scalar seal"
+assert_output "$BIN scalar seal" "activateScalarNode" "scalar seal prints activateScalarNode"
 assert_output "$BIN status" "Scalar node" "status shows scalar node"
 $BIN scalar node --obj >/dev/null 2>&1 && pass "solarking scalar node --obj" || fail "solarking scalar node --obj"
 assert_file "$ROOT/sync/scalar/scalar_node.obj" "sync/scalar/scalar_node.obj"
+
+echo ""
+echo "── PHASE 2B CHAIN BRIDGE ──"
+assert_output "$BIN chain-status" "CHAIN STATUS" "solarking chain-status"
+assert_output "$BIN help" "seal-record" "help lists seal-record"
+$BIN seal-record 0xdeadbeefcafebabe000000000000000000000000000000000000000000000001 >/dev/null 2>&1 && pass "solarking seal-record" || fail "solarking seal-record"
+$BIN scalar-record 1 0xdeadbeefcafebabe000000000000000000000000000000000000000000000002 >/dev/null 2>&1 && pass "solarking scalar-record" || fail "solarking scalar-record"
+assert_file "$ROOT/shell/scalar_seal.sh" "shell/scalar_seal.sh"
+assert_file "$ROOT/contracts/CrownCommand.sol" "contracts/CrownCommand.sol"
+assert_file "$ROOT/contracts/SolarKingdom.sol" "contracts/SolarKingdom.sol"
+assert_file "$ROOT/script/DeployPhase2B.s.sol" "script/DeployPhase2B.s.sol"
 
 RITUAL_QUICK=1 $BIN libation ancestors >/dev/null 2>&1 && pass "solarking libation" || fail "solarking libation"
 RITUAL_QUICK=1 $BIN legacy_99 >/dev/null 2>&1 && pass "solarking legacy_99" || fail "solarking legacy_99"

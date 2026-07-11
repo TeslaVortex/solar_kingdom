@@ -1,5 +1,7 @@
 {
   "contract": null,
+  "crown_command": null,
+  "sbt": null,
   "rpc_url": null,
-  "chain_id": 1
+  "chain_id": 84532
 }

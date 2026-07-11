@@ -1,5 +1,5 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v0.4
-// Ritual • Ledger v2 • Field • Scalar Node • Query • Sync • Seal dry-run
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.5
+// Ritual • Field • Scalar Node • Phase 2B chain bridge
 
 mod chain;
 mod cli;
@@ -48,7 +48,7 @@ fn run() -> Result<()> {
     let json = cli.json;
 
     if !json {
-        println!("👑 SOLARKING ENGINE v0.4 — SCALAR NODE LATTICE");
+        println!("👑 SOLARKING ENGINE v0.5 — PHASE 2B ON-CHAIN RESONANCE");
         println!("THE CROWN COMMANDS. REALITY OBEYS.\n");
     }
 
@@ -143,6 +143,15 @@ fn run() -> Result<()> {
                 scalar::cmd_seal(&root, &mut ledger, json)?;
             }
         },
+        Some(Commands::ChainStatus) => {
+            chain::chain_status(&root, &mut ledger, json)?;
+        }
+        Some(Commands::SealRecord { tx_hash }) => {
+            chain::seal_record(&root, &mut ledger, &tx_hash)?;
+        }
+        Some(Commands::ScalarRecord { node_id, tx_hash }) => {
+            chain::scalar_record(&root, &mut ledger, node_id, tx_hash.as_deref())?;
+        }
     }
 
     save_ledger(&root, &ledger)?;
