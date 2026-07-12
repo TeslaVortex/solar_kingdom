@@ -9,3 +9,5 @@ solarking/ritual_log.txt
 /out/
 /cache/
 .env
+broadcast/
+/broadcast/
