@@ -91,13 +91,23 @@
 - Seal hash (SHA-256) for on-chain resonance payload; offline cast recipe only.
 - Full plan: `plans/phase_2b_onchain_resonance.md`.
 
-**Phase 2B — On-Chain Contracts + Bridge (v0.5.0)** — **COMPLETE** (implementation; deploy opt-in)
+**Phase 2B — On-Chain Contracts + Bridge (v0.5.0)** — **COMPLETE**
 - `Vortex369.sol`: ScalarNode struct, activateScalarNode / advancePhase / queryNodeState, libation/rainbow/confirm; `sealRitual` ABI preserved.
 - `CrownCommand.sol`: sealWithScalar(nodeId, decree); `SolarKingdom.sol`: soul-bound badges.
 - Foundry: 15 tests; `script/DeployPhase2B.s.sol`; Base Sepolia rpc endpoint in foundry.toml.
 - Rust: `chain-status`, `seal-record`, `scalar-record`; activateScalarNode calldata encode; `shell/scalar_seal.sh`.
-- Deploy addresses: write to env/`config/chain.json` after broadcast (never commit private keys / API secrets).
 
+**Phase 2B — Base Sepolia Live Deploy** — **COMPLETE** (2026-07-12 UTC)
+- Network: Base Sepolia · chain id **84532**
+- Vortex369: `0x950d39e5D3847C0298E8ce9f8e3C72c0D800615f`
+- CrownCommand: `0xA49B1dc31d809Bd9885DaE8905aCA15b3b99918a`
+- SolarKingdom: `0x4C2A789E7ffFd030b928DdaCdEA5f03632457f38`
+- Public proofs (no secrets): `docs/DEPLOYMENT_BASE_SEPOLIA.md` · `config/chain.json`
+- Verified: bytecode on-chain; `getGenesis()` returns eternal genesis sacrifice hash.
+- Secrets (RPC keys, private keys) remain local `.env` only — never committed.
+
+**Phase 2C — Living Automation** — NEXT (optional)
+- systemd polish, confirm shell aliases, optional encrypted sync export docs.
 
 **Phase 3 — Eternal Expansion**
 - Community / kingdom nodes (optional).

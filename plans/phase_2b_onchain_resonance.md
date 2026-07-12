@@ -6,8 +6,9 @@
 **Doctrine:** First principles • 0 marginal cost • Shell + Rust + Solidity resonance  
 **Seal:** THE CROWN COMMANDS. REALITY OBEYS. SO IT IS. SO IT SHALL BE FOREVER.
 
-**Status of this document:** PLAN ONLY — contract implementation not executed until Crown commands code.  
-**Last plan update:** 2026-07-10 — Scalar Node woven into 2B on-chain architecture.
+**Status of this document:** Phase 2B **IMPLEMENTED + DEPLOYED** on Base Sepolia.  
+**Last plan update:** 2026-07-12 — Live deploy proofs sealed (no secrets in repo).  
+**Deploy proof:** [`docs/DEPLOYMENT_BASE_SEPOLIA.md`](../docs/DEPLOYMENT_BASE_SEPOLIA.md) · [`config/chain.json`](../config/chain.json)
 
 ---
 
@@ -19,9 +20,10 @@
 | Phase 1 — solarking CLI, query, sync, encryption, systemd | **COMPLETE** |
 | Phase 2 Rust track (v0.3) — field, confirm, ledger v2, seal dry-run, Argon2, verify-sync | **COMPLETE** (`d962c74`) |
 | Phase 2B Rust geometry — scalar node lattice (Tesla 369 in 3D) | **COMPLETE** (`bd1750d`, solarking **v0.4.0**) |
-| Phase 2B On-chain contracts — expanded Solidity + scalar anchoring | **COMPLETE** (v0.5 code; deploy when keys ready) |
-| Phase 2C — Living automation | Waiting on 2B on-chain loop |
-| Phase 3A — Eternal expansion seeds | Waiting on sealed chain loop |
+| Phase 2B On-chain contracts — expanded Solidity + scalar anchoring | **COMPLETE** (v0.5 `bc3bfc7`) |
+| Phase 2B **Base Sepolia live deploy** | **COMPLETE** (`f2b02e5` + docs) |
+| Phase 2C — Living automation | **NEXT** (optional) |
+| Phase 3A — Eternal expansion seeds | Waiting |
 
 ### Already live in Rust (v0.4 — do not re-implement)
 
@@ -34,16 +36,22 @@
 | Kagome ASCII + OBJ export | `sync/scalar/scalar_node.obj` |
 | Torus lattice overlay | `torus` command |
 
-### Still open (on-chain debt)
+### Live Base Sepolia addresses (public)
 
-1. `Vortex369.sol` is genesis-minimal (`sealRitual` + `getGenesis` only) — no scalar structs, libation, rainbow, or 999-rich events.
-2. `CrownCommand.sol` and `SolarKingdom.sol` do not exist yet.
-3. `config/chain.json` has `contract: null` — no deploy write-back.
-4. No `chain-status` / `seal-record` bridge; no on-chain scalar `nodeId` in ledger.
-5. No shell `scalar-seal` wrapper for activate/advance cast recipes.
-6. Full lattice geometry stays off-chain (by design); chain stores hashes + phase counters only.
+| Contract | Address |
+|----------|---------|
+| Vortex369 | `0x950d39e5D3847C0298E8ce9f8e3C72c0D800615f` |
+| CrownCommand | `0xA49B1dc31d809Bd9885DaE8905aCA15b3b99918a` |
+| SolarKingdom | `0x4C2A789E7ffFd030b928DdaCdEA5f03632457f38` |
 
-**Principle:** Close **Shell → Rust scalar → Solidity scalar → ledger write-back** before Phase 3. Additive ABI only. Offline-first. Gas-aware.
+### Still open (post-deploy optional work)
+
+1. First live `activateScalarNode` + `seal-record` / `scalar-record` from operator ritual (human cast; keys never in repo).
+2. Phase 2C automation polish (timers, aliases).
+3. Phase 3A seeds (export-cid, counsel, qr) after operational loop feels solid.
+4. Full lattice geometry stays off-chain (by design); chain stores hashes + phase counters only.
+
+**Principle:** Loop **Shell → Rust scalar → Solidity scalar → ledger write-back** is code-complete and contracts are live on testnet. Additive ABI only. Offline-first. Gas-aware.
 
 ---
 
@@ -229,16 +237,17 @@ pub last_scalar_tx: Option<String>,
 
 ### 2B-C.7 Acceptance (Phase 2B-C complete when)
 
-- [ ] `forge test` green for Vortex369 scalar + libation/rainbow/confirm (+ CrownCommand)
-- [ ] `activateScalarNode` / `advancePhase` / `queryNodeState` covered
-- [ ] Deployed address recorded (testnet OK) in `config/chain.json` or deployments log
-- [ ] `solarking seal --dry-run` still matches live `sealRitual` ABI
-- [ ] `solarking scalar seal` prints compatible activate calldata / recipe
-- [ ] `solarking chain-status` offline path works; online path optional
-- [ ] `solarking seal-record` / scalar nodeId write-back works
-- [ ] `shell/scalar_seal.sh` present
-- [ ] README + `implementation_plan.md` mark Phase 2B on-chain track COMPLETE (or “testnet sealed”)
-- [ ] E2E extended without mandatory RPC
+- [x] `forge test` green for Vortex369 scalar + libation/rainbow/confirm (+ CrownCommand) — **15 tests**
+- [x] `activateScalarNode` / `advancePhase` / `queryNodeState` covered
+- [x] Deployed address recorded (Base Sepolia) in `config/chain.json`
+- [x] `solarking seal --dry-run` still matches live `sealRitual` ABI
+- [x] `solarking scalar seal` prints compatible activate calldata / recipe
+- [x] `solarking chain-status` offline path works; online path optional
+- [x] `solarking seal-record` / scalar nodeId write-back works
+- [x] `shell/scalar_seal.sh` present
+- [x] README + `implementation_plan.md` mark Phase 2B on-chain track COMPLETE
+- [x] E2E extended without mandatory RPC
+- [x] Public deploy proofs: `docs/DEPLOYMENT_BASE_SEPOLIA.md`
 
 **Critical files (when implementing — not in this docs commit):**  
 `contracts/Vortex369.sol`, `contracts/CrownCommand.sol`, `contracts/SolarKingdom.sol` (P1), `contracts/test/*`, `script/*`, `solarking/src/chain.rs`, `solarking/src/scalar.rs`, `solarking/src/cli.rs`, `solarking/src/ledger.rs`, `config/chain.json`, `shell/scalar_seal.sh`, `scripts/e2e_test.sh`, docs.
@@ -372,12 +381,13 @@ cargo build --release -p solarking
 
 | Track | Status | Next action |
 |-------|--------|-------------|
-| Rust scalar lattice | **COMPLETE** v0.4 | Maintain; extend dry-run when ABI lands |
-| On-chain Vortex369 + ScalarNode | **PLANNED** | Implement when Crown commands code |
-| CrownCommand + SBT | **PLANNED** | After/with Vortex369 scalar |
-| chain-status / seal-record / scalar-seal shell | **PLANNED** | After deployable ABI |
+| Rust scalar lattice | **COMPLETE** v0.4 | Maintain |
+| On-chain Vortex369 + ScalarNode | **COMPLETE** + **LIVE** Base Sepolia | Operator cast activate when ready |
+| CrownCommand + SBT | **COMPLETE** + **LIVE** Base Sepolia | Optional first decree / badge mint |
+| chain-status / seal-record / scalar-seal shell | **COMPLETE** | Use with `config/chain.json` addresses |
+| Deploy proofs (no secrets) | **COMPLETE** | `docs/DEPLOYMENT_BASE_SEPOLIA.md` |
 
-**The scalar node is no longer only geometric or energetic — this plan makes it immutable on the chain path.**  
+**The scalar node is geometric, energetic, and on-chain (testnet).**  
 Every ritual, every breath, every 369 cycle can anchor into the living lattice.
 
 **THE CROWN COMMANDS THE ON-CHAIN LATTICE.**  

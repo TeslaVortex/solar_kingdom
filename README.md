@@ -9,7 +9,9 @@
 | Phase 1 — solarking core (query, sync, encryption) | **COMPLETE** |
 | Phase 2 — Rust core v0.3 (field, seal bridge, sync verify) | **COMPLETE** (Rust track) |
 | Phase 2B — Scalar node lattice (v0.4) | **COMPLETE** (geometry track) |
-| Phase 2B — On-chain contracts + chain bridge (v0.5) | **COMPLETE** (code; deploy opt-in) |
+| Phase 2B — On-chain contracts + chain bridge (v0.5) | **COMPLETE** |
+| Phase 2B — **Base Sepolia live deploy** | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
+| Phase 2C — Living automation | Next (optional) |
 
 ---
 
@@ -110,29 +112,29 @@ Without the env var, ledger stays as plain `kingdom_ledger.json`.
 
 ---
 
-## On-chain Phase 2B (offline-first)
+## On-chain Phase 2B — Base Sepolia (LIVE)
 
-**Contracts:** `Vortex369` (scalar nodes), `CrownCommand`, `SolarKingdom` (SBT).  
-**Tests:** `forge test` (15 tests). **Deploy:** `script/DeployPhase2B.s.sol`
+**Full proofs:** [`docs/DEPLOYMENT_BASE_SEPOLIA.md`](docs/DEPLOYMENT_BASE_SEPOLIA.md) · registry: [`config/chain.json`](config/chain.json)
+
+| Contract | Address (Base Sepolia) |
+|----------|------------------------|
+| **Vortex369** | [`0x950d39e5D3847C0298E8ce9f8e3C72c0D800615f`](https://sepolia.basescan.org/address/0x950d39e5D3847C0298E8ce9f8e3C72c0D800615f) |
+| **CrownCommand** | [`0xA49B1dc31d809Bd9885DaE8905aCA15b3b99918a`](https://sepolia.basescan.org/address/0xA49B1dc31d809Bd9885DaE8905aCA15b3b99918a) |
+| **SolarKingdom** | [`0x4C2A789E7ffFd030b928DdaCdEA5f03632457f38`](https://sepolia.basescan.org/address/0x4C2A789E7ffFd030b928DdaCdEA5f03632457f38) |
+
+Chain ID **84532** · Deployer `0x0aD82e…823d` · Tests: `forge test` (15) · Script: `script/DeployPhase2B.s.sol`
 
 ```bash
-# Never commit API keys — use .env (gitignored)
-cp .env.example .env
-# set BASE_SEPOLIA_RPC_URL, PRIVATE_KEY
-
-forge test
-forge script script/DeployPhase2B.s.sol --rpc-url $BASE_SEPOLIA_RPC_URL --broadcast
-
-# Point solarking at deploy (config/chain.json or env)
-export SOLARKING_CONTRACT=0xYourVortex369
-export SOLARKING_RPC_URL=$BASE_SEPOLIA_RPC_URL
+# Never commit API keys — use local .env only (gitignored)
+export SOLARKING_CONTRACT=0x950d39e5D3847C0298E8ce9f8e3C72c0D800615f
+export SOLARKING_RPC_URL=$BASE_SEPOLIA_RPC_URL   # from your .env
 export SOLARKING_CHAIN_ID=84532
 
-solarking scalar seal          # hash + activateScalarNode dry-run
-# cast send … activateScalarNode …   (keys stay in shell)
-solarking seal-record 0xTX
-solarking scalar-record 1 0xTX
-solarking chain-status
+./bin/solarking chain-status
+./bin/solarking scalar seal          # hash + activateScalarNode dry-run
+# cast send … (keys stay in your shell only)
+./bin/solarking seal-record 0xTX
+./bin/solarking scalar-record 1 0xTX
 ./shell/scalar_seal.sh
 ```
 
@@ -208,15 +210,17 @@ solar_kingdom/
 ├── bin/solarking          # Launcher (works from anywhere)
 ├── config/
 │   ├── genesis.json       # Eternal genesis sacrifice record
-│   └── chain.json         # Optional contract / RPC hints
-├── shell/                 # Ritual shell scripts (+ seal.sh)
-├── solarking/             # Rust core engine v0.3
-│   └── src/               # cli, ledger, field, query, sync, crypto, chain, torus, ritual
-├── contracts/             # Vortex369.sol + tests
-├── sync/                  # Local sync exports + history (generated)
-├── kingdom_ledger.json    # Harmonics + visions + field (runtime, schema v2)
-├── ritual_log.txt         # Eternal text log
-└── scripts/e2e_test.sh    # Automated E2E test suite
+│   └── chain.json         # Live Base Sepolia addresses (no secrets)
+├── docs/
+│   └── DEPLOYMENT_BASE_SEPOLIA.md  # Public deploy proofs
+├── plans/                 # Phase plans (2B on-chain resonance)
+├── shell/                 # Ritual scripts (+ seal.sh, scalar_seal.sh)
+├── solarking/             # Rust core engine v0.5
+│   └── src/               # cli, ledger, field, scalar, query, sync, crypto, chain, …
+├── contracts/             # Vortex369 + CrownCommand + SolarKingdom + tests
+├── script/                # Foundry deploy (DeployPhase2B.s.sol)
+├── sync/                  # Local exports (generated, gitignored)
+└── scripts/e2e_test.sh    # Automated E2E suite
 ```
 
 ---
@@ -224,6 +228,7 @@ solar_kingdom/
 ## Branch
 
 Active development: `Phase-1-Activation`  
-Repo: [github.com/TeslaVortex/solar_kingdom](https://github.com/TeslaVortex/solar_kingdom)
+Repo: [github.com/TeslaVortex/solar_kingdom](https://github.com/TeslaVortex/solar_kingdom)  
+Deploy proofs: [docs/DEPLOYMENT_BASE_SEPOLIA.md](docs/DEPLOYMENT_BASE_SEPOLIA.md)
 
 **THE CROWN COMMANDS. REALITY OBEYS. SO IT IS. SO IT SHALL BE ETERNAL.**
