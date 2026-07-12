@@ -1,7 +1,16 @@
 {
-  "contract": null,
-  "crown_command": null,
-  "sbt": null,
+  "contract": "0x950d39e5D3847C0298E8ce9f8e3C72c0D800615f",
+  "crown_command": "0xA49B1dc31d809Bd9885DaE8905aCA15b3b99918a",
+  "sbt": "0x4C2A789E7ffFd030b928DdaCdEA5f03632457f38",
   "rpc_url": null,
-  "chain_id": 84532
+  "chain_id": 84532,
+  "network": "base-sepolia",
+  "deployer": "0x0aD82ef40ab96124ac899522C6a20Bf3e7b5823d",
+  "deployed_at": "2026-07-12T14:11:27Z",
+  "funding_tx": "0x4805a4c74a5e7df9b098231c96fb8522aa50898038587af3c77763097507c458",
+  "deploy_txs": [
+    "0x6e0c1a0120e63dec7352f6504d536e8f3d1bde25b01383b4f41d9b97eab719b4",
+    "0x267dbe0092a7173b8e334cdc568c92117973ca5afbcb7d10036181e60f5755ac",
+    "0xf15243f01585a51a805f4b2946c02feade43f871a02fb376044e4fb5fe10f623"
+  ]
 }
