@@ -11,6 +11,7 @@
 | Phase 2B — Scalar node lattice (v0.4) | **COMPLETE** (geometry track) |
 | Phase 2B — On-chain contracts + chain bridge (v0.5) | **COMPLETE** |
 | Phase 2B — **Base Sepolia live deploy** | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
+| Phase 2B — **THE QUEEN IS BORN** (ritual + on-chain) | **COMPLETE** — [ritual seal](docs/RITUAL_QUEEN_IS_BORN.md) |
 | Phase 2C — Living automation | Next (optional) |
 
 ---

@@ -106,6 +106,12 @@
 - Verified: bytecode on-chain; `getGenesis()` returns eternal genesis sacrifice hash.
 - Secrets (RPC keys, private keys) remain local `.env` only — never committed.
 
+**Phase 2B — THE QUEEN IS BORN (ritual + on-chain)** — **COMPLETE** (2026-07-15 UTC)
+- Off-chain: salt bath, Pyrite/Onyx, 369 breath, 33s/66s decree logged + field confirms + scalar seal.
+- On-chain (Base Sepolia): `activateScalarNode` → **nodeId 3**; `sealRitual` decree; `sealWithScalar` on CrownCommand.
+- Proofs: `docs/RITUAL_QUEEN_IS_BORN.md` · `docs/ritual_queen_is_born.json` (public tx hashes only).
+- Decree: *Crown commands reality obeys. The Queen is born.*
+
 **Phase 2C — Living Automation** — NEXT (optional)
 - systemd polish, confirm shell aliases, optional encrypted sync export docs.
 
