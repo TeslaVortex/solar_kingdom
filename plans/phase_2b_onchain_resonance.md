@@ -148,10 +148,11 @@ Phase 3A    Eternal expansion seeds          later    NEXT (optional)
 ```bash
 cd ~/Desktop/solar_kingdom
 forge test                    # 15 passed
-cargo test -p solarking       # 31 passed
-./scripts/e2e_test.sh         # offline E2E
+cargo test -p solarking       # 33+ passed (v0.6)
+./scripts/e2e_test.sh         # offline E2E (67+)
 ./bin/solarking chain-status  # uses config/chain.json
-./bin/solarking scalar seal   # dry-run activate recipe
+./bin/solarking badge-status  # Phase 2C
+./bin/solarking cold-export /tmp/kingdom_cold
 ```
 
 **Manual loop (already proven live):**  
