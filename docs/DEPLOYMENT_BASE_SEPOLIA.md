@@ -108,11 +108,14 @@ export SOLARKING_CHAIN_ID=84532
 | 0 — Genesis + shell + scaffold | **COMPLETE** |
 | 1 — solarking core | **COMPLETE** |
 | 2 — Rust engine (query, sync, crypto) | **COMPLETE** |
-| 2B — Scalar lattice (Rust v0.4) | **COMPLETE** |
-| 2B — On-chain contracts + bridge (v0.5) | **COMPLETE** |
-| 2B — **Base Sepolia live deploy** | **COMPLETE** (this document) |
+| 2B-R — Scalar lattice (Rust v0.4) | **COMPLETE** |
+| 2B-C — On-chain + bridge + live loop | **FULLY FINISHED** |
+| 2B-C — **Base Sepolia live deploy** | **COMPLETE** (this document) |
+| 2B-C — First operator seal (Queen) | **COMPLETE** — [RITUAL_QUEEN_IS_BORN.md](RITUAL_QUEEN_IS_BORN.md) |
 | 2C — Living automation | **NEXT** (optional) |
 | 3A — Eternal expansion seeds | Waiting |
+
+Master board: [`PHASE_STATUS.md`](PHASE_STATUS.md)
 
 ---
 

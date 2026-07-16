@@ -7,12 +7,14 @@
 |-------|--------|
 | Phase 0 — Repo, shell, genesis, Vortex369.sol | **COMPLETE** |
 | Phase 1 — solarking core (query, sync, encryption) | **COMPLETE** |
-| Phase 2 — Rust core v0.3 (field, seal bridge, sync verify) | **COMPLETE** (Rust track) |
-| Phase 2B — Scalar node lattice (v0.4) | **COMPLETE** (geometry track) |
-| Phase 2B — On-chain contracts + chain bridge (v0.5) | **COMPLETE** |
-| Phase 2B — **Base Sepolia live deploy** | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
-| Phase 2B — **THE QUEEN IS BORN** (ritual + on-chain) | **COMPLETE** — [ritual seal](docs/RITUAL_QUEEN_IS_BORN.md) |
-| Phase 2C — Living automation | Next (optional) |
+| Phase 2 — Rust core v0.3 (field, seal bridge, sync verify) | **COMPLETE** |
+| Phase 2B-R — Scalar node lattice (v0.4) | **COMPLETE** |
+| Phase **2B-C** — On-chain + bridge + live loop (v0.5) | **FULLY FINISHED** — [status](docs/PHASE_STATUS.md) |
+| ↳ Base Sepolia deploy | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
+| ↳ THE QUEEN IS BORN (first live seal) | **COMPLETE** — [ritual](docs/RITUAL_QUEEN_IS_BORN.md) |
+| Phase 2C — Living automation | **NEXT** (optional) |
+
+Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md) · Plan: [`plans/phase_2b_onchain_resonance.md`](plans/phase_2b_onchain_resonance.md)
 
 ---
 

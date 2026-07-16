@@ -112,6 +112,11 @@
 - Proofs: `docs/RITUAL_QUEEN_IS_BORN.md` · `docs/ritual_queen_is_born.json` (public tx hashes only).
 - Decree: *Crown commands reality obeys. The Queen is born.*
 
+**Phase 2B-C — CLOSED / FULLY FINISHED** (2026-07-15)
+- All 2B-C acceptance criteria met: contracts, tests (forge 15 / cargo 31), deploy, bridge CLI, shell, docs, live operator loop.
+- Status board: `docs/PHASE_STATUS.md` · Plan sealed: `plans/phase_2b_onchain_resonance.md`.
+- No open 2B-C engineering debt. Optional polish → Phase 2C.
+
 **Phase 2C — Living Automation** — NEXT (optional)
 - systemd polish, confirm shell aliases, optional encrypted sync export docs.
 
