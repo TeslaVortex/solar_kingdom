@@ -11,3 +11,4 @@ solarking/ritual_log.txt
 .env
 broadcast/
 /broadcast/
+config/node_identity.json

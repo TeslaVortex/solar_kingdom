@@ -58,7 +58,11 @@ pub fn counsel(
     extra.push("── Sovereign Guidance ──".to_string());
     extra.push(phase3_guidance(ledger, question));
     extra.push(String::new());
-    extra.push("Offline counsel only. Optional local model: SOLARKING_LOCAL_MODEL (unused until 3E).".to_string());
+    extra.push(
+        "Offline counsel. Optional: solarking grok \"…\" (Grok Build CLI) or SOLARKING_LOCAL_MODEL."
+            .to_string(),
+    );
+    extra.push("I do not chase — I receive. What is meant for me does not wander.".to_string());
     extra.push("THE CROWN COMMANDS. REALITY OBEYS.".to_string());
 
     if json {

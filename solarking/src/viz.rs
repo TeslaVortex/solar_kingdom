@@ -1,0 +1,186 @@
+//! Phase 3C — Lattice visualization (static HTML + enhanced terminal).
+
+use std::fs;
+use std::path::Path;
+
+use crate::error::Result;
+use crate::ledger::KingdomLedger;
+use crate::scalar;
+
+const LATTICE_HTML: &str = r##"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SOLARKING — Scalar Lattice</title>
+<style>
+  body { margin:0; background:#0a0a12; color:#e8e0c8; font-family: system-ui, sans-serif; }
+  header { padding:1rem 1.5rem; border-bottom:1px solid #333; }
+  h1 { margin:0; font-size:1.2rem; letter-spacing:0.08em; color:#f0c040; }
+  #meta { font-size:0.85rem; opacity:0.8; margin-top:0.4rem; }
+  #c { width:100%; height:calc(100vh - 90px); display:block; }
+  .hint { padding:0.5rem 1.5rem; font-size:0.8rem; opacity:0.6; }
+</style>
+</head>
+<body>
+<header>
+  <h1>👑 SCALAR LATTICE — TESLA 369</h1>
+  <div id="meta">Loading…</div>
+</header>
+<canvas id="c"></canvas>
+<p class="hint">Drag to orbit · scroll to zoom · THE CROWN COMMANDS. REALITY OBEYS.</p>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+const meta = document.getElementById('meta');
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0a0a12, 0.04);
+const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth/canvas.clientHeight, 0.1, 200);
+camera.position.set(8, 6, 12);
+
+const amb = new THREE.AmbientLight(0x404060, 0.8);
+scene.add(amb);
+const sun = new THREE.DirectionalLight(0xffe0a0, 1.2);
+sun.position.set(5, 10, 7);
+scene.add(sun);
+
+// Nested cubocta shells (12 verts) matching solarking scalar geometry
+function cubocta(scale, phase) {
+  const base = [
+    [1,1,0],[1,-1,0],[-1,1,0],[-1,-1,0],
+    [1,0,1],[1,0,-1],[-1,0,1],[-1,0,-1],
+    [0,1,1],[0,1,-1],[0,-1,1],[0,-1,-1]
+  ];
+  const a = (phase - 1) * Math.PI * 2 / 9 + scale * Math.PI / 9;
+  const ca = Math.cos(a), sa = Math.sin(a);
+  return base.map(([x,y,z]) => {
+    const xr = x * ca - y * sa;
+    const yr = x * sa + y * ca;
+    return new THREE.Vector3(xr * scale, yr * scale, z * scale);
+  });
+}
+
+const group = new THREE.Group();
+scene.add(group);
+const colors = [0xff4444, 0xffaa00, 0xffff44, 0x44ff88, 0x4488ff, 0xcc44ff];
+const phase = Number(window.SOLARKING_PHASE || 1);
+const shells = Number(window.SOLARKING_SHELLS || 6);
+
+for (let s = 1; s <= 6; s++) {
+  const verts = cubocta(s, phase);
+  const geom = new THREE.BufferGeometry().setFromPoints(verts);
+  // wire edges sequential + spokes to origin
+  const idx = [];
+  for (let i = 0; i < 12; i++) {
+    idx.push(i, (i + 1) % 12);
+  }
+  geom.setIndex(idx);
+  const mat = new THREE.LineBasicMaterial({
+    color: colors[(s-1)%colors.length],
+    transparent: true,
+    opacity: s <= shells ? 0.95 : 0.15
+  });
+  group.add(new THREE.LineSegments(geom, mat));
+  // points
+  const pmat = new THREE.PointsMaterial({ color: colors[(s-1)%colors.length], size: 0.12 });
+  group.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints(verts), pmat));
+}
+// center
+const core = new THREE.Mesh(
+  new THREE.SphereGeometry(0.25, 16, 16),
+  new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: 0xaa8800 })
+);
+scene.add(core);
+
+meta.textContent = `phase ${phase}/9 · shells lit ${shells}/6 · drag to rotate`;
+
+let drag=false, px=0, py=0, th=0.4, ph=0.8, rad=14;
+canvas.addEventListener('pointerdown', e => { drag=true; px=e.clientX; py=e.clientY; });
+window.addEventListener('pointerup', () => drag=false);
+window.addEventListener('pointermove', e => {
+  if (!drag) return;
+  ph += (e.clientX - px) * 0.01;
+  th += (e.clientY - py) * 0.01;
+  th = Math.max(0.1, Math.min(Math.PI-0.1, th));
+  px=e.clientX; py=e.clientY;
+});
+canvas.addEventListener('wheel', e => { rad = Math.max(4, Math.min(40, rad + e.deltaY*0.01)); });
+
+function frame() {
+  requestAnimationFrame(frame);
+  camera.position.x = rad * Math.sin(th) * Math.cos(ph);
+  camera.position.y = rad * Math.cos(th);
+  camera.position.z = rad * Math.sin(th) * Math.sin(ph);
+  camera.lookAt(0,0,0);
+  group.rotation.y += 0.003;
+  renderer.render(scene, camera);
+}
+frame();
+window.addEventListener('resize', () => {
+  camera.aspect = canvas.clientWidth/canvas.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+});
+</script>
+</body>
+</html>
+"##;
+
+pub fn lattice_visualize(root: &Path, ledger: &KingdomLedger, open_hint: bool) -> Result<()> {
+    // Ensure scalar OBJ exists for offline tools
+    let _ = scalar::export_obj_file(root, ledger);
+
+    let web_dir = root.join("web");
+    fs::create_dir_all(&web_dir)?;
+
+    // Inject phase/shells into a local HTML copy
+    let html = LATTICE_HTML
+        .replace(
+            "Number(window.SOLARKING_PHASE || 1)",
+            &format!("{}", ledger.scalar.phase.max(1)),
+        )
+        .replace(
+            "Number(window.SOLARKING_SHELLS || 6)",
+            &format!("{}", ledger.scalar.shell_coherence.max(1)),
+        );
+
+    let path = web_dir.join("lattice.html");
+    fs::write(&path, html)?;
+
+    // Meta JSON for external tools
+    fs::write(
+        web_dir.join("lattice_state.json"),
+        serde_json::to_string_pretty(&serde_json::json!({
+            "phase": ledger.scalar.phase,
+            "shell_coherence": ledger.scalar.shell_coherence,
+            "harmonic_index": ledger.scalar.harmonic_index,
+            "harmonic_369": ledger.harmonic_369,
+            "harmonic_999": ledger.harmonic_999,
+            "obj": "sync/scalar/scalar_node.obj",
+        }))?,
+    )?;
+
+    println!("🌀 LATTICE VISUALIZE");
+    println!("──────────────────");
+    scalar::print_ascii_lattice(ledger);
+    println!();
+    println!("HTML viewer : {}", path.display());
+    println!("State JSON  : {}/lattice_state.json", web_dir.display());
+    println!("OBJ mesh    : {}/sync/scalar/scalar_node.obj", root.display());
+    if open_hint {
+        println!();
+        println!("Open in browser (optional network for Three.js CDN):");
+        println!("  xdg-open {}", path.display());
+        println!("  # or: python3 -m http.server -d {} 8765", root.display());
+    }
+    println!("THE CROWN COMMANDS. REALITY OBEYS.");
+    Ok(())
+}

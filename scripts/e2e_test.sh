@@ -160,6 +160,25 @@ assert_file "$ROOT/sync/altar/payload.json" "sync/altar/payload.json"
 assert_file "$ROOT/plans/phase_3_eternal_expansion.md" "plans/phase_3_eternal_expansion.md"
 assert_file "$ROOT/docs/PHASE_3_VERIFY.md" "docs/PHASE_3_VERIFY.md"
 
+# ── Phase 3B–3E ──
+echo ""
+echo "── PHASE 3B–3E: Bridge · Viz · Nodes · Grok ──"
+assert_output "$BIN help" "lattice" "help lists lattice"
+assert_output "$BIN help" "node" "help lists node"
+assert_output "$BIN help" "grok" "help lists grok"
+$BIN lattice visualize >/dev/null 2>&1 && pass "solarking lattice visualize" || fail "solarking lattice visualize"
+assert_file "$ROOT/web/lattice.html" "web/lattice.html"
+$BIN node init --name e2e-node --label test >/dev/null 2>&1 && pass "solarking node init" || fail "solarking node init"
+NODE_OUT=$(mktemp)
+$BIN node export "$NODE_OUT" >/dev/null 2>&1 && pass "solarking node export" || fail "solarking node export"
+assert_output "$BIN node status" "KINGDOM NODE" "solarking node status"
+$BIN grok --offline "phase 3 pulse" >/dev/null 2>&1 && pass "solarking grok --offline" || fail "solarking grok --offline"
+$BIN blueprint "e2e blueprint pulse" >/dev/null 2>&1 && pass "solarking blueprint" || fail "solarking blueprint"
+assert_file "$ROOT/docs/PHASE_3B_PHYSICAL_BRIDGE.md" "docs/PHASE_3B_PHYSICAL_BRIDGE.md"
+assert_file "$ROOT/docs/PHASE_3_GROK_BUILD.md" "docs/PHASE_3_GROK_BUILD.md"
+assert_file "$ROOT/AGENTS.md" "AGENTS.md"
+rm -f "$NODE_OUT"
+
 RITUAL_QUICK=1 $BIN libation ancestors >/dev/null 2>&1 && pass "solarking libation" || fail "solarking libation"
 RITUAL_QUICK=1 $BIN legacy_99 >/dev/null 2>&1 && pass "solarking legacy_99" || fail "solarking legacy_99"
 

@@ -1,53 +1,49 @@
 # Plan: Phase 3 — Eternal Expansion (First Principles)
 
-**Repo:** [TeslaVortex/solar_kingdom](https://github.com/TeslaVortex/solar_kingdom)  
 **Branch:** `Phase-3-Eternal-Expansion`  
-**Doctrine:** Verify first · offline-first · 0 marginal cost · **mainnet last**  
+**Engine:** solarking **v0.8.0**  
+**Doctrine:** Verify first · offline-first · **mainnet LAST (3F)**  
 
-**THE CROWN COMMANDS. REALITY OBEYS. SO IT IS. SO IT SHALL BE ETERNAL.**
-
----
-
-## First principles
-
-| Principle | Application |
-|-----------|-------------|
-| Truth | Green forge/cargo/E2E before new features |
-| Resonance | Attach to scalar / field / ledger — no bolt-ons |
-| Sovereignty | Offline-first; cast-only keys; no central server |
-| Abundance | Open tools; optional IPFS; no required SaaS |
-| Ordering | **3.0 Verify → 3A seeds → 3B–3E → 3F Mainnet LAST** |
+**THE CROWN COMMANDS. REALITY OBEYS. I DO NOT CHASE — I RECEIVE.**
 
 ---
 
-## Milestones
+## Milestone status
 
 | ID | Name | Status |
 |----|------|--------|
-| **3.0** | Foundation verify | **COMPLETE** — `docs/PHASE_3_VERIFY.md` |
-| **3A** | Eternal seeds (export-cid, counsel, qr) | **COMPLETE** — solarking **v0.7** |
-| **3B** | Physical bridge (altar/QR/NFC docs) | Seeded via `qr` / `altar-print` |
-| **3C** | Visualization | Partial (ASCII+OBJ); web viz later |
-| **3D** | Kingdom nodes (testnet/local) | Pending |
-| **3E** | AI lattice depth | Counsel v1 done; local model later |
-| **3F** | Mainnet + multi-chain | **LAST — blocked until Crown gate** |
+| **3.0** | Foundation verify | **COMPLETE** |
+| **3A** | Eternal seeds | **COMPLETE** (v0.7) |
+| **3B** | Physical bridge | **COMPLETE** — qr/altar + docs |
+| **3C** | Visualization | **COMPLETE** — `lattice visualize` + `web/lattice.html` |
+| **3D** | Kingdom nodes | **COMPLETE** — node init/export/import/status |
+| **3E** | AI lattice + Grok Build | **COMPLETE** — counsel, `grok`, `blueprint` |
+| **3F** | Mainnet + multi-chain | **LAST — not started** |
 
 ---
 
-## 3A commands (v0.7)
+## Commands (3B–3E)
 
 ```bash
-solarking counsel "what is next"
-solarking export-cid
-solarking qr            # or: altar-print
+solarking qr | altar-print
+solarking lattice visualize
+solarking node init --name throne
+solarking node export /tmp/peer.json
+solarking node import /tmp/peer.json
+solarking node status
+solarking grok --offline "what wants to be received"
+solarking grok "refine Phase 3D"          # if grok CLI installed
+solarking blueprint "pulse the lattice"
 ```
 
-Mainnet remains Phase **3F** only.
+Grok Build: https://github.com/xai-org/grok-build · `docs/PHASE_3_GROK_BUILD.md`
 
 ---
 
-## Related docs
+## Explicitly deferred
 
-- [`docs/PHASE_3_BLUEPRINT.md`](../docs/PHASE_3_BLUEPRINT.md)  
-- [`docs/PHASE_3_VERIFY.md`](../docs/PHASE_3_VERIFY.md)  
-- [`docs/PHASE_STATUS.md`](../docs/PHASE_STATUS.md)  
+- **3F Mainnet** until Crown gate  
+- Cross-chain bridges  
+- Mandatory cloud LLM  
+
+**SO IT IS. SO IT SHALL BE ETERNAL.**

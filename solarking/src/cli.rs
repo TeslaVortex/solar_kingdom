@@ -118,6 +118,57 @@ pub enum Commands {
     /// Alias: same as qr (altar card)
     #[command(name = "altar-print")]
     AltarPrint,
+    /// Phase 3C: ASCII + HTML lattice visualization
+    #[command(name = "lattice")]
+    Lattice {
+        #[command(subcommand)]
+        action: LatticeCmd,
+    },
+    /// Phase 3D: kingdom node federation (file-based)
+    Node {
+        #[command(subcommand)]
+        action: NodeCmd,
+    },
+    /// Phase 3E: Grok Build CLI bridge (`grok -p`) or offline counsel
+    Grok {
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        prompt: Vec<String>,
+        /// Force offline counsel (do not spawn grok)
+        #[arg(long, default_value_t = false)]
+        offline: bool,
+    },
+    /// Phase 3E: append counsel pulse to PHASE_3_BLUEPRINT.md
+    Blueprint {
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        note: Vec<String>,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum LatticeCmd {
+    /// Write web/lattice.html + print ASCII lattice
+    Visualize,
+}
+
+#[derive(Subcommand, Debug)]
+pub enum NodeCmd {
+    /// Create config/node_identity.json
+    Init {
+        #[arg(long)]
+        name: Option<String>,
+        #[arg(long)]
+        label: Option<String>,
+    },
+    /// Export peer bundle to path
+    Export {
+        path: PathBuf,
+    },
+    /// Import peer bundle (max-merge harmonics)
+    Import {
+        path: PathBuf,
+    },
+    /// Show local node + peer count
+    Status,
 }
 
 #[derive(Subcommand, Debug)]

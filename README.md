@@ -13,9 +13,12 @@
 | ↳ Base Sepolia deploy | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
 | ↳ THE QUEEN IS BORN (first live seal) | **COMPLETE** — [ritual](docs/RITUAL_QUEEN_IS_BORN.md) |
 | Phase **2C** — Living automation (v0.6) | **COMPLETE** — [2C docs](docs/PHASE_2C_LIVING_AUTOMATION.md) |
-| Phase **3** — Eternal expansion | **IN PROGRESS** on branch `Phase-3-Eternal-Expansion` |
-| ↳ 3.0 Verify | **COMPLETE** — [verify](docs/PHASE_3_VERIFY.md) |
-| ↳ 3A Seeds (v0.7) | **COMPLETE** — counsel · export-cid · qr |
+| Phase **3** — Eternal expansion | **3B–3E COMPLETE** on `Phase-3-Eternal-Expansion` (v0.8) |
+| ↳ 3.0–3A | **COMPLETE** — [verify](docs/PHASE_3_VERIFY.md) · seeds |
+| ↳ 3B Physical bridge | **COMPLETE** — [bridge](docs/PHASE_3B_PHYSICAL_BRIDGE.md) |
+| ↳ 3C Visualization | **COMPLETE** — `lattice visualize` |
+| ↳ 3D Kingdom nodes | **COMPLETE** — `node init/export/import` |
+| ↳ 3E Grok Build CLI | **COMPLETE** — [grok](docs/PHASE_3_GROK_BUILD.md) |
 | ↳ **3F Mainnet** | **LAST** — not started |
 
 Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md) · Plan: [`plans/phase_3_eternal_expansion.md`](plans/phase_3_eternal_expansion.md)
@@ -90,10 +93,14 @@ BIN=./bin/solarking   # or: solarking (if installed)
 | `$BIN scalar seal` | Seal hash + `activateScalarNode` dry-run + cast recipe | 2B |
 | `$BIN badge-status` | Soul-bound badge eligibility dry-run | 2C |
 | `$BIN cold-export <dir> [--encrypt]` | Offline/USB durability export | 2C |
-| `$BIN counsel [q]` | Local sovereign counsel (field+scalar) | 3A |
+| `$BIN counsel [q]` | Local sovereign counsel | 3A |
 | `$BIN export-cid` | IPFS/Arweave pin instructions | 3A |
-| `$BIN qr` / `altar-print` | Altar/QR/NFC payload files | 3A |
-| `$BIN torus` | Live ASCII torus + scalar lattice overlay (~6s) | 1–2B |
+| `$BIN qr` / `altar-print` | Altar/QR/NFC payload | 3B |
+| `$BIN lattice visualize` | ASCII + HTML 3D lattice | 3C |
+| `$BIN node init\|export\|import\|status` | Kingdom node federation | 3D |
+| `$BIN grok [prompt] [--offline]` | Grok Build CLI bridge | 3E |
+| `$BIN blueprint [note]` | Blueprint counsel pulse | 3E |
+| `$BIN torus` | Torus + scalar overlay | 1–2B |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |
 | `$BIN libation ancestors` | Rakija libation for ancestors | 0 |
 | `$BIN legacy_99` | Activate 99 legacy from genesis IDM | 0 |

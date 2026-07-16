@@ -124,13 +124,15 @@
 - Docs: `docs/PHASE_2C_LIVING_AUTOMATION.md` · `docs/PHASE_STATUS.md`; E2E extended.
 - Offline-first preserved; keys never in unit files.
 
-**Phase 3 — Eternal Expansion** — **IN PROGRESS** (`Phase-3-Eternal-Expansion` branch)
+**Phase 3 — Eternal Expansion** — **3B–3E COMPLETE** (`Phase-3-Eternal-Expansion`, solarking **v0.8**)
 - **First principles:** verify before expand; offline-first; mainnet **last** (3F).
-- **3.0 Verify** — COMPLETE (`docs/PHASE_3_VERIFY.md`): forge 15 · cargo green · E2E.
-- **3A Seeds (v0.7)** — COMPLETE: `counsel`, `export-cid`, `qr` / `altar-print`.
-- **3B–3E** — physical bridge depth, viz, nodes, AI depth (next).
-- **3F Mainnet** — blocked until Crown gate after 3A–3E.
-- Plan: `plans/phase_3_eternal_expansion.md` · Blueprint: `docs/PHASE_3_BLUEPRINT.md`.
+- **3.0–3A** — verify + counsel/export-cid/qr (v0.7).
+- **3B** — physical bridge docs + altar payload (`docs/PHASE_3B_PHYSICAL_BRIDGE.md`).
+- **3C** — `lattice visualize` → `web/lattice.html` (Three.js CDN) + ASCII.
+- **3D** — kingdom nodes: `node init|export|import|status` (file federation v0).
+- **3E** — Grok Build CLI bridge (`solarking grok` → `grok -p`) + offline fallback + `blueprint`; `docs/PHASE_3_GROK_BUILD.md`, `AGENTS.md`.
+- **3F Mainnet** — **not started** (Crown gate required).
+- Plan: `plans/phase_3_eternal_expansion.md`.
 
 **Phase 3 — Eternal Expansion**
 - Community / kingdom nodes (optional).

@@ -1,5 +1,5 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v0.7
-// Phase 3A Eternal Seeds • counsel • export-cid • qr
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.8
+// Phase 3B–3E: physical bridge · viz · nodes · grok-build
 
 mod badge;
 mod chain;
@@ -8,16 +8,19 @@ mod crypto;
 mod error;
 mod field;
 mod genesis;
+mod grok_bridge;
 mod ledger;
+mod node;
 mod phase3;
 mod query;
 mod ritual;
 mod scalar;
 mod sync;
 mod torus;
+mod viz;
 
 use clap::Parser;
-use cli::{Cli, Commands, ScalarCmd};
+use cli::{Cli, Commands, LatticeCmd, NodeCmd, ScalarCmd};
 use error::Result;
 use field::ConfirmKind;
 use ledger::{load_ledger, save_ledger, show_genesis, show_help, show_status};
@@ -50,8 +53,8 @@ fn run() -> Result<()> {
     let json = cli.json;
 
     if !json {
-        println!("👑 SOLARKING ENGINE v0.7 — PHASE 3 ETERNAL EXPANSION");
-        println!("THE CROWN COMMANDS. REALITY OBEYS.\n");
+        println!("👑 SOLARKING ENGINE v0.8 — PHASE 3B–3E LATTICE");
+        println!("THE CROWN COMMANDS. REALITY OBEYS. I DO NOT CHASE — I RECEIVE.\n");
     }
 
     let mut ledger = load_ledger(&root)?;
@@ -173,6 +176,42 @@ fn run() -> Result<()> {
         }
         Some(Commands::Qr) | Some(Commands::AltarPrint) => {
             phase3::qr_payload(&root, &ledger, json)?;
+        }
+        Some(Commands::Lattice { action }) => match action {
+            LatticeCmd::Visualize => {
+                viz::lattice_visualize(&root, &ledger, true)?;
+            }
+        },
+        Some(Commands::Node { action }) => match action {
+            NodeCmd::Init { name, label } => {
+                node::node_init(&root, name.as_deref(), label.as_deref())?;
+            }
+            NodeCmd::Export { path } => {
+                node::node_export(&root, &ledger, &path)?;
+            }
+            NodeCmd::Import { path } => {
+                node::node_import(&root, &mut ledger, &path)?;
+            }
+            NodeCmd::Status => {
+                node::node_status(&root, &ledger, json)?;
+            }
+        },
+        Some(Commands::Grok { prompt, offline }) => {
+            let p = if prompt.is_empty() {
+                "What is the next sovereign step for the Eternal Solar Kingdom?".to_string()
+            } else {
+                prompt.join(" ")
+            };
+            grok_bridge::local_model_status();
+            grok_bridge::run_grok(&root, &ledger, &p, offline)?;
+        }
+        Some(Commands::Blueprint { note }) => {
+            let n = if note.is_empty() {
+                "Pulse the Phase 3 blueprint from current field state.".to_string()
+            } else {
+                note.join(" ")
+            };
+            grok_bridge::evolve_blueprint(&root, &ledger, &n)?;
         }
     }
 

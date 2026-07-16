@@ -423,27 +423,20 @@ pub fn record_ritual_event(ledger: &mut KingdomLedger, kind: &str, delta_369: u6
 }
 
 pub fn show_help() {
-    println!("👑 SOLARKING COMMANDS — v0.7 (Phase 3 eternal expansion)");
-    println!("  ritual              Full visual ritual sequence");
-    println!("  torus               ASCII torus + scalar lattice overlay");
-    println!("  log <vision>        Anchor a vision to the ledger");
-    println!("  query <question>    First-principles truth engine");
-    println!("  counsel [q]         Phase 3A local counsel (field+scalar)");
-    println!("  export-cid          IPFS/Arweave pin instructions (+ optional ipfs)");
-    println!("  qr | altar-print    Altar/QR/NFC payload files");
-    println!("  sync                Export local sync bundle + manifest");
-    println!("  verify-sync         Verify sync bundle integrity");
-    println!("  import-sync [path]  Import/merge a sync export");
-    println!("  cold-export <dir>   USB/offline durability copy [--encrypt]");
-    println!("  status              Kingdom harmonics + field + scalar + genesis");
-    println!("  field               Symbolic field state snapshot");
-    println!("  confirm <kind> [note]  Field confirmation");
-    println!("  badge-status        Soul-bound badge eligibility (dry-run)");
-    println!("  seal / chain-status / seal-record / scalar-record");
-    println!("  scalar node|sync|seal");
-    println!("  genesis · libation · legacy_99");
-    println!("\nPhase 3: verify first · seeds now · mainnet LAST (3F).");
-    println!("Keys never enter binary. Offline-first.");
+    println!("👑 SOLARKING COMMANDS — v0.8 (Phase 3B–3E)");
+    println!("  ritual · torus · log · query · status · field · confirm");
+    println!("  counsel [q]         Local counsel");
+    println!("  grok [prompt]       Grok Build CLI (-p) or --offline counsel");
+    println!("  blueprint [note]    Append counsel pulse to PHASE_3_BLUEPRINT.md");
+    println!("  export-cid · qr · altar-print");
+    println!("  lattice visualize   ASCII + web/lattice.html (Three.js CDN)");
+    println!("  node init|export|import|status   Kingdom node federation");
+    println!("  sync · verify-sync · import-sync · cold-export");
+    println!("  badge-status · seal · chain-status · seal-record · scalar-record");
+    println!("  scalar node|sync|seal · genesis · libation · legacy_99");
+    println!("\nGrok Build: https://github.com/xai-org/grok-build  (install: x.ai/cli)");
+    println!("Mainnet is Phase 3F LAST. I do not chase — I receive.");
+    println!("Keys never enter solarking. Offline-first.");
 }
 
 #[cfg(test)]

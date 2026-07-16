@@ -26,6 +26,9 @@ pub enum SolarkingError {
 
     #[error("missing file: {0}")]
     MissingFile(PathBuf),
+
+    #[error("{0}")]
+    Msg(String),
 }
 
 impl SolarkingError {
