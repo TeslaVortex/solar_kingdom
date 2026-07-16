@@ -1,7 +1,10 @@
 # SOLARKING Systemd Automation (Phase 2C)
 
 Living automation for the Eternal Solar Kingdom.  
-**Offline-first:** no private keys, no auto-broadcast. Rituals stay local.
+**Offline-first:** no private keys, no auto-broadcast. Rituals stay local.  
+**Current engine:** solarking **v0.9** (timers still call `ritual` / `field` / `sync` — unchanged).
+
+Manual daily path (paste · read · recipes): [`docs/CROWN_WORKFLOW.md`](../docs/CROWN_WORKFLOW.md)
 
 **THE CROWN COMMANDS. REALITY OBEYS.**
 

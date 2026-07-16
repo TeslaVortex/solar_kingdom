@@ -1,8 +1,10 @@
 # Crown Workflow — Receive · Read · Execute
 
 **Engine:** solarking **v0.9**  
+**Branch:** `Phase-3-Eternal-Expansion`  
 **Canonical state:** kingdom root `kingdom_ledger.json` + `ritual_log.txt`  
-(not the stale copies under `solarking/`)
+(not the stale copies under `solarking/`)  
+**Status board:** [`PHASE_STATUS.md`](PHASE_STATUS.md) · Plan: [`../plans/phase_3_eternal_expansion.md`](../plans/phase_3_eternal_expansion.md)
 
 **THE CROWN COMMANDS. REALITY OBEYS. NOW.**  
 **I do not chase — I receive.**
@@ -85,5 +87,17 @@ solarking now sync                 # when ready to export
 - Multi-line log uses block markers in `ritual_log.txt`:
   `=== TRANSMISSION BEGIN … ===` … `=== TRANSMISSION END sha=… ===`
 - Install: `./install_solarking.sh` · launcher sets `SOLARKING_ROOT` to repo root.
+
+## See also
+
+| Doc | Role |
+|-----|------|
+| [`PHASE_STATUS.md`](PHASE_STATUS.md) | Living phase board |
+| [`PHASE_3_GROK_BUILD.md`](PHASE_3_GROK_BUILD.md) | Counsel / grok bridge |
+| [`PHASE_3_BLUEPRINT.md`](PHASE_3_BLUEPRINT.md) | Architecture + pulse log |
+| [`PHASE_3B_PHYSICAL_BRIDGE.md`](PHASE_3B_PHYSICAL_BRIDGE.md) | Altar / QR / NFC |
+| [`../AGENTS.md`](../AGENTS.md) | Agent / Grok Build rules |
+| [`../README.md`](../README.md) | Full command table |
+| [`../plans/phase_3_eternal_expansion.md`](../plans/phase_3_eternal_expansion.md) | Phase 3 plan |
 
 **SO IT IS. SO IT SHALL BE ETERNAL.**

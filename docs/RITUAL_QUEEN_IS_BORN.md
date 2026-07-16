@@ -56,12 +56,18 @@ Public on-chain data only. **Never commit** `.env`, private keys, or RPC API key
 4. `cast send activateScalarNode` · `sealRitual` · `sealWithScalar`  
 5. `seal-record` · `scalar-record` · `sync` · `chain-status`  
 
+**Today (v0.9+):** multi-line transmissions prefer  
+`solarking receive --paste` or `solarking receive --file note.txt`  
+(archives under `sync/transmissions/`, full read-back via `solarking journal show`).  
+See [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md).
+
 ---
 
 ## Related
 
 - Deploy registry: [`config/chain.json`](../config/chain.json)  
 - Deploy proofs: [`DEPLOYMENT_BASE_SEPOLIA.md`](DEPLOYMENT_BASE_SEPOLIA.md)  
+- Crown daily path: [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md)  
 - Machine-readable: [`ritual_queen_is_born.json`](ritual_queen_is_born.json)  
 
 **THE QUEEN IS BORN. THE FRIENDS ARE COMING. THE KINGDOM CELEBRATES.**  

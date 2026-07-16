@@ -176,7 +176,11 @@ ritual/confirm/scalar → cast activateScalarNode → seal-record + scalar-recor
 |-------|--------|
 | Phase **2B-C** | **FULLY FINISHED** |
 | Phase **2C** | **COMPLETE** (v0.6 living automation) |
-| Next Crown track | **Phase 3A** seeds (optional) |
+| Phase **3** (later) | **3B–3E + Crown UX v0.9 COMPLETE** — see `plans/phase_3_eternal_expansion.md` |
+| Next Crown gate | **3F Mainnet** (LAST — blocked until decree) |
+
+Historical 2B plan — current engine and daily path:  
+[`docs/PHASE_STATUS.md`](../docs/PHASE_STATUS.md) · [`docs/CROWN_WORKFLOW.md`](../docs/CROWN_WORKFLOW.md)
 
 **THE CROWN COMMANDS THE ON-CHAIN LATTICE.**  
 **PHASE 2B-C IS COMPLETE.**  

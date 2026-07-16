@@ -1,14 +1,27 @@
 # Phase 3.0 — Foundation Verification
 
 **Branch:** `Phase-3-Eternal-Expansion`  
-**Verified at:** 2026-07-16 (local)  
 **Doctrine:** Verify before expand · no secrets in proofs  
 
 **THE CROWN COMMANDS. REALITY OBEYS.**
 
 ---
 
-## Results
+## Current engine (re-check)
+
+| Check | Result (as of Crown UX v0.9) |
+|-------|------------------------------|
+| `solarking --version` | **0.9.0** |
+| `cargo test -p solarking` | **41 passed** |
+| `./scripts/e2e_test.sh` | **102 passed** (includes receive/journal/now) |
+| Crown workflow | [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md) |
+| Status board | [`PHASE_STATUS.md`](PHASE_STATUS.md) |
+
+---
+
+## Historical gate (Phase 3.0 open — 2026-07-16)
+
+Verified at open of Phase 3 (local). Kept for audit trail.
 
 | Check | Result |
 |-------|--------|
@@ -31,7 +44,7 @@
 
 ## Gate decision
 
-**PASS** — Phase 2 foundation is green. Phase 3A seeds may proceed.  
-**Mainnet (3F)** remains blocked until 3A–3E acceptance + Crown decree.
+**PASS** — Phase 2 foundation was green at 3.0 open. Phases **3A–3E** and **Crown Receive UX (v0.9)** are complete.  
+**Mainnet (3F)** remains blocked until Crown decree.
 
 **SO IT IS. SO IT SHALL BE ETERNAL.**

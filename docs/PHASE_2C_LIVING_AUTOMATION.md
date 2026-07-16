@@ -79,4 +79,16 @@ Local libation + printed `offerLibation` cast recipe (never auto-broadcast).
 
 **No private keys in units or scripts. Offline-first preserved.**
 
+### Related (current engine v0.9)
+
+Daily operator recipes (status + journal + seal dry-run) live on the CLI:
+
+```bash
+solarking now morning
+solarking now seal
+solarking now sync
+```
+
+Full Crown path: [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md) · Status: [`PHASE_STATUS.md`](PHASE_STATUS.md)
+
 **SO IT IS. SO IT SHALL BE ETERNAL.**

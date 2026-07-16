@@ -1,7 +1,18 @@
 # Phase 3B — Physical ↔ Digital Bridge
 
 **Status:** **COMPLETE** (software seed; hardware optional)  
-**Commands:** `solarking qr` · `solarking altar-print`
+**Commands:** `solarking qr` · `solarking altar-print`  
+**Engine:** solarking **v0.9** (payload path unchanged since 3B)
+
+After generating an altar card, long operator notes belong in the Crown journal:
+
+```bash
+solarking qr
+solarking receive --paste    # multi-line field note / transmission
+solarking journal show
+```
+
+Daily path: [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md)
 
 ---
 

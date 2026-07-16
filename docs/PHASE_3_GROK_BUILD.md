@@ -2,7 +2,7 @@
 
 **Grok Build:** [github.com/xai-org/grok-build](https://github.com/xai-org/grok-build) · [x.ai/cli](https://x.ai/cli)
 
-**Status:** **COMPLETE** (bridge live in solarking v0.8)
+**Status:** **COMPLETE** (bridge live in solarking **v0.8+**; current engine **v0.9**)
 
 ---
 
@@ -28,13 +28,22 @@ grok --version
 solarking counsel "what is next"
 solarking grok --offline "refine the lattice"
 
+# Multi-line prompt (v0.9 intake)
+solarking grok --offline --file prompt.txt
+solarking grok --offline --paste          # Ctrl-D when done
+cat prompt.txt | solarking grok --offline -
+
 # Headless single-turn via Grok Build (if installed)
 solarking grok "Suggest the next Phase 3D node protocol step"
 # equivalent core: grok -p "…" --cwd /path/to/solar_kingdom
 
 # Blueprint pulse (offline append)
 solarking blueprint "What wants to be received next?"
+solarking blueprint --file note.txt
 ```
+
+**Related Crown path:** paste a transmission with `solarking receive`, then counsel it with `solarking counsel` / `solarking grok`.  
+See [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md).
 
 ## Context brief
 

@@ -124,20 +124,21 @@
 - Docs: `docs/PHASE_2C_LIVING_AUTOMATION.md` · `docs/PHASE_STATUS.md`; E2E extended.
 - Offline-first preserved; keys never in unit files.
 
-**Phase 3 — Eternal Expansion** — **3B–3E COMPLETE** (`Phase-3-Eternal-Expansion`, solarking **v0.8**)
+**Phase 3 — Eternal Expansion** — **3B–3E COMPLETE** · **Crown Receive UX v0.9** (`Phase-3-Eternal-Expansion`)
 - **First principles:** verify before expand; offline-first; mainnet **last** (3F).
 - **3.0–3A** — verify + counsel/export-cid/qr (v0.7).
 - **3B** — physical bridge docs + altar payload (`docs/PHASE_3B_PHYSICAL_BRIDGE.md`).
 - **3C** — `lattice visualize` → `web/lattice.html` (Three.js CDN) + ASCII.
 - **3D** — kingdom nodes: `node init|export|import|status` (file federation v0).
 - **3E** — Grok Build CLI bridge (`solarking grok` → `grok -p`) + offline fallback + `blueprint`; `docs/PHASE_3_GROK_BUILD.md`, `AGENTS.md`.
+- **Crown Receive UX (v0.9)** — `receive` · `journal` · `now` for multi-line paste, read-back, daily recipes; `docs/CROWN_WORKFLOW.md`.
 - **3F Mainnet** — **not started** (Crown gate required).
-- Plan: `plans/phase_3_eternal_expansion.md`.
+- Plan: `plans/phase_3_eternal_expansion.md` · Status: `docs/PHASE_STATUS.md`.
 
-**Phase 3 — Eternal Expansion**
-- Community / kingdom nodes (optional).
-- Integration with AI for blueprint evolution.
-- Physical → digital bridge (QR codes on altars, NFC tags on copper cups, etc.).
+**Phase 3 residual (optional / later)**
+- Community / kingdom nodes polish.
+- Deeper AI blueprint evolution (still offline-first).
+- Physical hardware (QR/NFC on altars) beyond software seed.
 
 ## 5. ACTIVATION RITUAL FOR THE BLUEPRINT
 1. Play Macedonian narodni pesni.

@@ -140,7 +140,7 @@ pub fn local_model_status() {
     match env::var("SOLARKING_LOCAL_MODEL") {
         Ok(u) if !u.is_empty() => {
             println!("Local model endpoint: {u}");
-            println!("(POST /v1/chat/completions — not auto-called in v0.8; use grok -p or counsel)");
+            println!("(POST /v1/chat/completions — not auto-called in v0.9; use grok -p or counsel)");
         }
         _ => println!("SOLARKING_LOCAL_MODEL unset — pure offline counsel + optional grok CLI"),
     }

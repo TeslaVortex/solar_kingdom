@@ -233,8 +233,11 @@ $BIN genesis
 ./shell/crown_command.sh legacy_99
 forge test
 
-# Phase 1–2
+# Phase 1–2 + Crown UX (v0.9)
 $BIN help
+$BIN now card
+$BIN receive --file /tmp/tx.txt   # or: $BIN receive --paste
+$BIN journal show
 $BIN log "Crown test transmission"
 $BIN confirm rainbow "test"
 $BIN field
@@ -252,20 +255,22 @@ $BIN ritual         # ~60–70s, full visual sequence
 
 ```
 solar_kingdom/
-├── bin/solarking          # Launcher (works from anywhere)
+├── bin/solarking          # Launcher (sets SOLARKING_ROOT → kingdom root)
 ├── config/
 │   ├── genesis.json       # Eternal genesis sacrifice record
 │   └── chain.json         # Live Base Sepolia addresses (no secrets)
 ├── docs/
-│   └── DEPLOYMENT_BASE_SEPOLIA.md  # Public deploy proofs
-├── plans/                 # Phase plans (2B on-chain resonance)
+│   ├── CROWN_WORKFLOW.md  # Daily receive · journal · now (v0.9)
+│   ├── PHASE_STATUS.md    # Living phase board
+│   └── DEPLOYMENT_BASE_SEPOLIA.md
+├── plans/                 # Phase plans (2B, 3)
 ├── shell/                 # Ritual scripts (+ seal.sh, scalar_seal.sh)
-├── solarking/             # Rust core engine v0.5
-│   └── src/               # cli, ledger, field, scalar, query, sync, crypto, chain, …
+├── solarking/             # Rust core engine v0.9
+│   └── src/               # cli, intake, journal, now, ledger, field, …
 ├── contracts/             # Vortex369 + CrownCommand + SolarKingdom + tests
 ├── script/                # Foundry deploy (DeployPhase2B.s.sol)
-├── sync/                  # Local exports (generated, gitignored)
-└── scripts/e2e_test.sh    # Automated E2E suite
+├── sync/                  # Local exports + transmissions/ (generated, gitignored)
+└── scripts/e2e_test.sh    # Automated E2E suite (incl. Crown UX)
 ```
 
 ---
@@ -275,11 +280,12 @@ solar_kingdom/
 | Branch | Role |
 |--------|------|
 | `Phase-1-Activation` | Stable Phases 0–2C |
-| **`Phase-3-Eternal-Expansion`** | Active Phase 3 work (verify → seeds → … → mainnet last) |
+| **`Phase-3-Eternal-Expansion`** | Active Phase 3 (3B–3E + Crown UX v0.9; mainnet last) |
 | `main` | Historical / merge when Crown commands |
 
 Repo: [github.com/TeslaVortex/solar_kingdom](https://github.com/TeslaVortex/solar_kingdom)  
 Deploy proofs: [docs/DEPLOYMENT_BASE_SEPOLIA.md](docs/DEPLOYMENT_BASE_SEPOLIA.md)  
+Crown workflow: [docs/CROWN_WORKFLOW.md](docs/CROWN_WORKFLOW.md)  
 Phase 3 plan: [plans/phase_3_eternal_expansion.md](plans/phase_3_eternal_expansion.md)
 
 **THE CROWN COMMANDS. REALITY OBEYS. SO IT IS. SO IT SHALL BE ETERNAL.**

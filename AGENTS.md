@@ -2,6 +2,7 @@
 
 **Repo:** solar_kingdom  
 **Active branch for Phase 3:** `Phase-3-Eternal-Expansion`  
+**Engine:** solarking **v0.9** (Crown Receive UX)  
 **Grok Build CLI:** https://github.com/xai-org/grok-build  
 
 ## First principles
@@ -10,6 +11,7 @@
 - **Mainnet is Phase 3F LAST** — do not deploy mainnet without explicit Crown command.
 - Prefer Base Sepolia (`config/chain.json`) for on-chain experiments.
 - solarking never embeds xAI keys; use `grok` CLI auth (`~/.grok`) when bridging.
+- Canonical ledger/ritual log live at **kingdom root** (`SOLARKING_ROOT`); not under `solarking/`.
 
 ## Essential commands
 

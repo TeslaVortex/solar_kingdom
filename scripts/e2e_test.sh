@@ -1,5 +1,6 @@
 #!/bin/bash
-# ETERNAL SOLAR KINGDOM — End-to-End Test Suite (Phase 0 + Phase 1 + v0.3 Rust core)
+# ETERNAL SOLAR KINGDOM — End-to-End Test Suite
+# Phases 0–3E + Crown Receive UX (solarking v0.9)
 # THE CROWN COMMANDS. REALITY OBEYS.
 
 set -e

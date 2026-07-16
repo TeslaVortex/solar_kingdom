@@ -1,8 +1,8 @@
 # Phase 3 Architecture Blueprint
 
 **Branch:** `Phase-3-Eternal-Expansion`  
-**Engine:** solarking **v0.7**  
-**Seal:** Fractal expansion · verify first · mainnet last  
+**Engine:** solarking **v0.9**  
+**Seal:** Fractal expansion · verify first · mainnet last · I receive  
 
 ---
 
@@ -13,13 +13,16 @@
 3. **Rust sovereign engine** — counsel, export-cid, qr seeds (3A)  
 4. **Physical bridge** — altar payload JSON/NFC text (3A/3B)  
 5. **Nodes** — file-based peer sync first (3D)  
-6. **AI** — local counsel first; optional model path later (3E)  
+6. **AI** — local counsel first; optional Grok Build CLI (3E)  
+7. **Crown Receive UX** — `receive` · `journal` · `now` multi-line paste & recipes (v0.9)  
 
 ## Ordering law
 
 ```
-Verify (3.0) → Seeds (3A) → Physical (3B) → Viz (3C) → Nodes (3D) → AI (3E) → Mainnet (3F)
+Verify (3.0) → Seeds (3A) → Physical (3B) → Viz (3C) → Nodes (3D) → AI (3E) → Crown UX (v0.9) → Mainnet (3F)
 ```
+
+Daily operator path: [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md) · Status: [`PHASE_STATUS.md`](PHASE_STATUS.md)
 
 ## Explicitly deferred
 

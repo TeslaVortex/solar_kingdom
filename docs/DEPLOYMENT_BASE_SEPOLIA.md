@@ -9,6 +9,10 @@
 **THE CROWN COMMANDS. REALITY OBEYS.**  
 **SO IT IS. SO IT SHALL BE ETERNAL.**
 
+**Current engine:** solarking **v0.9** (deploy addresses unchanged).  
+After live seals, log multi-line notes with `solarking receive` — see [`CROWN_WORKFLOW.md`](CROWN_WORKFLOW.md).  
+Phase board: [`PHASE_STATUS.md`](PHASE_STATUS.md).
+
 ---
 
 ## Security note
