@@ -9,12 +9,13 @@
 | Phase 1 — solarking core (query, sync, encryption) | **COMPLETE** |
 | Phase 2 — Rust core v0.3 (field, seal bridge, sync verify) | **COMPLETE** |
 | Phase 2B-R — Scalar node lattice (v0.4) | **COMPLETE** |
-| Phase **2B-C** — On-chain + bridge + live loop (v0.5) | **FULLY FINISHED** — [status](docs/PHASE_STATUS.md) |
+| Phase **2B-C** — On-chain + bridge + live loop (v0.5) | **COMPLETE** — [status](docs/PHASE_STATUS.md) |
 | ↳ Base Sepolia deploy | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
 | ↳ THE QUEEN IS BORN (first live seal) | **COMPLETE** — [ritual](docs/RITUAL_QUEEN_IS_BORN.md) |
-| Phase 2C — Living automation | **NEXT** (optional) |
+| Phase **2C** — Living automation (v0.6) | **COMPLETE** — [2C docs](docs/PHASE_2C_LIVING_AUTOMATION.md) |
+| Phase 3A — Eternal expansion seeds | **NEXT** (optional) |
 
-Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md) · Plan: [`plans/phase_2b_onchain_resonance.md`](plans/phase_2b_onchain_resonance.md)
+Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md)
 
 ---
 
@@ -84,6 +85,8 @@ BIN=./bin/solarking   # or: solarking (if installed)
 | `$BIN scalar node [--obj]` | Activate Tesla 369 cubocta lattice (ASCII + optional OBJ) | 2B |
 | `$BIN scalar sync [--hz]` | Reconcile lattice ⇄ ledger ⇄ chain (`--hz` = 44228 Hz) | 2B |
 | `$BIN scalar seal` | Seal hash + `activateScalarNode` dry-run + cast recipe | 2B |
+| `$BIN badge-status` | Soul-bound badge eligibility dry-run | 2C |
+| `$BIN cold-export <dir> [--encrypt]` | Offline/USB durability export | 2C |
 | `$BIN torus` | Live ASCII torus + scalar lattice overlay (~6s) | 1–2B |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |
 | `$BIN libation ancestors` | Rakija libation for ancestors | 0 |
@@ -173,7 +176,14 @@ systemctl --user enable --now solarking-ritual.timer
 systemctl --user list-timers
 ```
 
-Runs `solarking ritual` daily at **06:00**.
+**Phase 2C timers** (daily ritual 06:00, field check 12:00, weekly sync Sunday 18:00):
+
+```bash
+./scripts/install_systemd.sh
+# custom path: SOLARKING_ROOT=/path/to/solar_kingdom ./scripts/install_systemd.sh
+```
+
+Details: [`systemd/README.md`](systemd/README.md) · [`docs/PHASE_2C_LIVING_AUTOMATION.md`](docs/PHASE_2C_LIVING_AUTOMATION.md)
 
 ---
 

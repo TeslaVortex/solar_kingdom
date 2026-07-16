@@ -212,6 +212,63 @@ pub fn hex_sha256(data: &[u8]) -> String {
     hash.iter().map(|b| format!("{:02x}", b)).collect()
 }
 
+/// Cold-export durability: copy latest sync bundle (+ optional encrypt) to a destination directory.
+/// Suitable for USB / offline backup. Never uploads. Optional encryption uses SOLARKING_PASSPHRASE.
+pub fn cold_export(
+    root: &Path,
+    ledger: &mut KingdomLedger,
+    dest: &Path,
+    encrypt: bool,
+) -> Result<()> {
+    // Ensure fresh bundle exists
+    run_sync(root, ledger, false)?;
+
+    fs::create_dir_all(dest)?;
+    let stamp = Local::now().format("%Y%m%d_%H%M%S").to_string();
+    let src_bundle = root.join("sync/latest/kingdom_export.json");
+    let src_manifest = root.join("sync/manifest.json");
+    if !src_bundle.exists() {
+        return Err(SolarkingError::MissingFile(src_bundle));
+    }
+
+    let dest_bundle = dest.join(format!("kingdom_export_{}.json", stamp));
+    fs::copy(&src_bundle, &dest_bundle)?;
+    if src_manifest.exists() {
+        fs::copy(&src_manifest, dest.join(format!("manifest_{}.json", stamp)))?;
+    }
+
+    // Optional encrypted twin (same crypto envelope as ledger)
+    if encrypt {
+        if !crate::crypto::encryption_enabled() {
+            return Err(SolarkingError::sync(
+                "cold-export --encrypt requires SOLARKING_PASSPHRASE",
+            ));
+        }
+        let plain = fs::read(&dest_bundle)?;
+        let enc = crate::crypto::encrypt_ledger(&plain).map_err(SolarkingError::crypto)?;
+        fs::write(dest.join(format!("kingdom_export_{}.json.enc", stamp)), enc)?;
+    }
+
+    // README for cold media
+    let readme = format!(
+        "SOLARKING cold export\nexported_at={}\nsha256={}\nencrypt={}\nRestore: copy kingdom_export_*.json and run: solarking import-sync <path>\n",
+        Local::now().format("%Y-%m-%d %H:%M:%S %Z"),
+        ledger.sync_hash.as_deref().unwrap_or("?"),
+        encrypt
+    );
+    fs::write(dest.join("COLD_EXPORT_README.txt"), readme)?;
+
+    println!("🧊 COLD EXPORT COMPLETE");
+    println!("Destination : {}", dest.display());
+    println!("Bundle      : {}", dest_bundle.display());
+    if encrypt {
+        println!("Encrypted   : kingdom_export_{}.json.enc", stamp);
+    }
+    println!("README      : {}/COLD_EXPORT_README.txt", dest.display());
+    println!("Copy this folder to USB / offline vault. No network used.");
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

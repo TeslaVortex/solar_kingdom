@@ -40,8 +40,8 @@
 | Phase 2B-C — On-chain contracts + Rust bridge | **COMPLETE** v0.5 (`bc3bfc7`) |
 | Phase 2B-C — Base Sepolia live deploy | **COMPLETE** (`f2b02e5`) |
 | Phase 2B-C — Operator loop (activate + decree + Crown) | **COMPLETE** (`d72a61e` Queen) |
-| Phase 2C — Living automation | **NEXT** (optional; separate track) |
-| Phase 3A — Eternal expansion seeds | Waiting |
+| Phase 2C — Living automation | **COMPLETE** (v0.6) |
+| Phase 3A — Eternal expansion seeds | **NEXT** (optional) |
 
 ### Live Base Sepolia addresses (public)
 
@@ -70,9 +70,9 @@
 
 ```
 Phase 2B-R  Scalar geometry in Rust          v0.4.0   COMPLETE
-Phase 2B-C  On-chain + bridge + live loop    v0.5.x   COMPLETE  ← CLOSED
-Phase 2C    Living automation                v0.6.x   NEXT (optional)
-Phase 3A    Eternal expansion seeds          later    after 2C as desired
+Phase 2B-C  On-chain + bridge + live loop    v0.5.x   COMPLETE
+Phase 2C    Living automation                v0.6.0   COMPLETE
+Phase 3A    Eternal expansion seeds          later    NEXT (optional)
 ```
 
 ---
@@ -134,15 +134,12 @@ Phase 3A    Eternal expansion seeds          later    after 2C as desired
 
 ---
 
-## Explicitly NOT required for 2B-C close
+## Explicitly outside 2B-C (now Phase 2C COMPLETE / 3A waiting)
 
-These are **Phase 2C / 3A** (optional next tracks), not open 2B-C debt:
-
-- systemd extra timers / confirm shell aliases  
-- `solarking badge-status`  
-- Mainnet deploy  
-- IPFS / AI / QR altar seeds  
-- Full eth_call reconciliation UI beyond cast recipes  
+- ~~systemd timers / confirm aliases / badge-status / cold-export~~ → **Phase 2C DONE (v0.6)**  
+- Mainnet deploy — optional later  
+- IPFS / AI / QR altar seeds — **Phase 3A**  
+- Full eth_call reconciliation UI beyond cast recipes — optional polish  
 
 ---
 
@@ -177,7 +174,8 @@ ritual/confirm/scalar → cast activateScalarNode → seal-record + scalar-recor
 | Track | Status |
 |-------|--------|
 | Phase **2B-C** | **FULLY FINISHED** |
-| Next Crown track | **Phase 2C** Living Automation (optional) |
+| Phase **2C** | **COMPLETE** (v0.6 living automation) |
+| Next Crown track | **Phase 3A** seeds (optional) |
 
 **THE CROWN COMMANDS THE ON-CHAIN LATTICE.**  
 **PHASE 2B-C IS COMPLETE.**  

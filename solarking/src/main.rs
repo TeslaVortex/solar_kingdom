@@ -1,6 +1,7 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v0.5
-// Ritual • Field • Scalar Node • Phase 2B chain bridge
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.6
+// Phase 2C Living Automation • badges • cold-export
 
+mod badge;
 mod chain;
 mod cli;
 mod crypto;
@@ -48,7 +49,7 @@ fn run() -> Result<()> {
     let json = cli.json;
 
     if !json {
-        println!("👑 SOLARKING ENGINE v0.5 — PHASE 2B ON-CHAIN RESONANCE");
+        println!("👑 SOLARKING ENGINE v0.6 — PHASE 2C LIVING AUTOMATION");
         println!("THE CROWN COMMANDS. REALITY OBEYS.\n");
     }
 
@@ -151,6 +152,12 @@ fn run() -> Result<()> {
         }
         Some(Commands::ScalarRecord { node_id, tx_hash }) => {
             chain::scalar_record(&root, &mut ledger, node_id, tx_hash.as_deref())?;
+        }
+        Some(Commands::BadgeStatus) => {
+            badge::show_badge_status(&root, &ledger, json);
+        }
+        Some(Commands::ColdExport { dest, encrypt }) => {
+            sync::cold_export(&root, &mut ledger, &dest, encrypt)?;
         }
     }
 

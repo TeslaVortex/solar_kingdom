@@ -117,8 +117,12 @@
 - Status board: `docs/PHASE_STATUS.md` · Plan sealed: `plans/phase_2b_onchain_resonance.md`.
 - No open 2B-C engineering debt. Optional polish → Phase 2C.
 
-**Phase 2C — Living Automation** — NEXT (optional)
-- systemd polish, confirm shell aliases, optional encrypted sync export docs.
+**Phase 2C — Living Automation (v0.6.0)** — **COMPLETE**
+- systemd: ritual (06:00), field-check (12:00), weekly sync+verify (Sun 18:00); `scripts/install_systemd.sh` + non-Desktop path docs.
+- Shell: `confirm_*.sh` aliases; `libation_onchain.sh` cast recipe (no auto-broadcast).
+- Rust: `badge-status` (SBT eligibility dry-run); `cold-export <dir> [--encrypt]` for USB/offline durability.
+- Docs: `docs/PHASE_2C_LIVING_AUTOMATION.md` · `docs/PHASE_STATUS.md`; E2E extended.
+- Offline-first preserved; keys never in unit files.
 
 **Phase 3 — Eternal Expansion**
 - Community / kingdom nodes (optional).

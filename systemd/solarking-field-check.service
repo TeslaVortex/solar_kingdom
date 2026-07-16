@@ -1,0 +1,13 @@
+[Unit]
+Description=SOLARKING Midday Field Check — status snapshot to ritual log
+After=network.target
+
+[Service]
+Type=oneshot
+Environment=SOLARKING_ROOT=%h/Desktop/solar_kingdom
+WorkingDirectory=%h/Desktop/solar_kingdom
+# Quiet field/status check (non-interactive); log via status path
+ExecStart=/bin/bash -c '%h/Desktop/solar_kingdom/bin/solarking field >> %h/Desktop/solar_kingdom/ritual_log.txt 2>&1; echo "--- field check $(date -Iseconds) ---" >> %h/Desktop/solar_kingdom/ritual_log.txt'
+
+[Install]
+WantedBy=default.target

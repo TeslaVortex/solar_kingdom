@@ -1,12 +1,16 @@
 [Unit]
 Description=SOLARKING Daily Ritual — Eternal Solar Kingdom
 After=network.target
+# Override WorkingDirectory/ExecStart if repo is not ~/Desktop/solar_kingdom
+#   systemctl --user edit solarking-ritual.service
 
 [Service]
 Type=oneshot
-WorkingDirectory=%h/Desktop/solar_kingdom/solarking
-ExecStart=%h/Desktop/solar_kingdom/bin/solarking ritual
+# Portable: set SOLARKING_ROOT to your clone absolute path via drop-in if needed
+Environment=SOLARKING_ROOT=%h/Desktop/solar_kingdom
 Environment=RITUAL_QUICK=1
+WorkingDirectory=%h/Desktop/solar_kingdom
+ExecStart=%h/Desktop/solar_kingdom/bin/solarking ritual
 
 [Install]
 WantedBy=default.target

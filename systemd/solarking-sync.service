@@ -1,0 +1,13 @@
+[Unit]
+Description=SOLARKING Weekly Sync + Verify — Eternal Solar Kingdom
+After=network.target
+
+[Service]
+Type=oneshot
+Environment=SOLARKING_ROOT=%h/Desktop/solar_kingdom
+WorkingDirectory=%h/Desktop/solar_kingdom
+# Sync then verify integrity (no network required)
+ExecStart=/bin/bash -c '%h/Desktop/solar_kingdom/bin/solarking sync && %h/Desktop/solar_kingdom/bin/solarking verify-sync'
+
+[Install]
+WantedBy=default.target

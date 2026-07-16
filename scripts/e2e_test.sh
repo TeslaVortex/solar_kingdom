@@ -130,6 +130,24 @@ assert_file "$ROOT/contracts/CrownCommand.sol" "contracts/CrownCommand.sol"
 assert_file "$ROOT/contracts/SolarKingdom.sol" "contracts/SolarKingdom.sol"
 assert_file "$ROOT/script/DeployPhase2B.s.sol" "script/DeployPhase2B.s.sol"
 
+# ── Phase 2C Living Automation ──
+echo ""
+echo "── PHASE 2C: Living Automation ──"
+assert_output "$BIN help" "badge-status" "help lists badge-status"
+assert_output "$BIN help" "cold-export" "help lists cold-export"
+assert_output "$BIN badge-status" "BADGE STATUS" "solarking badge-status"
+COLD_TMP=$(mktemp -d)
+$BIN cold-export "$COLD_TMP" >/dev/null 2>&1 && pass "solarking cold-export" || fail "solarking cold-export"
+assert_file "$COLD_TMP/COLD_EXPORT_README.txt" "cold export README"
+rm -rf "$COLD_TMP"
+assert_file "$ROOT/shell/confirm_rainbow.sh" "shell/confirm_rainbow.sh"
+assert_file "$ROOT/shell/confirm_oracle.sh" "shell/confirm_oracle.sh"
+assert_file "$ROOT/shell/libation_onchain.sh" "shell/libation_onchain.sh"
+assert_file "$ROOT/scripts/install_systemd.sh" "scripts/install_systemd.sh"
+assert_file "$ROOT/systemd/solarking-sync.timer" "systemd sync timer"
+assert_file "$ROOT/systemd/solarking-field-check.timer" "systemd field-check timer"
+RITUAL_QUICK=1 "$ROOT/shell/confirm_rainbow.sh" "e2e phase2c" >/dev/null 2>&1 && pass "confirm_rainbow.sh" || fail "confirm_rainbow.sh"
+
 RITUAL_QUICK=1 $BIN libation ancestors >/dev/null 2>&1 && pass "solarking libation" || fail "solarking libation"
 RITUAL_QUICK=1 $BIN legacy_99 >/dev/null 2>&1 && pass "solarking legacy_99" || fail "solarking legacy_99"
 

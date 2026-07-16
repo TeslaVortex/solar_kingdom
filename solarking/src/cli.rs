@@ -93,6 +93,18 @@ pub enum Commands {
         node_id: u64,
         tx_hash: Option<String>,
     },
+    /// Soul-bound badge eligibility dry-run (Phase 2C)
+    #[command(name = "badge-status")]
+    BadgeStatus,
+    /// Cold-export sync bundle to USB/offline path (optional encrypt)
+    #[command(name = "cold-export")]
+    ColdExport {
+        /// Destination directory (created if missing)
+        dest: PathBuf,
+        /// Also write ChaCha20-Poly1305 envelope (requires SOLARKING_PASSPHRASE)
+        #[arg(long, default_value_t = false)]
+        encrypt: bool,
+    },
 }
 
 #[derive(Subcommand, Debug)]
