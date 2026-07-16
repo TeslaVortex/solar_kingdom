@@ -1,5 +1,5 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v0.8
-// Phase 3B–3E: physical bridge · viz · nodes · grok-build
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.9
+// Crown Receive UX: receive · journal · now
 
 mod badge;
 mod chain;
@@ -9,8 +9,11 @@ mod error;
 mod field;
 mod genesis;
 mod grok_bridge;
+mod intake;
+mod journal;
 mod ledger;
 mod node;
+mod now;
 mod phase3;
 mod query;
 mod ritual;
@@ -20,7 +23,7 @@ mod torus;
 mod viz;
 
 use clap::Parser;
-use cli::{Cli, Commands, LatticeCmd, NodeCmd, ScalarCmd};
+use cli::{Cli, Commands, JournalCmd, LatticeCmd, NodeCmd, NowCmd, ScalarCmd};
 use error::Result;
 use field::ConfirmKind;
 use ledger::{load_ledger, save_ledger, show_genesis, show_help, show_status};
@@ -29,6 +32,12 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 fn project_root() -> PathBuf {
+    if let Ok(root) = env::var("SOLARKING_ROOT") {
+        let p = PathBuf::from(root);
+        if p.is_dir() {
+            return p;
+        }
+    }
     let cwd = env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
     if cwd.ends_with("solarking") {
         cwd.parent().unwrap_or(&cwd).to_path_buf()
@@ -53,7 +62,7 @@ fn run() -> Result<()> {
     let json = cli.json;
 
     if !json {
-        println!("👑 SOLARKING ENGINE v0.8 — PHASE 3B–3E LATTICE");
+        println!("👑 SOLARKING ENGINE v0.9 — CROWN RECEIVE UX");
         println!("THE CROWN COMMANDS. REALITY OBEYS. I DO NOT CHASE — I RECEIVE.\n");
     }
 
@@ -69,26 +78,83 @@ fn run() -> Result<()> {
         Some(Commands::Torus) => {
             torus::activate_torus_viz(&ledger);
         }
-        Some(Commands::Log { vision }) => {
-            let text = if vision.is_empty() {
-                None
-            } else {
-                Some(vision.join(" "))
-            };
-            ledger::log_vision(&root, &mut ledger, text.as_deref())?;
+        Some(Commands::Log {
+            vision,
+            file,
+            paste,
+        }) => {
+            let text = intake::resolve_crown_text(
+                &vision,
+                file.as_ref(),
+                paste,
+                false,
+                "Usage: solarking log \"vision\" | log --paste | log --file PATH | log -",
+            )?;
+            match text {
+                Some(t) => ledger::log_vision(&root, &mut ledger, Some(&t))?,
+                None => println!(
+                    "Enter vision after 'log', or: log --paste | log --file PATH | pipe via log -"
+                ),
+            }
         }
-        Some(Commands::Query { question }) => {
-            if question.is_empty() {
-                println!("Enter question after 'query' command.");
-            } else {
-                let q = question.join(" ");
-                let answer = query::run_query(
-                    &q,
-                    &ledger,
-                    genesis::load_genesis(&root).as_ref(),
-                    json,
-                );
-                println!("{}", answer);
+        Some(Commands::Receive {
+            text,
+            file,
+            paste,
+            counsel,
+            confirm,
+            title,
+        }) => {
+            let body = intake::resolve_crown_text(
+                &text,
+                file.as_ref(),
+                paste,
+                true, // interactive paste when empty on TTY
+                "Usage: solarking receive --paste | receive --file PATH | receive - | pipe text",
+            )?
+            .ok_or_else(|| {
+                error::SolarkingError::Msg(
+                    "empty receive — paste a transmission or use --file".into(),
+                )
+            })?;
+            ledger::receive_transmission(&root, &mut ledger, &body, title.as_deref())?;
+            if let Some(kind) = confirm.as_deref() {
+                handle_confirm(&root, &mut ledger, kind, "receive")?;
+            }
+            if counsel {
+                println!();
+                println!("{}", phase3::counsel(&root, &ledger, &body, json));
+            }
+        }
+        Some(Commands::Journal { action }) => {
+            handle_journal(&root, &ledger, action, json)?;
+        }
+        Some(Commands::Now { action }) => {
+            handle_now(&root, &mut ledger, action, json)?;
+        }
+        Some(Commands::Query {
+            question,
+            file,
+            paste,
+        }) => {
+            let q = intake::resolve_crown_text(
+                &question,
+                file.as_ref(),
+                paste,
+                false,
+                "Enter question after 'query'",
+            )?;
+            match q {
+                Some(q) => {
+                    let answer = query::run_query(
+                        &q,
+                        &ledger,
+                        genesis::load_genesis(&root).as_ref(),
+                        json,
+                    );
+                    println!("{}", answer);
+                }
+                None => println!("Enter question after 'query' command."),
             }
         }
         Some(Commands::Sync) => {
@@ -166,12 +232,19 @@ fn run() -> Result<()> {
         Some(Commands::ExportCid) => {
             phase3::export_cid(&root, &mut ledger, json)?;
         }
-        Some(Commands::Counsel { question }) => {
-            let q = if question.is_empty() {
-                "What is the next sovereign step?".to_string()
-            } else {
-                question.join(" ")
-            };
+        Some(Commands::Counsel {
+            question,
+            file,
+            paste,
+        }) => {
+            let q = intake::resolve_crown_text(
+                &question,
+                file.as_ref(),
+                paste,
+                false,
+                "Usage: solarking counsel \"question\"",
+            )?
+            .unwrap_or_else(|| "What is the next sovereign step?".to_string());
             println!("{}", phase3::counsel(&root, &ledger, &q, json));
         }
         Some(Commands::Qr) | Some(Commands::AltarPrint) => {
@@ -196,21 +269,40 @@ fn run() -> Result<()> {
                 node::node_status(&root, &ledger, json)?;
             }
         },
-        Some(Commands::Grok { prompt, offline }) => {
-            let p = if prompt.is_empty() {
+        Some(Commands::Grok {
+            prompt,
+            offline,
+            file,
+            paste,
+        }) => {
+            let p = intake::resolve_crown_text(
+                &prompt,
+                file.as_ref(),
+                paste,
+                false,
+                "Usage: solarking grok \"prompt\"",
+            )?
+            .unwrap_or_else(|| {
                 "What is the next sovereign step for the Eternal Solar Kingdom?".to_string()
-            } else {
-                prompt.join(" ")
-            };
+            });
             grok_bridge::local_model_status();
             grok_bridge::run_grok(&root, &ledger, &p, offline)?;
         }
-        Some(Commands::Blueprint { note }) => {
-            let n = if note.is_empty() {
+        Some(Commands::Blueprint {
+            note,
+            file,
+            paste,
+        }) => {
+            let n = intake::resolve_crown_text(
+                &note,
+                file.as_ref(),
+                paste,
+                false,
+                "Usage: solarking blueprint \"note\"",
+            )?
+            .unwrap_or_else(|| {
                 "Pulse the Phase 3 blueprint from current field state.".to_string()
-            } else {
-                note.join(" ")
-            };
+            });
             grok_bridge::evolve_blueprint(&root, &ledger, &n)?;
         }
     }
@@ -219,7 +311,87 @@ fn run() -> Result<()> {
     Ok(())
 }
 
-fn handle_confirm(root: &Path, ledger: &mut ledger::KingdomLedger, kind: &str, note: &str) -> Result<()> {
+fn handle_journal(
+    root: &Path,
+    ledger: &ledger::KingdomLedger,
+    action: Option<JournalCmd>,
+    json: bool,
+) -> Result<()> {
+    match action {
+        None => {
+            journal::list_visions(ledger, 10, json);
+        }
+        Some(JournalCmd::List { last }) => {
+            journal::list_visions(ledger, last, json);
+        }
+        Some(JournalCmd::Show { n }) => {
+            journal::show_vision(ledger, n, json);
+        }
+        Some(JournalCmd::Search { query }) => {
+            if query.is_empty() {
+                println!("Usage: solarking journal search <keyword…>");
+            } else {
+                journal::search_visions(ledger, &query.join(" "), json);
+            }
+        }
+        Some(JournalCmd::Log { tail }) => {
+            journal::tail_ritual_log(root, tail)?;
+        }
+        Some(JournalCmd::Files) => {
+            journal::list_transmission_files(root, json)?;
+        }
+        Some(JournalCmd::Open { n }) => {
+            journal::open_transmission_file(root, n)?;
+        }
+    }
+    Ok(())
+}
+
+fn handle_now(
+    root: &Path,
+    ledger: &mut ledger::KingdomLedger,
+    action: Option<NowCmd>,
+    json: bool,
+) -> Result<()> {
+    match action {
+        None | Some(NowCmd::Card) => {
+            now::print_crown_card();
+        }
+        Some(NowCmd::Morning) => {
+            now::recipe_morning(root, ledger, json)?;
+        }
+        Some(NowCmd::Receive) => {
+            let body = intake::resolve_crown_text(
+                &[],
+                None,
+                true,
+                true,
+                "Usage: solarking now receive  (paste then Ctrl-D)",
+            )?
+            .ok_or_else(|| {
+                error::SolarkingError::Msg("empty paste — nothing received".into())
+            })?;
+            ledger::receive_transmission(root, ledger, &body, None)?;
+        }
+        Some(NowCmd::Seal) => {
+            now::recipe_seal(root, ledger, json)?;
+        }
+        Some(NowCmd::Sync) => {
+            now::recipe_sync(root, ledger, json)?;
+        }
+        Some(NowCmd::Pulse) => {
+            now::recipe_pulse(root, ledger, json)?;
+        }
+    }
+    Ok(())
+}
+
+fn handle_confirm(
+    root: &Path,
+    ledger: &mut ledger::KingdomLedger,
+    kind: &str,
+    note: &str,
+) -> Result<()> {
     let Some(k) = ConfirmKind::parse(kind) else {
         println!(
             "Unknown confirmation kind '{}'. Use: {}",

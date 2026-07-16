@@ -29,9 +29,12 @@ find_binary() {
 BINARY="$(find_binary)"
 if [ -z "$BINARY" ]; then
     echo "👑 SOLARKING not built yet." >&2
-    echo "Run: cd $ROOT/solarking && cargo build --release" >&2
+    echo "Run: cargo build --release -p solarking" >&2
+    echo "     (from $ROOT)" >&2
     exit 1
 fi
 
-cd "$ROOT/solarking" || exit 1
+# Canonical kingdom root — single ledger/ritual_log (not solarking/ crate dir)
+export SOLARKING_ROOT="$ROOT"
+cd "$ROOT" || exit 1
 exec "$BINARY" "$@"

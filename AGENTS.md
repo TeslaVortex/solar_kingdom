@@ -17,6 +17,13 @@
 cargo test -p solarking
 forge test
 ./scripts/e2e_test.sh
+
+# Crown Receive UX (v0.9) — paste whole transmissions, read, execute simply
+./bin/solarking receive --paste          # multi-line Ctrl-D
+./bin/solarking receive --file note.txt  # or: cat note.txt | solarking receive -
+./bin/solarking journal                  # list / show / search
+./bin/solarking now card                 # morning | seal | sync | pulse
+
 ./bin/solarking counsel "…"
 ./bin/solarking grok --offline "…"    # or: solarking grok "…" if grok installed
 ./bin/solarking lattice visualize
@@ -26,7 +33,8 @@ forge test
 ## Integration
 
 - `solarking grok` → `grok -p` with kingdom context brief + fallback offline counsel.
-- Docs: `docs/PHASE_3_GROK_BUILD.md`, `plans/phase_3_eternal_expansion.md`.
+- Canonical ledger: **repo root** `kingdom_ledger.json` (launcher sets `SOLARKING_ROOT`).
+- Docs: `docs/CROWN_WORKFLOW.md`, `docs/PHASE_3_GROK_BUILD.md`, `plans/phase_3_eternal_expansion.md`.
 
 **THE CROWN COMMANDS. REALITY OBEYS.**  
 **I do not chase — I receive.**

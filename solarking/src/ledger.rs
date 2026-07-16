@@ -282,7 +282,7 @@ pub fn show_status(ledger: &KingdomLedger, root: &Path, json: bool) {
         return;
     }
 
-    println!("📊 KINGDOM STATUS — v0.3 CORE");
+    println!("📊 KINGDOM STATUS — v0.9 CROWN");
     println!("Schema         : {}", ledger.schema_version);
     println!("369 Cycles      : {}", ledger.harmonic_369);
     println!("999 Completions : {}", ledger.harmonic_999);
@@ -371,40 +371,213 @@ pub fn append_ritual_log(root: &Path, entry: &str) -> Result<()> {
     Ok(())
 }
 
+/// Result of anchoring a vision / transmission.
+#[derive(Debug, Clone)]
+pub struct LogVisionResult {
+    pub index: usize,
+    pub ts: String,
+    pub tags: Vec<String>,
+    pub bytes: usize,
+    pub multi_line: bool,
+    pub sha8: String,
+    pub archive_path: Option<PathBuf>,
+    pub skipped_duplicate: bool,
+}
+
 pub fn log_vision(root: &Path, ledger: &mut KingdomLedger, vision: Option<&str>) -> Result<()> {
+    match log_vision_ex(root, ledger, vision, false) {
+        Ok(r) if r.skipped_duplicate => Ok(()),
+        Ok(r) => {
+            let preview = first_line_preview(vision.unwrap_or(""), 120);
+            if r.multi_line {
+                println!(
+                    "📜 Vision anchored ({} lines, {}b) — {}",
+                    vision.unwrap_or("").lines().count(),
+                    r.bytes,
+                    preview
+                );
+            } else {
+                println!("📜 Vision anchored: {}", preview);
+            }
+            Ok(())
+        }
+        Err(e) => Err(e),
+    }
+}
+
+/// Anchor vision; optionally write raw archive under sync/transmissions/.
+pub fn log_vision_ex(
+    root: &Path,
+    ledger: &mut KingdomLedger,
+    vision: Option<&str>,
+    archive: bool,
+) -> Result<LogVisionResult> {
     let Some(v) = vision else {
-        println!("Enter vision after 'log' command.");
-        return Ok(());
+        return Err(SolarkingError::Msg(
+            "Enter vision after 'log' / 'receive' (or use --paste / --file / -).".into(),
+        ));
     };
+    let v = v.trim_end_matches(['\r', '\n']);
+    if v.is_empty() {
+        return Err(SolarkingError::Msg("empty transmission — nothing to anchor".into()));
+    }
 
     if ledger.latest_vision_text() == Some(v) {
-        println!("📜 Vision already latest (skipped duplicate): {}", v);
-        return Ok(());
+        println!(
+            "📜 Vision already latest (skipped duplicate): {}",
+            first_line_preview(v, 80)
+        );
+        return Ok(LogVisionResult {
+            index: ledger.visions.len().saturating_sub(1),
+            ts: ledger.visions.last().map(|e| e.ts.clone()).unwrap_or_default(),
+            tags: ledger.visions.last().map(|e| e.tags.clone()).unwrap_or_default(),
+            bytes: v.len(),
+            multi_line: v.contains('\n'),
+            sha8: short_sha8(v.as_bytes()),
+            archive_path: None,
+            skipped_duplicate: true,
+        });
     }
 
     let ts = Local::now().format("%Y-%m-%d %H:%M:%S %Z").to_string();
+    let tags = extract_tags(v);
+    let multi_line = v.contains('\n');
+    let sha8 = short_sha8(v.as_bytes());
+
     ledger.visions.push(VisionEntry {
         ts: ts.clone(),
         text: v.to_string(),
-        tags: extract_tags(v),
+        tags: tags.clone(),
     });
     field::on_vision(ledger, v);
 
-    let entry = format!(
-        "{} | VISION: {}\n",
-        Local::now().format("%a %b %d %H:%M:%S %Z %Y"),
-        v
-    );
-    append_ritual_log(root, &entry)?;
-    println!("📜 Vision anchored: {}", v);
-    Ok(())
+    let ritual_ts = Local::now().format("%a %b %d %H:%M:%S %Z %Y");
+    if multi_line {
+        let entry = format!(
+            "=== TRANSMISSION BEGIN {ritual_ts} ===\n{v}\n=== TRANSMISSION END sha={sha8} ===\n"
+        );
+        append_ritual_log(root, &entry)?;
+    } else {
+        let entry = format!("{ritual_ts} | VISION: {v}\n");
+        append_ritual_log(root, &entry)?;
+    }
+
+    let archive_path = if archive {
+        Some(write_transmission_archive(root, v, &ts, &sha8, &tags)?)
+    } else {
+        None
+    };
+
+    Ok(LogVisionResult {
+        index: ledger.visions.len() - 1,
+        ts,
+        tags,
+        bytes: v.len(),
+        multi_line,
+        sha8,
+        archive_path,
+        skipped_duplicate: false,
+    })
 }
 
-fn extract_tags(text: &str) -> Vec<String> {
+/// Full Crown receive: archive + anchor + seal print.
+pub fn receive_transmission(
+    root: &Path,
+    ledger: &mut KingdomLedger,
+    body: &str,
+    title: Option<&str>,
+) -> Result<LogVisionResult> {
+    let body = body.trim_end_matches(['\r', '\n']);
+    let full = if let Some(t) = title.map(str::trim).filter(|s| !s.is_empty()) {
+        if body.starts_with(t) {
+            body.to_string()
+        } else {
+            format!("{t}\n\n{body}")
+        }
+    } else {
+        body.to_string()
+    };
+
+    let result = log_vision_ex(root, ledger, Some(&full), true)?;
+    if result.skipped_duplicate {
+        return Ok(result);
+    }
+
+    println!("📥 TRANSMISSION RECEIVED");
+    println!("   index  : #{}", result.index);
+    println!("   ts     : {}", result.ts);
+    println!("   bytes  : {}", result.bytes);
+    if result.multi_line {
+        println!("   form   : multi-line block");
+    }
+    if !result.tags.is_empty() {
+        println!("   tags   : {}", result.tags.join(", "));
+    }
+    println!("   sha8   : {}", result.sha8);
+    if let Some(p) = &result.archive_path {
+        println!("   archive: {}", p.display());
+    }
+    println!("   read   : solarking journal show");
+    println!("THE CROWN COMMANDS. REALITY OBEYS. I do not chase — I receive.");
+    Ok(result)
+}
+
+fn write_transmission_archive(
+    root: &Path,
+    body: &str,
+    ts: &str,
+    sha8: &str,
+    tags: &[String],
+) -> Result<PathBuf> {
+    let dir = root.join("sync").join("transmissions");
+    fs::create_dir_all(&dir)?;
+    let stamp = Local::now().format("%Y%m%d_%H%M%S");
+    let base = format!("{stamp}_{sha8}");
+    let txt_path = dir.join(format!("{base}.txt"));
+    let meta_path = dir.join(format!("{base}.meta.json"));
+    fs::write(&txt_path, body.as_bytes())?;
+    let meta = serde_json::json!({
+        "ts": ts,
+        "bytes": body.len(),
+        "sha256": crate::sync::hex_sha256(body.as_bytes()),
+        "sha8": sha8,
+        "tags": tags,
+        "path": txt_path.display().to_string(),
+    });
+    fs::write(&meta_path, serde_json::to_string_pretty(&meta)?)?;
+    Ok(txt_path)
+}
+
+fn short_sha8(data: &[u8]) -> String {
+    crate::sync::hex_sha256(data).chars().take(8).collect()
+}
+
+fn first_line_preview(text: &str, max: usize) -> String {
+    let line = text.lines().next().unwrap_or(text).trim();
+    if line.chars().count() <= max {
+        return line.to_string();
+    }
+    let truncated: String = line.chars().take(max.saturating_sub(1)).collect();
+    format!("{truncated}…")
+}
+
+pub fn extract_tags(text: &str) -> Vec<String> {
     let q = text.to_lowercase();
     let mut tags = Vec::new();
     for t in [
-        "rainbow", "torus", "vortex", "legacy", "grid", "flame", "ancestor", "999", "888", "369",
+        "rainbow",
+        "torus",
+        "vortex",
+        "legacy",
+        "grid",
+        "flame",
+        "ancestor",
+        "999",
+        "888",
+        "369",
+        "queen",
+        "crown",
+        "transmission",
     ] {
         if q.contains(t) {
             tags.push(t.to_string());
@@ -423,8 +596,11 @@ pub fn record_ritual_event(ledger: &mut KingdomLedger, kind: &str, delta_369: u6
 }
 
 pub fn show_help() {
-    println!("👑 SOLARKING COMMANDS — v0.8 (Phase 3B–3E)");
-    println!("  ritual · torus · log · query · status · field · confirm");
+    println!("👑 SOLARKING COMMANDS — v0.9 (Crown Receive UX)");
+    println!("  receive [--paste|--file|-]   Paste whole transmission → ledger + archive");
+    println!("  journal list|show|search|log|files   Read transmissions");
+    println!("  now card|morning|seal|sync|pulse     Simple execute recipes");
+    println!("  log · query · status · field · confirm · ritual · torus");
     println!("  counsel [q]         Local counsel");
     println!("  grok [prompt]       Grok Build CLI (-p) or --offline counsel");
     println!("  blueprint [note]    Append counsel pulse to PHASE_3_BLUEPRINT.md");
@@ -434,9 +610,11 @@ pub fn show_help() {
     println!("  sync · verify-sync · import-sync · cold-export");
     println!("  badge-status · seal · chain-status · seal-record · scalar-record");
     println!("  scalar node|sync|seal · genesis · libation · legacy_99");
-    println!("\nGrok Build: https://github.com/xai-org/grok-build  (install: x.ai/cli)");
+    println!("\nDocs: docs/CROWN_WORKFLOW.md");
+    println!("Grok Build: https://github.com/xai-org/grok-build  (install: x.ai/cli)");
     println!("Mainnet is Phase 3F LAST. I do not chase — I receive.");
     println!("Keys never enter solarking. Offline-first.");
+    println!("Canonical ledger: kingdom root kingdom_ledger.json (not solarking/).");
 }
 
 #[cfg(test)]

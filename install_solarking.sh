@@ -22,7 +22,9 @@ else
 fi
 echo ""
 echo "Usage from anywhere:"
+echo "  solarking receive --paste     # multi-line transmission (Ctrl-D)"
+echo "  solarking journal             # read past transmissions"
+echo "  solarking now card            # Crown essentials"
 echo "  solarking log \"your vision\""
 echo "  solarking status"
-echo "  solarking torus"
-echo "  solarking ritual"
+echo "  Docs: docs/CROWN_WORKFLOW.md"

@@ -182,6 +182,43 @@ rm -f "$NODE_OUT"
 RITUAL_QUICK=1 $BIN libation ancestors >/dev/null 2>&1 && pass "solarking libation" || fail "solarking libation"
 RITUAL_QUICK=1 $BIN legacy_99 >/dev/null 2>&1 && pass "solarking legacy_99" || fail "solarking legacy_99"
 
+# ── Crown Receive UX (v0.9) ──
+echo ""
+echo "── CROWN RECEIVE UX (v0.9) ──"
+assert_output "$BIN help" "receive" "help lists receive"
+assert_output "$BIN help" "journal" "help lists journal"
+assert_output "$BIN help" "now" "help lists now"
+assert_output "$BIN --version" "0.9" "solarking version 0.9"
+assert_output "$BIN now card" "CROWN CARD" "solarking now card"
+
+TX_FILE=$(mktemp)
+printf 'E2E MULTI-LINE TRANSMISSION\nLine two — Th3 Cr0wn commands th3 r3ality obeys NOW\nLine three sealed.\n' > "$TX_FILE"
+$BIN receive --file "$TX_FILE" >/dev/null 2>&1 && pass "solarking receive --file" || fail "solarking receive --file"
+rm -f "$TX_FILE"
+
+printf 'E2E PIPE TRANSMISSION\nsecond line of paste\n' | $BIN receive - >/dev/null 2>&1 && pass "solarking receive - (pipe)" || fail "solarking receive - (pipe)"
+
+assert_output "$BIN journal show" "E2E PIPE TRANSMISSION" "journal show latest pipe body"
+assert_output "$BIN journal search Cr0wn" "MULTI-LINE" "journal search finds multi-line"
+assert_output "$BIN journal list --last 3" "CROWN JOURNAL" "journal list"
+assert_output "$BIN now morning" "NOW MORNING" "solarking now morning"
+
+# At least one transmission archive written under sync/transmissions/
+TX_COUNT=$(find "$ROOT/sync/transmissions" -name '*.txt' 2>/dev/null | wc -l)
+if [ "$TX_COUNT" -ge 1 ]; then
+  pass "sync/transmissions archive files ($TX_COUNT)"
+else
+  fail "sync/transmissions archive files missing"
+fi
+assert_file "$ROOT/docs/CROWN_WORKFLOW.md" "docs/CROWN_WORKFLOW.md"
+
+# Multi-line block in ritual_log
+if grep -q "TRANSMISSION BEGIN" "$ROOT/ritual_log.txt" 2>/dev/null; then
+  pass "ritual_log multi-line TRANSMISSION BEGIN block"
+else
+  fail "ritual_log multi-line TRANSMISSION BEGIN block"
+fi
+
 assert_file "$ROOT/systemd/solarking-ritual.timer" "systemd timer"
 assert_file "$ROOT/implementation_plan.md" "implementation_plan.md"
 assert_file "$ROOT/shell/seal.sh" "shell/seal.sh"
@@ -194,9 +231,10 @@ echo "  PASSED: $PASS   FAILED: $FAIL"
 if [ "$FAIL" -eq 0 ]; then
   echo "  👑 ALL E2E TESTS PASSED — REALITY OBEYS"
   echo ""
-  echo "  Manual test (optional, ~60s):"
-  echo "    cd $ROOT/solarking && $BIN ritual"
-  echo "    cd $ROOT/solarking && $BIN torus"
+  echo "  Crown UX:"
+  echo "    $BIN receive --paste"
+  echo "    $BIN journal show"
+  echo "    $BIN now card"
   exit 0
 else
   echo "  ⚠️  SOME TESTS FAILED"

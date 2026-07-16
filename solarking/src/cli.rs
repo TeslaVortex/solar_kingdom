@@ -6,7 +6,7 @@ use std::path::PathBuf;
     name = "solarking",
     version,
     about = "Eternal Solar Kingdom — sovereign core engine",
-    long_about = "THE CROWN COMMANDS. REALITY OBEYS.\nShell + Rust + Solidity resonance engine."
+    long_about = "THE CROWN COMMANDS. REALITY OBEYS.\nShell + Rust + Solidity resonance engine.\nCrown UX: receive · journal · now — docs/CROWN_WORKFLOW.md"
 )]
 pub struct Cli {
     /// Machine-readable JSON output where supported
@@ -23,14 +23,55 @@ pub enum Commands {
     Ritual,
     /// ASCII torus visualization
     Torus,
-    /// Anchor a vision to the ledger
+    /// Anchor a vision to the ledger (one-liner, --file, --paste, or -)
     Log {
-        /// Vision text
+        /// Read full multi-line body from file
+        #[arg(long)]
+        file: Option<PathBuf>,
+        /// Read multi-line paste from stdin (Ctrl-D to end)
+        #[arg(long, default_value_t = false)]
+        paste: bool,
+        /// Vision text (one-liner). Use `-` for stdin.
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         vision: Vec<String>,
     },
+    /// Receive a full transmission (paste/file/pipe) → archive + ledger
+    Receive {
+        /// Read full multi-line body from file
+        #[arg(long)]
+        file: Option<PathBuf>,
+        /// Interactive multi-line paste (Ctrl-D)
+        #[arg(long, default_value_t = false)]
+        paste: bool,
+        /// Run offline counsel on the body after anchor
+        #[arg(long, default_value_t = false)]
+        counsel: bool,
+        /// Optional field confirm after receive (sneeze|highpitch|rainbow|grid|oracle)
+        #[arg(long)]
+        confirm: Option<String>,
+        /// Optional title line prepended to body
+        #[arg(long)]
+        title: Option<String>,
+        /// Text body, or `-` for stdin
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        text: Vec<String>,
+    },
+    /// Read visions, ritual log, transmission archives
+    Journal {
+        #[command(subcommand)]
+        action: Option<JournalCmd>,
+    },
+    /// Simple Crown execute recipes (card · morning · seal · sync · pulse)
+    Now {
+        #[command(subcommand)]
+        action: Option<NowCmd>,
+    },
     /// First-principles truth engine
     Query {
+        #[arg(long)]
+        file: Option<PathBuf>,
+        #[arg(long, default_value_t = false)]
+        paste: bool,
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         question: Vec<String>,
     },
@@ -110,6 +151,10 @@ pub enum Commands {
     ExportCid,
     /// Phase 3A: local sovereign counsel (query + field/scalar)
     Counsel {
+        #[arg(long)]
+        file: Option<PathBuf>,
+        #[arg(long, default_value_t = false)]
+        paste: bool,
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         question: Vec<String>,
     },
@@ -131,17 +176,73 @@ pub enum Commands {
     },
     /// Phase 3E: Grok Build CLI bridge (`grok -p`) or offline counsel
     Grok {
-        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
-        prompt: Vec<String>,
         /// Force offline counsel (do not spawn grok)
         #[arg(long, default_value_t = false)]
         offline: bool,
+        #[arg(long)]
+        file: Option<PathBuf>,
+        #[arg(long, default_value_t = false)]
+        paste: bool,
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        prompt: Vec<String>,
     },
     /// Phase 3E: append counsel pulse to PHASE_3_BLUEPRINT.md
     Blueprint {
+        #[arg(long)]
+        file: Option<PathBuf>,
+        #[arg(long, default_value_t = false)]
+        paste: bool,
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         note: Vec<String>,
     },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum JournalCmd {
+    /// List recent visions (default)
+    List {
+        #[arg(long, default_value_t = 10)]
+        last: usize,
+    },
+    /// Show full vision text (from_end: 1 = latest)
+    Show {
+        /// 1 = latest, 2 = second latest, …
+        #[arg(default_value_t = 1)]
+        n: i64,
+    },
+    /// Search visions by keyword
+    Search {
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        query: Vec<String>,
+    },
+    /// Tail ritual_log.txt
+    Log {
+        #[arg(long, default_value_t = 30)]
+        tail: usize,
+    },
+    /// List sync/transmissions archives
+    Files,
+    /// Print archive path + body (from_end: 1 = latest file)
+    Open {
+        #[arg(default_value_t = 1)]
+        n: i64,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum NowCmd {
+    /// Crown card — 9 essential commands
+    Card,
+    /// status + field + last 3 visions
+    Morning,
+    /// Interactive receive paste
+    Receive,
+    /// seal dry-run + chain-status + badge-status
+    Seal,
+    /// sync + verify-sync
+    Sync,
+    /// scalar node + scalar sync
+    Pulse,
 }
 
 #[derive(Subcommand, Debug)]

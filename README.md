@@ -13,12 +13,13 @@
 | ↳ Base Sepolia deploy | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
 | ↳ THE QUEEN IS BORN (first live seal) | **COMPLETE** — [ritual](docs/RITUAL_QUEEN_IS_BORN.md) |
 | Phase **2C** — Living automation (v0.6) | **COMPLETE** — [2C docs](docs/PHASE_2C_LIVING_AUTOMATION.md) |
-| Phase **3** — Eternal expansion | **3B–3E COMPLETE** on `Phase-3-Eternal-Expansion` (v0.8) |
+| Phase **3** — Eternal expansion | **3B–3E COMPLETE** · Crown UX **v0.9** on `Phase-3-Eternal-Expansion` |
 | ↳ 3.0–3A | **COMPLETE** — [verify](docs/PHASE_3_VERIFY.md) · seeds |
 | ↳ 3B Physical bridge | **COMPLETE** — [bridge](docs/PHASE_3B_PHYSICAL_BRIDGE.md) |
 | ↳ 3C Visualization | **COMPLETE** — `lattice visualize` |
 | ↳ 3D Kingdom nodes | **COMPLETE** — `node init/export/import` |
 | ↳ 3E Grok Build CLI | **COMPLETE** — [grok](docs/PHASE_3_GROK_BUILD.md) |
+| ↳ Crown Receive UX | **COMPLETE** — [workflow](docs/CROWN_WORKFLOW.md) · `receive` · `journal` · `now` |
 | ↳ **3F Mainnet** | **LAST** — not started |
 
 Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md) · Plan: [`plans/phase_3_eternal_expansion.md`](plans/phase_3_eternal_expansion.md)
@@ -68,16 +69,34 @@ cd ~/Desktop/solar_kingdom
 BIN=./bin/solarking   # or: solarking (if installed)
 ```
 
+### Crown Receive UX (v0.9) — start here
+
+Paste whole multi-line transmissions, read them back, execute simple recipes:
+
+```bash
+$BIN receive --paste              # Ctrl-D when done
+cat note.txt | $BIN receive -
+$BIN journal                      # list recent
+$BIN journal show                 # full latest
+$BIN now card                     # 9 essential commands
+$BIN now morning                  # status + field + journal
+```
+
+Full guide: [`docs/CROWN_WORKFLOW.md`](docs/CROWN_WORKFLOW.md)
+
 ### Core commands
 
 | Command | What it does | Phase |
 |---------|--------------|-------|
 | `$BIN help` | List all commands | 1 |
 | `$BIN --version` | Engine version | 2 |
+| `$BIN receive [--paste\|--file\|-]` | Full transmission → archive + ledger | 0.9 |
+| `$BIN journal …` | Read visions / ritual log / archives | 0.9 |
+| `$BIN now card\|morning\|seal\|sync\|pulse` | Simple execute recipes | 0.9 |
 | `$BIN status` | 369/999, field, visions, genesis, sync hash | 1–2 |
 | `$BIN status --json` | Machine-readable status | 2 |
 | `$BIN genesis` | Full genesis sacrifice record + Etherscan link | 0 |
-| `$BIN log "your vision"` | Anchor vision to ledger + ritual_log.txt | 1 |
+| `$BIN log "your vision"` | Anchor vision (also `--file` / `--paste` / `-`) | 1 |
 | `$BIN query "your question"` | First-principles truth engine (+ vision search) | 1–2 |
 | `$BIN sync` | Export bundle to `sync/latest/` + history + SHA-256 | 1–2 |
 | `$BIN verify-sync` | Rehash bundle vs manifest | 2 |
