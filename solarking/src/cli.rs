@@ -105,6 +105,19 @@ pub enum Commands {
         #[arg(long, default_value_t = false)]
         encrypt: bool,
     },
+    /// Phase 3A: decentralized pin instructions (+ optional ipfs add)
+    #[command(name = "export-cid")]
+    ExportCid,
+    /// Phase 3A: local sovereign counsel (query + field/scalar)
+    Counsel {
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        question: Vec<String>,
+    },
+    /// Phase 3A: altar / QR payload for physical bridge
+    Qr,
+    /// Alias: same as qr (altar card)
+    #[command(name = "altar-print")]
+    AltarPrint,
 }
 
 #[derive(Subcommand, Debug)]

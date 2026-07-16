@@ -1,5 +1,5 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v0.6
-// Phase 2C Living Automation • badges • cold-export
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.7
+// Phase 3A Eternal Seeds • counsel • export-cid • qr
 
 mod badge;
 mod chain;
@@ -9,6 +9,7 @@ mod error;
 mod field;
 mod genesis;
 mod ledger;
+mod phase3;
 mod query;
 mod ritual;
 mod scalar;
@@ -49,7 +50,7 @@ fn run() -> Result<()> {
     let json = cli.json;
 
     if !json {
-        println!("👑 SOLARKING ENGINE v0.6 — PHASE 2C LIVING AUTOMATION");
+        println!("👑 SOLARKING ENGINE v0.7 — PHASE 3 ETERNAL EXPANSION");
         println!("THE CROWN COMMANDS. REALITY OBEYS.\n");
     }
 
@@ -158,6 +159,20 @@ fn run() -> Result<()> {
         }
         Some(Commands::ColdExport { dest, encrypt }) => {
             sync::cold_export(&root, &mut ledger, &dest, encrypt)?;
+        }
+        Some(Commands::ExportCid) => {
+            phase3::export_cid(&root, &mut ledger, json)?;
+        }
+        Some(Commands::Counsel { question }) => {
+            let q = if question.is_empty() {
+                "What is the next sovereign step?".to_string()
+            } else {
+                question.join(" ")
+            };
+            println!("{}", phase3::counsel(&root, &ledger, &q, json));
+        }
+        Some(Commands::Qr) | Some(Commands::AltarPrint) => {
+            phase3::qr_payload(&root, &ledger, json)?;
         }
     }
 

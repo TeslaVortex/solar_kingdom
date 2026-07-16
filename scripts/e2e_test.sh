@@ -148,6 +148,18 @@ assert_file "$ROOT/systemd/solarking-sync.timer" "systemd sync timer"
 assert_file "$ROOT/systemd/solarking-field-check.timer" "systemd field-check timer"
 RITUAL_QUICK=1 "$ROOT/shell/confirm_rainbow.sh" "e2e phase2c" >/dev/null 2>&1 && pass "confirm_rainbow.sh" || fail "confirm_rainbow.sh"
 
+# ── Phase 3A Eternal Seeds ──
+echo ""
+echo "── PHASE 3A: Eternal Seeds ──"
+assert_output "$BIN help" "counsel" "help lists counsel"
+assert_output "$BIN help" "export-cid" "help lists export-cid"
+assert_output "$BIN counsel 'what is next phase 3'" "Phase 3" "solarking counsel"
+$BIN export-cid >/dev/null 2>&1 && pass "solarking export-cid" || fail "solarking export-cid"
+$BIN qr >/dev/null 2>&1 && pass "solarking qr" || fail "solarking qr"
+assert_file "$ROOT/sync/altar/payload.json" "sync/altar/payload.json"
+assert_file "$ROOT/plans/phase_3_eternal_expansion.md" "plans/phase_3_eternal_expansion.md"
+assert_file "$ROOT/docs/PHASE_3_VERIFY.md" "docs/PHASE_3_VERIFY.md"
+
 RITUAL_QUICK=1 $BIN libation ancestors >/dev/null 2>&1 && pass "solarking libation" || fail "solarking libation"
 RITUAL_QUICK=1 $BIN legacy_99 >/dev/null 2>&1 && pass "solarking legacy_99" || fail "solarking legacy_99"
 

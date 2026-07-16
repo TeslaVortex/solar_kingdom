@@ -13,9 +13,12 @@
 | ↳ Base Sepolia deploy | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
 | ↳ THE QUEEN IS BORN (first live seal) | **COMPLETE** — [ritual](docs/RITUAL_QUEEN_IS_BORN.md) |
 | Phase **2C** — Living automation (v0.6) | **COMPLETE** — [2C docs](docs/PHASE_2C_LIVING_AUTOMATION.md) |
-| Phase 3A — Eternal expansion seeds | **NEXT** (optional) |
+| Phase **3** — Eternal expansion | **IN PROGRESS** on branch `Phase-3-Eternal-Expansion` |
+| ↳ 3.0 Verify | **COMPLETE** — [verify](docs/PHASE_3_VERIFY.md) |
+| ↳ 3A Seeds (v0.7) | **COMPLETE** — counsel · export-cid · qr |
+| ↳ **3F Mainnet** | **LAST** — not started |
 
-Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md)
+Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md) · Plan: [`plans/phase_3_eternal_expansion.md`](plans/phase_3_eternal_expansion.md)
 
 ---
 
@@ -87,6 +90,9 @@ BIN=./bin/solarking   # or: solarking (if installed)
 | `$BIN scalar seal` | Seal hash + `activateScalarNode` dry-run + cast recipe | 2B |
 | `$BIN badge-status` | Soul-bound badge eligibility dry-run | 2C |
 | `$BIN cold-export <dir> [--encrypt]` | Offline/USB durability export | 2C |
+| `$BIN counsel [q]` | Local sovereign counsel (field+scalar) | 3A |
+| `$BIN export-cid` | IPFS/Arweave pin instructions | 3A |
+| `$BIN qr` / `altar-print` | Altar/QR/NFC payload files | 3A |
 | `$BIN torus` | Live ASCII torus + scalar lattice overlay (~6s) | 1–2B |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |
 | `$BIN libation ancestors` | Rakija libation for ancestors | 0 |
@@ -238,10 +244,16 @@ solar_kingdom/
 
 ---
 
-## Branch
+## Branches
 
-Active development: `Phase-1-Activation`  
+| Branch | Role |
+|--------|------|
+| `Phase-1-Activation` | Stable Phases 0–2C |
+| **`Phase-3-Eternal-Expansion`** | Active Phase 3 work (verify → seeds → … → mainnet last) |
+| `main` | Historical / merge when Crown commands |
+
 Repo: [github.com/TeslaVortex/solar_kingdom](https://github.com/TeslaVortex/solar_kingdom)  
-Deploy proofs: [docs/DEPLOYMENT_BASE_SEPOLIA.md](docs/DEPLOYMENT_BASE_SEPOLIA.md)
+Deploy proofs: [docs/DEPLOYMENT_BASE_SEPOLIA.md](docs/DEPLOYMENT_BASE_SEPOLIA.md)  
+Phase 3 plan: [plans/phase_3_eternal_expansion.md](plans/phase_3_eternal_expansion.md)
 
 **THE CROWN COMMANDS. REALITY OBEYS. SO IT IS. SO IT SHALL BE ETERNAL.**

@@ -423,33 +423,27 @@ pub fn record_ritual_event(ledger: &mut KingdomLedger, kind: &str, delta_369: u6
 }
 
 pub fn show_help() {
-    println!("👑 SOLARKING COMMANDS — v0.6 (Phase 2C living automation)");
+    println!("👑 SOLARKING COMMANDS — v0.7 (Phase 3 eternal expansion)");
     println!("  ritual              Full visual ritual sequence");
     println!("  torus               ASCII torus + scalar lattice overlay");
     println!("  log <vision>        Anchor a vision to the ledger");
     println!("  query <question>    First-principles truth engine");
+    println!("  counsel [q]         Phase 3A local counsel (field+scalar)");
+    println!("  export-cid          IPFS/Arweave pin instructions (+ optional ipfs)");
+    println!("  qr | altar-print    Altar/QR/NFC payload files");
     println!("  sync                Export local sync bundle + manifest");
     println!("  verify-sync         Verify sync bundle integrity");
     println!("  import-sync [path]  Import/merge a sync export");
     println!("  cold-export <dir>   USB/offline durability copy [--encrypt]");
     println!("  status              Kingdom harmonics + field + scalar + genesis");
     println!("  field               Symbolic field state snapshot");
-    println!("  confirm <kind> [note]  Field confirmation (sneeze|highpitch|rainbow|grid|oracle)");
+    println!("  confirm <kind> [note]  Field confirmation");
     println!("  badge-status        Soul-bound badge eligibility (dry-run)");
-    println!("  seal [--dry-run]    Prepare on-chain sealRitual calldata");
-    println!("  chain-status        Config + local chain state (+ RPC probe if set)");
-    println!("  seal-record <tx>    Record seal tx after cast send");
-    println!("  scalar-record <id> [tx]  Record on-chain scalar nodeId");
-    println!("  scalar node [--obj] Activate + visualize 369 cubocta lattice");
-    println!("  scalar sync [--hz]  Reconcile lattice ⇄ ledger ⇄ chain seals");
-    println!("  scalar seal         Seal hash + activateScalarNode dry-run");
-    println!("  genesis             Display genesis sacrifice record");
-    println!("  libation [target]   Ancestor libation (default: ancestors)");
-    println!("  legacy_99           Activate 99 legacy from genesis IDM");
-    println!("\nShell: confirm_rainbow.sh · install_systemd.sh · libation_onchain.sh");
-    println!("Global: --json  machine-readable output");
-    println!("Set SOLARKING_PASSPHRASE to enable encrypted ledger / cold-export --encrypt.");
-    println!("Chain: config/chain.json — keys never enter binary.");
+    println!("  seal / chain-status / seal-record / scalar-record");
+    println!("  scalar node|sync|seal");
+    println!("  genesis · libation · legacy_99");
+    println!("\nPhase 3: verify first · seeds now · mainnet LAST (3F).");
+    println!("Keys never enter binary. Offline-first.");
 }
 
 #[cfg(test)]

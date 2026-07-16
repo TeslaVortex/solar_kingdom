@@ -124,6 +124,14 @@
 - Docs: `docs/PHASE_2C_LIVING_AUTOMATION.md` · `docs/PHASE_STATUS.md`; E2E extended.
 - Offline-first preserved; keys never in unit files.
 
+**Phase 3 — Eternal Expansion** — **IN PROGRESS** (`Phase-3-Eternal-Expansion` branch)
+- **First principles:** verify before expand; offline-first; mainnet **last** (3F).
+- **3.0 Verify** — COMPLETE (`docs/PHASE_3_VERIFY.md`): forge 15 · cargo green · E2E.
+- **3A Seeds (v0.7)** — COMPLETE: `counsel`, `export-cid`, `qr` / `altar-print`.
+- **3B–3E** — physical bridge depth, viz, nodes, AI depth (next).
+- **3F Mainnet** — blocked until Crown gate after 3A–3E.
+- Plan: `plans/phase_3_eternal_expansion.md` · Blueprint: `docs/PHASE_3_BLUEPRINT.md`.
+
 **Phase 3 — Eternal Expansion**
 - Community / kingdom nodes (optional).
 - Integration with AI for blueprint evolution.
