@@ -38,7 +38,8 @@ pub fn print_crown_card() {
     println!("  solarking localai \"…\"             # Ollama / LocalAI (3G)");
     println!("  solarking grok --offline \"…\"");
     println!();
-    println!("Docs: docs/CROWN_WORKFLOW.md · docs/PHASE_3G_LOCALAI.md");
+    println!("Docs: docs/OLLAMA_WORKFLOW.md · docs/CROWN_WORKFLOW.md");
+    println!("Helper: ./scripts/ollama_workflow.sh help");
     println!("Mainnet is Phase 3F LAST. Offline-first. Keys never enter solarking.");
 }
 

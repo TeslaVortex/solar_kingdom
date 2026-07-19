@@ -185,8 +185,13 @@ echo ""
 echo "── PHASE 3G: LocalAI / Ollama ──"
 assert_output "$BIN help" "localai" "help lists localai"
 assert_file "$ROOT/docs/PHASE_3G_LOCALAI.md" "docs/PHASE_3G_LOCALAI.md"
+assert_file "$ROOT/docs/OLLAMA_WORKFLOW.md" "docs/OLLAMA_WORKFLOW.md"
+assert_file "$ROOT/docs/templates/ollama_session_template.md" "docs/templates/ollama_session_template.md"
+assert_file "$ROOT/docs/templates/prompts/activation.txt" "docs/templates/prompts/activation.txt"
 assert_file "$ROOT/config/localai_system.txt" "config/localai_system.txt"
+assert_file "$ROOT/scripts/ollama_workflow.sh" "scripts/ollama_workflow.sh"
 $BIN localai --status >/dev/null 2>&1 && pass "solarking localai --status" || fail "solarking localai --status"
+"$ROOT/scripts/ollama_workflow.sh" help >/dev/null 2>&1 && pass "ollama_workflow.sh help" || fail "ollama_workflow.sh help"
 # Unset endpoint → offline counsel fallback (must not crash)
 unset SOLARKING_LOCAL_MODEL 2>/dev/null || true
 $BIN localai "e2e localai pulse" >/dev/null 2>&1 && pass "solarking localai offline fallback" || fail "solarking localai offline fallback"

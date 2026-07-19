@@ -20,7 +20,7 @@
 | ↳ 3D Kingdom nodes | **COMPLETE** — `node init/export/import` |
 | ↳ 3E Grok Build CLI | **COMPLETE** — [grok](docs/PHASE_3_GROK_BUILD.md) |
 | ↳ Crown Receive UX | **COMPLETE** — [workflow](docs/CROWN_WORKFLOW.md) · `receive` · `journal` · `now` |
-| ↳ **3G LocalAI** | **COMPLETE** — Ollama recommended · [localai](docs/PHASE_3G_LOCALAI.md) |
+| ↳ **3G LocalAI** | **COMPLETE** — Ollama recommended · [localai](docs/PHASE_3G_LOCALAI.md) · [workflow](docs/OLLAMA_WORKFLOW.md) |
 | ↳ **3F Mainnet** | **LAST** — not started |
 
 Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md) · Plan: [`plans/phase_3_eternal_expansion.md`](plans/phase_3_eternal_expansion.md)
@@ -120,6 +120,7 @@ Full guide: [`docs/CROWN_WORKFLOW.md`](docs/CROWN_WORKFLOW.md)
 | `$BIN node init\|export\|import\|status` | Kingdom node federation | 3D |
 | `$BIN grok [prompt] [--offline]` | Ladder: LocalAI → grok → offline | 3E |
 | `$BIN localai [prompt] [--status]` | Ollama / LocalAI sovereign chat | 3G |
+| `./scripts/ollama_workflow.sh` | Full Ollama how-to card + morning/next/activate | 3G |
 | `$BIN blueprint [note]` | Blueprint counsel pulse | 3E |
 | `$BIN torus` | Torus + scalar overlay | 1–2B |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |

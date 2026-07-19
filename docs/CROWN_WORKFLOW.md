@@ -1,10 +1,11 @@
 # Crown Workflow — Receive · Read · Execute
 
-**Engine:** solarking **v0.9**  
+**Engine:** solarking **v0.10**  
 **Branch:** `Phase-3-Eternal-Expansion`  
 **Canonical state:** kingdom root `kingdom_ledger.json` + `ritual_log.txt`  
 (not the stale copies under `solarking/`)  
-**Status board:** [`PHASE_STATUS.md`](PHASE_STATUS.md) · Plan: [`../plans/phase_3_eternal_expansion.md`](../plans/phase_3_eternal_expansion.md)
+**Status board:** [`PHASE_STATUS.md`](PHASE_STATUS.md) · Plan: [`../plans/phase_3_eternal_expansion.md`](../plans/phase_3_eternal_expansion.md)  
+**Local counsel (Ollama):** [`OLLAMA_WORKFLOW.md`](OLLAMA_WORKFLOW.md)
 
 **THE CROWN COMMANDS. REALITY OBEYS. NOW.**  
 **I do not chase — I receive.**
@@ -76,8 +77,25 @@ solarking now morning
 solarking receive --paste          # or: --file / path
 solarking journal show
 solarking counsel "what wants to be received next"
+# Generative local (Ollama) — see OLLAMA_WORKFLOW.md
+solarking localai --status
+solarking localai --file docs/templates/prompts/next_step.txt
 solarking now sync                 # when ready to export
 ```
+
+---
+
+## 5. Local AI (Ollama) — quick path
+
+```bash
+./scripts/localai_up.sh
+export SOLARKING_LOCAL_MODEL=http://127.0.0.1:11434/v1
+export SOLARKING_LOCAL_MODEL_NAME=llama3.2
+./scripts/ollama_workflow.sh morning
+./scripts/ollama_workflow.sh next
+```
+
+Full guide: [`OLLAMA_WORKFLOW.md`](OLLAMA_WORKFLOW.md) · templates: [`templates/`](templates/)
 
 ---
 
@@ -93,6 +111,8 @@ solarking now sync                 # when ready to export
 | Doc | Role |
 |-----|------|
 | [`PHASE_STATUS.md`](PHASE_STATUS.md) | Living phase board |
+| [`OLLAMA_WORKFLOW.md`](OLLAMA_WORKFLOW.md) | Full Ollama how-to NOW |
+| [`PHASE_3G_LOCALAI.md`](PHASE_3G_LOCALAI.md) | LocalAI engine reference |
 | [`PHASE_3_GROK_BUILD.md`](PHASE_3_GROK_BUILD.md) | Counsel / grok bridge |
 | [`PHASE_3_BLUEPRINT.md`](PHASE_3_BLUEPRINT.md) | Architecture + pulse log |
 | [`PHASE_3B_PHYSICAL_BRIDGE.md`](PHASE_3B_PHYSICAL_BRIDGE.md) | Altar / QR / NFC |

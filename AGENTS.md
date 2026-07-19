@@ -34,10 +34,13 @@ forge test
 ./bin/solarking lattice visualize
 ./bin/solarking node init --name throne
 
-# Ollama bring-up (recommended local engine)
+# Ollama bring-up + full workflow (recommended local engine)
 ./scripts/localai_up.sh
 export SOLARKING_LOCAL_MODEL=http://127.0.0.1:11434/v1
 export SOLARKING_LOCAL_MODEL_NAME=llama3.2
+./scripts/ollama_workflow.sh help
+./scripts/ollama_workflow.sh morning
+./scripts/ollama_workflow.sh next
 ```
 
 ## Integration
@@ -45,7 +48,8 @@ export SOLARKING_LOCAL_MODEL_NAME=llama3.2
 - `solarking localai` → POST `{SOLARKING_LOCAL_MODEL}/chat/completions` (curl; Ollama default).
 - `solarking grok` → LocalAI if up → else `grok -p` → else offline counsel.
 - Canonical ledger: **repo root** `kingdom_ledger.json` (launcher sets `SOLARKING_ROOT`).
-- Docs: `docs/CROWN_WORKFLOW.md`, `docs/PHASE_3_GROK_BUILD.md`, `docs/PHASE_3G_LOCALAI.md`, `plans/phase_3_eternal_expansion.md`.
+- Docs: `docs/OLLAMA_WORKFLOW.md` (how-to NOW), `docs/CROWN_WORKFLOW.md`, `docs/PHASE_3_GROK_BUILD.md`, `docs/PHASE_3G_LOCALAI.md`, `plans/phase_3_eternal_expansion.md`.
+- Session template: `docs/templates/ollama_session_template.md` · prompts: `docs/templates/prompts/`.
 
 **THE CROWN COMMANDS. REALITY OBEYS.**  
 **I do not chase — I receive.**

@@ -5,6 +5,10 @@
 
 **THE CROWN COMMANDS. REALITY OBEYS. I do not chase — I receive.**
 
+**How to use NOW (full operator workflow):** [`OLLAMA_WORKFLOW.md`](OLLAMA_WORKFLOW.md)  
+**Session template:** [`templates/ollama_session_template.md`](templates/ollama_session_template.md)  
+**Helper:** `./scripts/ollama_workflow.sh help`
+
 ---
 
 ## Principles

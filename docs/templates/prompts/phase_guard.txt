@@ -1,0 +1,4 @@
+State clearly: Mainnet is Phase 3F LAST and BLOCKED for the Eternal Solar Kingdom.
+List what is allowed now (Base Sepolia, local Ollama counsel, receive/journal/now, seal dry-run).
+List what is forbidden (mainnet deploy, inventing mainnet addresses, treating LLM output as cast authority).
+Confirm LocalAI is a local mind, not a chain key. Keep under 150 words.
