@@ -1,8 +1,8 @@
 {
-  "harmonic_369": 22,
+  "harmonic_369": 23,
   "harmonic_999": 7,
-  "harmonic_index": 849,
+  "harmonic_index": 847,
   "obj": "sync/scalar/scalar_node.obj",
-  "phase": 4,
+  "phase": 5,
   "shell_coherence": 6
 }
