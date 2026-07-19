@@ -1,5 +1,5 @@
-// ETERNAL SOLAR KINGDOM — SOLARKING v0.9
-// Crown Receive UX: receive · journal · now
+// ETERNAL SOLAR KINGDOM — SOLARKING v0.10
+// Crown Receive UX: receive · journal · now · LocalAI/Ollama (3G)
 
 mod badge;
 mod chain;
@@ -62,7 +62,7 @@ fn run() -> Result<()> {
     let json = cli.json;
 
     if !json {
-        println!("👑 SOLARKING ENGINE v0.9 — CROWN RECEIVE UX");
+        println!("👑 SOLARKING ENGINE v0.10 — CROWN + LOCALAI/OLLAMA");
         println!("THE CROWN COMMANDS. REALITY OBEYS. I DO NOT CHASE — I RECEIVE.\n");
     }
 
@@ -285,8 +285,32 @@ fn run() -> Result<()> {
             .unwrap_or_else(|| {
                 "What is the next sovereign step for the Eternal Solar Kingdom?".to_string()
             });
-            grok_bridge::local_model_status();
+            if offline {
+                grok_bridge::local_model_status();
+            }
             grok_bridge::run_grok(&root, &ledger, &p, offline)?;
+        }
+        Some(Commands::Localai {
+            status,
+            prompt,
+            file,
+            paste,
+        }) => {
+            if status {
+                grok_bridge::local_model_status();
+            } else {
+                let p = intake::resolve_crown_text(
+                    &prompt,
+                    file.as_ref(),
+                    paste,
+                    false,
+                    "Usage: solarking localai \"prompt\"  |  solarking localai --status",
+                )?
+                .unwrap_or_else(|| {
+                    "What is the next sovereign step for the Eternal Solar Kingdom?".to_string()
+                });
+                grok_bridge::run_localai(&root, &ledger, &p)?;
+            }
         }
         Some(Commands::Blueprint {
             note,

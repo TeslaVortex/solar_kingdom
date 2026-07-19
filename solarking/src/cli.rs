@@ -175,10 +175,23 @@ pub enum Commands {
         action: NodeCmd,
     },
     /// Phase 3E: Grok Build CLI bridge (`grok -p`) or offline counsel
+    /// Ladder: LocalAI/Ollama → grok → offline (unless --offline)
     Grok {
-        /// Force offline counsel (do not spawn grok)
+        /// Force offline counsel (do not spawn LocalAI or grok)
         #[arg(long, default_value_t = false)]
         offline: bool,
+        #[arg(long)]
+        file: Option<PathBuf>,
+        #[arg(long, default_value_t = false)]
+        paste: bool,
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        prompt: Vec<String>,
+    },
+    /// Phase 3G: LocalAI / Ollama (OpenAI-compatible local counsel)
+    Localai {
+        /// Print endpoint / model / reachability only
+        #[arg(long, default_value_t = false)]
+        status: bool,
         #[arg(long)]
         file: Option<PathBuf>,
         #[arg(long, default_value_t = false)]

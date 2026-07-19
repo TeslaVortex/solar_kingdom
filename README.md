@@ -13,13 +13,14 @@
 | ↳ Base Sepolia deploy | **COMPLETE** — [proofs](docs/DEPLOYMENT_BASE_SEPOLIA.md) |
 | ↳ THE QUEEN IS BORN (first live seal) | **COMPLETE** — [ritual](docs/RITUAL_QUEEN_IS_BORN.md) |
 | Phase **2C** — Living automation (v0.6) | **COMPLETE** — [2C docs](docs/PHASE_2C_LIVING_AUTOMATION.md) |
-| Phase **3** — Eternal expansion | **3B–3E COMPLETE** · Crown UX **v0.9** on `Phase-3-Eternal-Expansion` |
+| Phase **3** — Eternal expansion | **3B–3E + 3G COMPLETE** · Crown UX **v0.10** on `Phase-3-Eternal-Expansion` |
 | ↳ 3.0–3A | **COMPLETE** — [verify](docs/PHASE_3_VERIFY.md) · seeds |
 | ↳ 3B Physical bridge | **COMPLETE** — [bridge](docs/PHASE_3B_PHYSICAL_BRIDGE.md) |
 | ↳ 3C Visualization | **COMPLETE** — `lattice visualize` |
 | ↳ 3D Kingdom nodes | **COMPLETE** — `node init/export/import` |
 | ↳ 3E Grok Build CLI | **COMPLETE** — [grok](docs/PHASE_3_GROK_BUILD.md) |
 | ↳ Crown Receive UX | **COMPLETE** — [workflow](docs/CROWN_WORKFLOW.md) · `receive` · `journal` · `now` |
+| ↳ **3G LocalAI** | **COMPLETE** — Ollama recommended · [localai](docs/PHASE_3G_LOCALAI.md) |
 | ↳ **3F Mainnet** | **LAST** — not started |
 
 Full board: [`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md) · Plan: [`plans/phase_3_eternal_expansion.md`](plans/phase_3_eternal_expansion.md)
@@ -117,7 +118,8 @@ Full guide: [`docs/CROWN_WORKFLOW.md`](docs/CROWN_WORKFLOW.md)
 | `$BIN qr` / `altar-print` | Altar/QR/NFC payload | 3B |
 | `$BIN lattice visualize` | ASCII + HTML 3D lattice | 3C |
 | `$BIN node init\|export\|import\|status` | Kingdom node federation | 3D |
-| `$BIN grok [prompt] [--offline]` | Grok Build CLI bridge | 3E |
+| `$BIN grok [prompt] [--offline]` | Ladder: LocalAI → grok → offline | 3E |
+| `$BIN localai [prompt] [--status]` | Ollama / LocalAI sovereign chat | 3G |
 | `$BIN blueprint [note]` | Blueprint counsel pulse | 3E |
 | `$BIN torus` | Torus + scalar overlay | 1–2B |
 | `$BIN ritual` | Full visual ritual sequence (~60–70s) | 1 |

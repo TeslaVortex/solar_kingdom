@@ -180,6 +180,17 @@ assert_file "$ROOT/docs/PHASE_3_GROK_BUILD.md" "docs/PHASE_3_GROK_BUILD.md"
 assert_file "$ROOT/AGENTS.md" "AGENTS.md"
 rm -f "$NODE_OUT"
 
+# ── Phase 3G LocalAI (offline graceful) ──
+echo ""
+echo "── PHASE 3G: LocalAI / Ollama ──"
+assert_output "$BIN help" "localai" "help lists localai"
+assert_file "$ROOT/docs/PHASE_3G_LOCALAI.md" "docs/PHASE_3G_LOCALAI.md"
+assert_file "$ROOT/config/localai_system.txt" "config/localai_system.txt"
+$BIN localai --status >/dev/null 2>&1 && pass "solarking localai --status" || fail "solarking localai --status"
+# Unset endpoint → offline counsel fallback (must not crash)
+unset SOLARKING_LOCAL_MODEL 2>/dev/null || true
+$BIN localai "e2e localai pulse" >/dev/null 2>&1 && pass "solarking localai offline fallback" || fail "solarking localai offline fallback"
+
 RITUAL_QUICK=1 $BIN libation ancestors >/dev/null 2>&1 && pass "solarking libation" || fail "solarking libation"
 RITUAL_QUICK=1 $BIN legacy_99 >/dev/null 2>&1 && pass "solarking legacy_99" || fail "solarking legacy_99"
 
@@ -189,7 +200,7 @@ echo "── CROWN RECEIVE UX (v0.9) ──"
 assert_output "$BIN help" "receive" "help lists receive"
 assert_output "$BIN help" "journal" "help lists journal"
 assert_output "$BIN help" "now" "help lists now"
-assert_output "$BIN --version" "0.9" "solarking version 0.9"
+assert_output "$BIN --version" "0.10" "solarking version 0.10"
 assert_output "$BIN now card" "CROWN CARD" "solarking now card"
 
 TX_FILE=$(mktemp)

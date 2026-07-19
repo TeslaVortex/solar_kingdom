@@ -2,7 +2,9 @@
 
 **Grok Build:** [github.com/xai-org/grok-build](https://github.com/xai-org/grok-build) · [x.ai/cli](https://x.ai/cli)
 
-**Status:** **COMPLETE** (bridge live in solarking **v0.8+**; current engine **v0.9**)
+**Status:** **COMPLETE** (bridge live in solarking **v0.8+**; current engine **v0.10**)
+
+**Also see Phase 3G:** prefer **Ollama / LocalAI** when `SOLARKING_LOCAL_MODEL` is up — [`PHASE_3G_LOCALAI.md`](PHASE_3G_LOCALAI.md).
 
 ---
 
@@ -11,7 +13,8 @@
 | Law | Practice |
 |-----|----------|
 | Sovereignty | solarking never stores xAI API keys; `grok` uses `~/.grok` auth |
-| Receive | Offline counsel always works; grok is optional grace |
+| Receive | Offline counsel always works; local LLM then grok are optional grace |
+| Local first | `solarking grok` tries LocalAI/Ollama before `grok -p` |
 | Mainnet last | System prompt forbids inventing mainnet addresses |
 
 ## Install Grok Build (optional)

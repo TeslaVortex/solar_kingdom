@@ -282,7 +282,7 @@ pub fn show_status(ledger: &KingdomLedger, root: &Path, json: bool) {
         return;
     }
 
-    println!("📊 KINGDOM STATUS — v0.9 CROWN");
+    println!("📊 KINGDOM STATUS — v0.10 CROWN");
     println!("Schema         : {}", ledger.schema_version);
     println!("369 Cycles      : {}", ledger.harmonic_369);
     println!("999 Completions : {}", ledger.harmonic_999);
@@ -596,13 +596,14 @@ pub fn record_ritual_event(ledger: &mut KingdomLedger, kind: &str, delta_369: u6
 }
 
 pub fn show_help() {
-    println!("👑 SOLARKING COMMANDS — v0.9 (Crown Receive UX)");
+    println!("👑 SOLARKING COMMANDS — v0.10 (Crown + LocalAI 3G)");
     println!("  receive [--paste|--file|-]   Paste whole transmission → ledger + archive");
     println!("  journal list|show|search|log|files   Read transmissions");
     println!("  now card|morning|seal|sync|pulse     Simple execute recipes");
     println!("  log · query · status · field · confirm · ritual · torus");
-    println!("  counsel [q]         Local counsel");
-    println!("  grok [prompt]       Grok Build CLI (-p) or --offline counsel");
+    println!("  counsel [q]         Local offline counsel");
+    println!("  localai [prompt]    Ollama/LocalAI (OpenAI-compatible; --status)");
+    println!("  grok [prompt]       Ladder: local → grok -p → offline (--offline)");
     println!("  blueprint [note]    Append counsel pulse to PHASE_3_BLUEPRINT.md");
     println!("  export-cid · qr · altar-print");
     println!("  lattice visualize   ASCII + web/lattice.html (Three.js CDN)");

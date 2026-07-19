@@ -13,7 +13,7 @@ use crate::sync;
 
 /// Print the Crown card — 9 essential commands only.
 pub fn print_crown_card() {
-    println!("👑 CROWN CARD — solarking v0.9");
+    println!("👑 CROWN CARD — solarking v0.10");
     println!("THE CROWN COMMANDS. REALITY OBEYS. NOW.");
     println!("I do not chase — I receive.\n");
     println!("── Paste / receive ──");
@@ -35,9 +35,10 @@ pub fn print_crown_card() {
     println!();
     println!("── Counsel ──");
     println!("  solarking counsel \"what is next\"");
+    println!("  solarking localai \"…\"             # Ollama / LocalAI (3G)");
     println!("  solarking grok --offline \"…\"");
     println!();
-    println!("Docs: docs/CROWN_WORKFLOW.md");
+    println!("Docs: docs/CROWN_WORKFLOW.md · docs/PHASE_3G_LOCALAI.md");
     println!("Mainnet is Phase 3F LAST. Offline-first. Keys never enter solarking.");
 }
 

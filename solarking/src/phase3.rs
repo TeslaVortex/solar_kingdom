@@ -59,7 +59,7 @@ pub fn counsel(
     extra.push(phase3_guidance(ledger, question));
     extra.push(String::new());
     extra.push(
-        "Offline counsel. Optional: solarking grok \"…\" (Grok Build CLI) or SOLARKING_LOCAL_MODEL."
+        "Offline counsel. Optional: solarking localai \"…\" (Ollama) or solarking grok \"…\"."
             .to_string(),
     );
     extra.push("I do not chase — I receive. What is meant for me does not wander.".to_string());
